@@ -2,6 +2,7 @@
     "name": "TimeMachine",
     "id": "3",
     "masterId": "255",
+	"time": {"hours":"0", "minutes":"60", "seconds":"0"},
     "events": [{
             "id": "1",
             "name": "start_timeMachine_game",
@@ -498,5 +499,42 @@
             "message": "phone continue",
             "state": "continue_phone"
         }
-    ]
+    ],
+	  "triggers": [
+    {
+      "name": "start video",
+      "trigger": "start_game",
+      "audio": "someFile.mp3",
+      "video": "some video.mp4",
+      "timeValue": {
+        "hours": "0",
+        "minutes": "60",
+        "seconds": "0"
+      },
+      "hint": "end hint",
+      "can_toggle": "true"
+    },
+    {
+      "name": "end video",
+      "trigger": "end_game",
+      "audio": "anoptherfile.mp3",
+      "video": "another video.mp4",
+      "hint": "",
+      "can_toggle": "true"
+    }
+  ],
+  "hints": [
+    {
+      "name": "Start hint",
+      "hint": "Read the whole thing bro"
+    },
+    {
+      "name": "not hint",
+      "hint": "make sure you drop some loose change"
+    },
+    {
+      "name": "end hint",
+      "hint": "waughhhh"
+    }
+  ]
 }

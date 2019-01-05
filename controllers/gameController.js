@@ -1,29 +1,65 @@
+//@ts-check
+// var Timer = require('../node_modules/easytimer/src/easytimer.js').Timer;
+var Timer = require('easytimer');
+var SocketController = require('./socketController');
+var timerArr = []
+
 class Game {
-    constructor(name, time, script) {
-        var name = name;
-        var time = time;
-        var script = script;
-        var states = new Array();
+    constructor(name, timeLimit, script) {
+        this.name = name;
+        this.timeLimit = timeLimit;
+        this.time = {hrs:0, min:0, sec:0};
+        this.script = script;
+        this.states = [];
+        this.countdown = true;
+        this.createGameTimer();
+    }
+    
+    createGameTimer(){
+        // this.timer = new Timer();
+        this.timer = new Timer();
+        this.timer.start({
+            countdown: this.countdown,
+            precision: 'seconds',
+            startValues: {
+                hours: this.timeLimit.hrs,
+                minutes: this.timeLimit.min,
+                seconds: this.timeLimit.sec
+            }
+        });
+        timerArr.push(this.timer)
+        var t = this
+        this.timer.addEventListener('secondsUpdated', function (e) {
+            t.time.hrs = t.timer.getTimeValues().hours;
+            t.time.min = t.timer.getTimeValues().minutes;
+            t.time.sec = t.timer.getTimeValues().seconds;
+            SocketController.socketSendEvent({"gameUpdate":t})
+        })
+        this.timer.addEventListener('targetAchieved', function (e) {
+            SocketController.socketSendEvent({"gameOver":this})
+        });
     }
 
+    //TODO: read the game script here, and send socket events for triggers
+
     addState(state) {
-        states.push(state);
+        this.states.push(state);
     }
 
     getStates() {
-        return states;
+        return this.states;
     }
 
     setName(name) {
-        name = name;
+        this.name = name;
     }
 
     setTime(time) {
-        time = time;
+        this.time = time;
     }
 
     getTime() {
-        return time;
+        return this.time;
     }
 
     setScript(script) {
@@ -32,6 +68,22 @@ class Game {
 
     getScript() {
         return this.script;
+    }
+
+    startTime(){
+        this.timer.start()
+    }
+
+    pauseTime(){
+        this.timer.pause()
+    }
+
+    stopTime(){
+        this.timer.stop()
+    }
+
+    resetTime(){
+        this.timer.reset()
     }
 
 }
@@ -43,9 +95,10 @@ var games = [];
 //===========================================//
 
 exports.newGame = function (req, res) {
-    name = req.body.name;
-    time = req.body.time;
-    var game = new Game(name, time);
+    var name = req.body.name;
+    var timeLimit = req.body.timeLimit;
+    //if no time, then go by script time
+    var game = new Game(name, timeLimit);
     games.push(game);
     res.send(game);
 };
@@ -73,6 +126,7 @@ exports.updateGameTime = function (req, res) {
     var name = req.body.name;
     var time = req.body.time;
     localUpdateTime(name, time)
+
 };
 
 exports.deleteGame = function (req, res) {
