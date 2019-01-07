@@ -33,7 +33,7 @@ class Game {
             t.time.hrs = t.timer.getTimeValues().hours;
             t.time.min = t.timer.getTimeValues().minutes;
             t.time.sec = t.timer.getTimeValues().seconds;
-            SocketController.socketSendEvent({"gameUpdate":t})
+            SocketController.socketSendEvent({"instance_update":t})
         })
         this.timer.addEventListener('targetAchieved', function (e) {
             SocketController.socketSendEvent({"gameOver":this})
