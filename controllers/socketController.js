@@ -27,7 +27,7 @@ exports.parseMessage = function (msg) {
 }
 
 exports.socketSendEvent = function (event) {
-    log("Socket: ", event)
+    // log("Socket: ", event)
     // @ts-ignore
     io.emit(`message`, event)
 }

@@ -1,7 +1,9 @@
 //@ts-check
 // var Timer = require('../node_modules/easytimer/src/easytimer.js').Timer;
+// @ts-ignore
 var Timer = require('easytimer');
 var SocketController = require('./socketController');
+var log = require("./loggingController").log;
 var timerArr = []
 
 class Game {
@@ -12,6 +14,7 @@ class Game {
         this.script = script;
         this.states = [];
         this.countdown = true;
+        this.ended = false;
         this.createGameTimer();
     }
     
@@ -19,6 +22,7 @@ class Game {
         // this.timer = new Timer();
         this.timer = new Timer();
         this.timer.start({
+            // @ts-ignore
             countdown: this.countdown,
             precision: 'seconds',
             startValues: {
@@ -29,15 +33,38 @@ class Game {
         });
         timerArr.push(this.timer)
         var t = this
+        // @ts-ignore
         this.timer.addEventListener('secondsUpdated', function (e) {
+            if(t.ended){
+                // this.stopTime();
+                return;
+            }
+            // @ts-ignore
             t.time.hrs = t.timer.getTimeValues().hours;
+            // @ts-ignore
             t.time.min = t.timer.getTimeValues().minutes;
+            // @ts-ignore
             t.time.sec = t.timer.getTimeValues().seconds;
             SocketController.socketSendEvent({"instance_update":t})
         })
+        // @ts-ignore
         this.timer.addEventListener('targetAchieved', function (e) {
             SocketController.socketSendEvent({"gameOver":this})
         });
+    }
+
+    endGame(){
+        this.pauseTime();
+        this.ended = true;
+        this.timer.removeEventListener('secondsUpdated', (e)=>{
+            let res = ("event listner removed: seconds updated");
+            log(res, e);
+        });
+        this.timer.removeEventListener('targetAchieved', (e)=>{
+            let res = ("event listner removed: seconds updated");
+            log(res, e);
+        });
+        // this.timer = null;
     }
 
     //TODO: read the game script here, and send socket events for triggers
@@ -71,6 +98,7 @@ class Game {
     }
 
     startTime(){
+        // @ts-ignore
         this.timer.start()
     }
 
@@ -83,6 +111,7 @@ class Game {
     }
 
     resetTime(){
+        // @ts-ignore
         this.timer.reset()
     }
 
@@ -95,10 +124,13 @@ var games = [];
 //===========================================//
 
 exports.newGame = function (req, res) {
-    var name = req.body.name;
+    var script = req.body.name;
     var timeLimit = req.body.timeLimit;
+    
+    // remove duplicate game instance
+    removeDuplicateInstance(script);
     //if no time, then go by script time
-    var game = new Game(name, timeLimit);
+    var game = new Game(script, timeLimit);
     games.push(game);
     res.send(game);
 };
@@ -112,16 +144,19 @@ exports.readGame = function (req, res) {
     });
 };
 
+// @ts-ignore
 exports.readAll = function (req, res) {
     res.send(games);
 };
 
+// @ts-ignore
 exports.updateGameState = function (req, res) {
     var name = req.body.name;
     var state = req.body.state;
     localUpdateState(name, state)
 };
 
+// @ts-ignore
 exports.updateGameTime = function (req, res) {
     var name = req.body.name;
     var time = req.body.time;
@@ -130,10 +165,11 @@ exports.updateGameTime = function (req, res) {
 };
 
 exports.deleteGame = function (req, res) {
-    var name = req.params.name;
+    var script = req.params.name;
     var gRemoved
     for (var i = 0; i < games.length; i++) {
-        if (games[i].name = name) {
+        if (games[i].name.name = script.name) {
+            games[i].endGame();
             gRemoved = games[i]
             games.splice(i, 1);
             res.send(`{"removed": ${gRemoved}}`)
@@ -169,4 +205,31 @@ function localUpdateTime(name, time) {
             game.time = time;
         }
     });
+}
+
+function removeDuplicateInstance(script){
+    return new Promise((resolve, reject)=>{
+        games.forEach(function (s) {
+            if (s.name.name == script.name) {
+                s.endGame();
+                localDeleteGame(s.name.name);
+                resolve()
+            }
+        });
+    })
+}
+
+function localDeleteGame(scriptName){
+    return new Promise((resolve, reject)=>{
+
+        var gRemoved
+        for (var i = 0; i < games.length; i++) {
+            if (games[i].name.name = scriptName) {
+                games[i] = null;
+                gRemoved = games[i]
+                games.splice(i, 1);
+                resolve(`{"removed": ${gRemoved}}`)
+            }
+        }
+    })
 }
