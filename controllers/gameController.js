@@ -1,180 +1,256 @@
 //@ts-check
 // var Timer = require('../node_modules/easytimer/src/easytimer.js').Timer;
 // @ts-ignore
-var Timer = require('easytimer');
-var SocketController = require('./socketController');
+// @ts-ignore
+var Timer = require("easytimer");
+var SocketController = require("./socketController");
 var log = require("./loggingController").log;
-var timerArr = []
+// @ts-ignore
+var timerArr = [];
 
 class Game {
-    constructor(name, timeLimit, script) {
-        this.name = name;
-        this.timeLimit = timeLimit;
-        this.time = {hrs:0, min:0, sec:0};
-        this.script = script;
-        this.states = [];
-        this.countdown = true;
-        this.ended = false;
-        this.createGameTimer();
-    }
-    
-    createGameTimer(){
-        // this.timer = new Timer();
-        this.timer = new Timer();
-        this.timer.start({
-            // @ts-ignore
-            countdown: this.countdown,
-            precision: 'seconds',
-            startValues: {
-                hours: this.timeLimit.hrs,
-                minutes: this.timeLimit.min,
-                seconds: this.timeLimit.sec
-            }
-        });
-        timerArr.push(this.timer)
-        var t = this
+  constructor(name, timeLimit, script) {
+    this.name = name;
+    this.timeLimit = timeLimit;
+    this.time = {
+      hrs: 0,
+      min: 0,
+      sec: 0
+    };
+    this.script = script;
+    this.states = [];
+    this.countdown = true;
+    this.ended = false;
+    // this.createGameTimer();
+  }
+
+  createGameTimer() {
+    // this.timer = new Timer();
+    this.timer = new Timer();
+    this.timer.start({
+      // @ts-ignore
+      countdown: this.countdown,
+      precision: "seconds",
+      startValues: {
+        hours: this.timeLimit.hrs,
+        minutes: this.timeLimit.min,
+        seconds: this.timeLimit.sec
+      }
+    });
+    this.prepareTimerEventListners();
+  }
+
+  endGame() {
+    this.pauseTime();
+    this.ended = true;
+    this.prepareTimerRemoval();
+  }
+
+  //TODO: read the game script here, and send socket events for triggers
+
+  addState(state) {
+    this.states.push(state);
+  }
+
+  getStates() {
+    return this.states;
+  }
+
+  setName(name) {
+    this.name = name;
+  }
+
+  setTime(time) {
+    this.time = time;
+  }
+
+  getTime() {
+    return this.time;
+  }
+
+  setScript(script) {
+    this.script = script;
+  }
+
+  getScript() {
+    return this.script;
+  }
+
+  startTime() {
+    // @ts-ignore
+    this.createGameTimer();
+  }
+
+  resumeTime() {
+    // @ts-ignore
+    this.timer.start();
+  }
+
+  pauseTime() {
+    this.timer.pause();
+  }
+
+  stopTime() {
+    this.timer.stop();
+  }
+
+  resetTime() {
+    // @ts-ignore
+    this.timer.reset();
+  }
+
+  updateTime(customTime) {
+    this.prepareTimerRemoval().then(() => {
+      this.timer = new Timer();
+      this.timer.start({
         // @ts-ignore
-        this.timer.addEventListener('secondsUpdated', function (e) {
-            if(t.ended){
-                // this.stopTime();
-                return;
-            }
-            // @ts-ignore
-            t.time.hrs = t.timer.getTimeValues().hours;
-            // @ts-ignore
-            t.time.min = t.timer.getTimeValues().minutes;
-            // @ts-ignore
-            t.time.sec = t.timer.getTimeValues().seconds;
-            SocketController.socketSendEvent({"instance_update":t})
-        })
-        // @ts-ignore
-        this.timer.addEventListener('targetAchieved', function (e) {
-            SocketController.socketSendEvent({"gameOver":this})
-        });
-    }
+        countdown: this.countdown,
+        precision: "seconds",
+        startValues: {
+          hours: customTime.hours,
+          minutes: customTime.minutes,
+          seconds: customTime.seconds
+        }
+      });
+      this.prepareTimerEventListners();
+    });
+  }
 
-    endGame(){
-        this.pauseTime();
-        this.ended = true;
-        this.timer.removeEventListener('secondsUpdated', (e)=>{
-            let res = ("event listner removed: seconds updated");
-            log(res, e);
-        });
-        this.timer.removeEventListener('targetAchieved', (e)=>{
-            let res = ("event listner removed: seconds updated");
-            log(res, e);
-        });
-        // this.timer = null;
-    }
+  prepareTimerEventListners() {
+    var t = this;
+    // @ts-ignore
+    this.timer.addEventListener("secondsUpdated", function(e) {
+      if (t.ended) {
+        return;
+      }
+      // @ts-ignore
+      t.time.hrs = t.timer.getTimeValues().hours;
+      // @ts-ignore
+      t.time.min = t.timer.getTimeValues().minutes;
+      // @ts-ignore
+      t.time.sec = t.timer.getTimeValues().seconds;
+      SocketController.socketSendEvent({
+        instance_update: t
+      });
+    });
+    // @ts-ignore
+    this.timer.addEventListener("targetAchieved", function(e) {
+      t.endGame();
+      SocketController.socketSendEvent({
+        instance_update: t
+      });
+    });
+  }
 
-    //TODO: read the game script here, and send socket events for triggers
-
-    addState(state) {
-        this.states.push(state);
-    }
-
-    getStates() {
-        return this.states;
-    }
-
-    setName(name) {
-        this.name = name;
-    }
-
-    setTime(time) {
-        this.time = time;
-    }
-
-    getTime() {
-        return this.time;
-    }
-
-    setScript(script) {
-        this.script = script;
-    }
-
-    getScript() {
-        return this.script;
-    }
-
-    startTime(){
-        // @ts-ignore
-        this.timer.start()
-    }
-
-    pauseTime(){
-        this.timer.pause()
-    }
-
-    stopTime(){
-        this.timer.stop()
-    }
-
-    resetTime(){
-        // @ts-ignore
-        this.timer.reset()
-    }
-
+  prepareTimerRemoval() {
+    // @ts-ignore
+    return new Promise((resolve, reject) => {
+      // @ts-ignore
+      var t = this;
+      // @ts-ignore
+      this.timer.removeEventListener("secondsUpdated", e => {
+        let res = "event listner removed: seconds updated";
+        log(res, e);
+      });
+      // @ts-ignore
+      this.timer.removeEventListener("targetAchieved", e => {
+        let res = "event listner removed: seconds updated";
+        log(res, e);
+      });
+      resolve();
+    });
+  }
 }
 
+// @ts-ignore
 var games = [];
+var gamesJson = {};
 
 //=============================================//
 //====== HTTP functions ========================//
 //===========================================//
 
-exports.newGame = function (req, res) {
-    var script = req.body.name;
-    var timeLimit = req.body.timeLimit;
-    
-    // remove duplicate game instance
-    removeDuplicateInstance(script);
+exports.newGame = function(req, res) {
+  var script = req.body.name;
+  var timeLimit = req.body.timeLimit;
+
+  // remove duplicate game instance
+  removeDuplicateInstance(script).then(() => {
     //if no time, then go by script time
-    var game = new Game(script, timeLimit);
-    games.push(game);
+    var game = new Game(script.name, timeLimit, script);
+    game.startTime();
+    gamesJson[`${script.name}`] = game;
+    // games.push(game);
     res.send(game);
+  });
+  // TODO: test
 };
 
-exports.readGame = function (req, res) {
-    var name = req.params.name;
-    games.forEach(function (game) {
-        if (game.name == name) {
-            res.send(game);
-        }
-    });
-};
+exports.readGame = function(req, res) {
+  var name = req.params.name;
 
-// @ts-ignore
-exports.readAll = function (req, res) {
-    res.send(games);
-};
-
-// @ts-ignore
-exports.updateGameState = function (req, res) {
-    var name = req.body.name;
-    var state = req.body.state;
-    localUpdateState(name, state)
-};
-
-// @ts-ignore
-exports.updateGameTime = function (req, res) {
-    var name = req.body.name;
-    var time = req.body.time;
-    localUpdateTime(name, time)
-
-};
-
-exports.deleteGame = function (req, res) {
-    var script = req.params.name;
-    var gRemoved
-    for (var i = 0; i < games.length; i++) {
-        if (games[i].name.name = script.name) {
-            games[i].endGame();
-            gRemoved = games[i]
-            games.splice(i, 1);
-            res.send(`{"removed": ${gRemoved}}`)
-        }
+  //TODO: test
+  for (var key in gamesJson) {
+    if (gamesJson.hasOwnProperty(name)) {
+        res.send(gamesJson[`${name}`]);
     }
+  }
+};
+
+// @ts-ignore
+// @ts-ignore
+exports.readAll = function(req, res) {
+  // res.send(games);
+  JsonToArr(gamesJson).then(arr => {
+    res.send(arr);
+  });
+};
+
+// @ts-ignore
+// @ts-ignore
+exports.updateGameState = function(req, res) {
+  var name = req.body.name;
+  var state = req.body.state;
+  localUpdateState(name, state);
+};
+
+// @ts-ignore
+exports.updateGameTime = function(req, res) {
+  var name = req.body.name;
+  var time = req.body.time;
+  localUpdateTime(name, time);
+  res.send(time);
+};
+
+exports.deleteGame = function(req, res) {
+  var scriptName = req.params.name;
+  // @ts-ignore
+  var gRemoved;
+
+  //Handle the end of the game
+  // @ts-ignore
+  localEndGame(scriptName).then(endResult => {
+    var result = {
+      result: gamesJson[scriptName]
+    };
+    res.send(result);
+  });
+};
+
+exports.pauseGame = function(req, res) {
+  var name = req.params.name;
+  if (gamesJson.hasOwnProperty(name)) {
+    gamesJson[`${name}`].pauseTime();
+    res.send(`${name} paused`);
+  }
+};
+
+exports.resumeGame = function(req, res) {
+  var name = req.params.name;
+  if (gamesJson.hasOwnProperty(name)) {
+    gamesJson[`${name}`].resumeTime();
+    res.send(`${name} resumed`);
+  }
 };
 
 //=============================================//
@@ -182,54 +258,87 @@ exports.deleteGame = function (req, res) {
 //===========================================//
 
 /** For external modules */
-exports.loUpdateGameState = function (name, state) {
-    localUpdateState(name, state)
-}
+exports.loUpdateGameState = function(name, state) {
+  localUpdateState(name, state);
+};
 
 /** For external modules */
-exports.loUpdateGameTime = function (name, time) {
-    localUpdateTime(name, time)
-}
+exports.loUpdateGameTime = function(name, time) {
+  localUpdateTime(name, time);
+};
 
 function localUpdateState(name, state) {
-    games.forEach(function (game) {
-        if (game.name == name) {
-            game.states.push(state);
-        }
-    });
+  for (var key in gamesJson) {
+    if (gamesJson.hasOwnProperty(`${key}`)) {
+      if (gamesJson[`${key}`].name == name) {
+        gamesJson[`${key}`].states.push(state);
+      }
+    }
+  }
 }
 
 function localUpdateTime(name, time) {
-    games.forEach(function (game) {
-        if (game.name == name) {
-            game.time = time;
-        }
-    });
+  for (var key in gamesJson) {
+    if (gamesJson.hasOwnProperty(`${key}`)) {
+      if (gamesJson[`${key}`].name == name) {
+        gamesJson[`${key}`].updateTime(time);
+        // key[`${time}`] = time
+      }
+    }
+  }
 }
 
-function removeDuplicateInstance(script){
-    return new Promise((resolve, reject)=>{
-        games.forEach(function (s) {
-            if (s.name.name == script.name) {
-                s.endGame();
-                localDeleteGame(s.name.name);
-                resolve()
-            }
-        });
-    })
+function removeDuplicateInstance(script) {
+  // @ts-ignore
+  return new Promise((resolve, reject) => {
+    if (gamesJson.hasOwnProperty(`${script.name}`)) {
+      gamesJson[`${script.name}`].endGame();
+      resolve();
+    } else {
+      resolve();
+    }
+  });
 }
 
-function localDeleteGame(scriptName){
-    return new Promise((resolve, reject)=>{
+function localEndGame(scriptName) {
+  // @ts-ignore
+  return new Promise((resolve, reject) => {
+    if (gamesJson.hasOwnProperty(`${scriptName}`)) {
+      gamesJson[`${scriptName}`].endGame();
+      resolve(`{"ended": ${scriptName}}`);
+    } else {
+      resolve(`{"ended": false}`);
+    }
+  });
+}
 
-        var gRemoved
-        for (var i = 0; i < games.length; i++) {
-            if (games[i].name.name = scriptName) {
-                games[i] = null;
-                gRemoved = games[i]
-                games.splice(i, 1);
-                resolve(`{"removed": ${gRemoved}}`)
-            }
-        }
-    })
+// @ts-ignore
+function localDeleteGame(scriptName) {
+  // @ts-ignore
+  return new Promise((resolve, reject) => {
+    if (gamesJson.hasOwnProperty(`${scriptName}`)) {
+      gamesJson[`${scriptName}`] = null;
+      resolve(`{"removed": ${scriptName}}`);
+    } else {
+      resolve(`{"removed": false}`);
+    }
+  });
+}
+
+/**
+ *Create array from gamesJson
+ *
+ */
+function JsonToArr(json) {
+  // @ts-ignore
+  return new Promise((resolve, reject) => {
+    var arr = [];
+    for (var key in json) {
+      if (json.hasOwnProperty(key)) {
+        // console.log(key + " -> " + json[key]);
+        arr.push(json[key]);
+      }
+    }
+    resolve(arr);
+  });
 }

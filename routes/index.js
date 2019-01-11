@@ -47,7 +47,11 @@ router.post('/game', GameController.newGame)
 router.get('/game/:name', GameController.readGame)
 router.get('/game', GameController.readAll)
 router.put('/game/state', GameController.updateGameState)
+
 router.put('/game/time', GameController.updateGameTime)
+router.get('/game/time/pause/:name', GameController.pauseGame)
+router.get('/game/time/resume/:name', GameController.resumeGame)
+
 router.delete('/game/:name', GameController.deleteGame)
 
 module.exports = router;

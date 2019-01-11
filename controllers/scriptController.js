@@ -25,7 +25,7 @@ exports.readScripts = function (req, res) {
 }
 
 exports.updateScript = function (req, res) {
-    res.send("updateing script")
+    res.send("updating script")
 }
 
 exports.deleteScript = function (req, res) {
