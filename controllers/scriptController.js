@@ -1,7 +1,8 @@
 //@ts-check
 const path = require('path');
 const fs = require('fs');
-var log = require('../controllers/loggingController').log;
+var log = require('./loggingController').log;
+var gameController = require('./gameController');
 var SocketController = require("./socketController")
 const directoryPath = path.join(__dirname, '../EventActionScripts');
 var scripts = []
@@ -86,6 +87,7 @@ function readScriptsInDirectory() {
             files.forEach(function (file) {
                 var script = fs.readFileSync(directoryPath + `/${file}`, 'utf8')
                 var pScript = JSON.parse(script)
+                // gameController.localNewGame(pScript, pScript.time, false);
                 scripts.push(pScript)
                 if (scripts.length == files.length) {
                     resolve(scripts)

@@ -21,7 +21,14 @@ class Game {
     this.states = [];
     this.countdown = true;
     this.ended = false;
+    this.prepareStructure();
     // this.createGameTimer();
+  }
+
+  prepareStructure() {
+    this.script.timeUpdate = this.time;
+    this.script.states = this.states;
+    this.script.ended = this.ended;
   }
 
   createGameTimer() {
@@ -119,10 +126,11 @@ class Game {
   prepareTimerEventListners() {
     var t = this;
     // @ts-ignore
-    this.timer.addEventListener("secondsUpdated", function(e) {
+    this.timer.addEventListener("secondsUpdated", function (e) {
       if (t.ended) {
         return;
       }
+      t.prepareStructure();
       // @ts-ignore
       t.time.hrs = t.timer.getTimeValues().hours;
       // @ts-ignore
@@ -134,7 +142,7 @@ class Game {
       });
     });
     // @ts-ignore
-    this.timer.addEventListener("targetAchieved", function(e) {
+    this.timer.addEventListener("targetAchieved", function (e) {
       t.endGame();
       SocketController.socketSendEvent({
         instance_update: t
@@ -170,7 +178,7 @@ var gamesJson = {};
 //====== HTTP functions ========================//
 //===========================================//
 
-exports.newGame = function(req, res) {
+exports.newGame = function (req, res) {
   var script = req.body.name;
   var timeLimit = req.body.timeLimit;
 
@@ -186,20 +194,20 @@ exports.newGame = function(req, res) {
   // TODO: test
 };
 
-exports.readGame = function(req, res) {
+exports.readGame = function (req, res) {
   var name = req.params.name;
 
   //TODO: test
   for (var key in gamesJson) {
     if (gamesJson.hasOwnProperty(name)) {
-        res.send(gamesJson[`${name}`]);
+      res.send(gamesJson[`${name}`]);
     }
   }
 };
 
 // @ts-ignore
 // @ts-ignore
-exports.readAll = function(req, res) {
+exports.readAll = function (req, res) {
   // res.send(games);
   JsonToArr(gamesJson).then(arr => {
     res.send(arr);
@@ -208,21 +216,21 @@ exports.readAll = function(req, res) {
 
 // @ts-ignore
 // @ts-ignore
-exports.updateGameState = function(req, res) {
+exports.updateGameState = function (req, res) {
   var name = req.body.name;
   var state = req.body.state;
   localUpdateState(name, state);
 };
 
 // @ts-ignore
-exports.updateGameTime = function(req, res) {
+exports.updateGameTime = function (req, res) {
   var name = req.body.name;
   var time = req.body.time;
   localUpdateTime(name, time);
   res.send(time);
 };
 
-exports.deleteGame = function(req, res) {
+exports.deleteGame = function (req, res) {
   var scriptName = req.params.name;
   // @ts-ignore
   var gRemoved;
@@ -237,7 +245,7 @@ exports.deleteGame = function(req, res) {
   });
 };
 
-exports.pauseGame = function(req, res) {
+exports.pauseGame = function (req, res) {
   var name = req.params.name;
   if (gamesJson.hasOwnProperty(name)) {
     gamesJson[`${name}`].pauseTime();
@@ -245,7 +253,7 @@ exports.pauseGame = function(req, res) {
   }
 };
 
-exports.resumeGame = function(req, res) {
+exports.resumeGame = function (req, res) {
   var name = req.params.name;
   if (gamesJson.hasOwnProperty(name)) {
     gamesJson[`${name}`].resumeTime();
@@ -258,12 +266,12 @@ exports.resumeGame = function(req, res) {
 //===========================================//
 
 /** For external modules */
-exports.loUpdateGameState = function(name, state) {
+exports.loUpdateGameState = function (name, state) {
   localUpdateState(name, state);
 };
 
 /** For external modules */
-exports.loUpdateGameTime = function(name, time) {
+exports.loUpdateGameTime = function (name, time) {
   localUpdateTime(name, time);
 };
 
@@ -275,6 +283,23 @@ function localUpdateState(name, state) {
       }
     }
   }
+}
+
+exports.localNewGame = function (script, timeLimit, canStart) {
+  loNewGame(script, timeLimit, canStart);
+};
+
+function loNewGame(script, timeLimit, canStart) {
+  return new Promise((resolve, reject) => {
+    removeDuplicateInstance(script).then(() => {
+      //if no time, then go by script time
+      var game = new Game(script.name, timeLimit, script);
+      game.startTime();
+      gamesJson[`${script.name}`] = game;
+      // games.push(game);
+      resolve(game);
+    });
+  });
 }
 
 function localUpdateTime(name, time) {
