@@ -1,14 +1,14 @@
 {
-  "name": "Atonement",
-  "id": "1",
-  "branch_address": "192.168.0.51:5002",
+  "name": "Christmas",
+  "id": "0",
   "masterId": "255",
   "time": {
     "hours": "0",
     "minutes": "60",
     "seconds": "0"
   },
-  "states": [{
+  "states": [
+    {
       "name": "start_game",
       "active": false
     },
@@ -21,106 +21,26 @@
       "active": false
     }
   ],
-  "events": [{
+  "events": [
+    {
       "id": "1",
-      "name": "start_Atonement_game",
+      "name": "start_Christmas_game",
       "device_id": "10",
       "event": "toggle",
       "eventType": "button",
       "data": "0",
       "description": "the beginning of the game, code typed or something",
       "dependencies": [],
-      "actions": ["chest_door_start", "play_start_music", "play_box_music"],
+      "actions": [
+        "chest_door_start"
+      ],
       "message": "started the game",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
-    },
-    {
-      "id": "2",
-      "name": "test_chest_door",
-      "device_id": "23",
-      "event": "toggle",
-      "eventType": "button",
-      "data": "0",
-      "description": "players opened door",
-      "dependencies": [],
-      "actions": ["chest_door_toggle"],
-      "can_toggle": "true",
-      "message": "opened box",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
-    },
-    {
-      "id": "3",
-      "name": "test_top_drawer",
-      "device_id": "23",
-      "event": "toggle",
-      "eventType": "button",
-      "data": "1",
-      "description": "players opened door",
-      "dependencies": [],
-      "actions": ["top_drawer_toggle"],
-      "can_toggle": "true",
-      "message": "opened box",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
-    },
-    {
-      "id": "4",
-      "name": "test_second_drawer",
-      "device_id": "23",
-      "event": "toggle",
-      "eventType": "button",
-      "data": "2",
-      "description": "players opened door",
-      "dependencies": [],
-      "actions": ["second_drawer_toggle"],
-      "can_toggle": "true",
-      "message": "opened box",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
-    },
-    {
-      "id": "5",
-      "name": "test_vent",
-      "device_id": "23",
-      "event": "toggle",
-      "eventType": "button",
-      "data": "3",
-      "description": "players opened door",
-      "dependencies": [],
-      "actions": ["vent_latch_toggle"],
-      "can_toggle": "true",
-      "message": "opened box",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
-    },
-    {
-      "id": "6",
-      "name": "test_music",
-      "device_id": "23",
-      "event": "toggle",
-      "eventType": "button",
-      "data": "4",
-      "description": "players opened door",
-      "dependencies": [],
-      "actions": ["play_start_music"],
-      "can_toggle": "true",
-      "message": "opened box",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "7",
@@ -128,47 +48,31 @@
       "device_id": "24",
       "event": "toggle",
       "eventType": "magnetSwitch",
-      "data": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      "data": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
       "description": "players opened jack in the box",
       "dependencies": [],
-      "actions": ["second_drawer_toggle"],
+      "actions": [
+        "second_drawer_toggle"
+      ],
       "can_toggle": "true",
       "message": "opened jack_in_the_box",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
-    },
-    {
-      "id": "8",
-      "name": "rfid_hand",
-      "device_id": "26",
-      "event": "code",
-      "eventType": "rfId",
-      "data": "BE254579A7",
-      "description": "open vent",
-      "dependencies": [],
-      "actions": ["vent_latch_toggle"],
-      "can_toggle": "true",
-      "message": "opened vent",
-      "state": "vent_opened"
-    },
-    {
-      "id": "9",
-      "name": "open_chest",
-      "device_id": "11",
-      "event": "code",
-      "eventType": "keypad",
-      "data": "111111",
-      "description": "Open Chest Door",
-      "dependencies": [],
-      "actions": ["chest_door_stop"],
-      "can_toggle": "true",
-      "message": "opened chest",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "10",
@@ -176,33 +80,31 @@
       "device_id": "25",
       "event": "toggle",
       "eventType": "magnetSwitch",
-      "data": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      "data": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
       "description": "tetris0",
       "dependencies": [],
-      "actions": ["top_drawer_toggle"],
+      "actions": [
+        "top_drawer_toggle"
+      ],
       "can_toggle": "true",
       "message": "Tetris",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
-    },
-    {
-      "id": "11",
-      "name": "wrath_phone",
-      "device_id": "12",
-      "event": "callOut",
-      "eventType": "phoneET",
-      "data": "0437897284",
-      "description": "phone call",
-      "dependencies": [],
-      "actions": ["phone_wrath"],
-      "can_toggle": "true",
-      "message": "phone out",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "12",
@@ -212,48 +114,20 @@
       "eventType": "phoneET",
       "data": "1#",
       "description": "phone call",
-      "dependencies": ["phone1"],
-      "actions": ["continue_phone"],
+      "dependencies": [
+        "phone1"
+      ],
+      "actions": [
+        "continue_phone"
+      ],
       "can_toggle": "true",
       "message": "phone out",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
-    },
-    {
-      "id": "13",
-      "name": "keypad_phone_test",
-      "device_id": "11",
-      "event": "code",
-      "eventType": "keypad",
-      "data": "411696",
-      "description": "test incomming call",
-      "dependencies": [],
-      "actions": ["phone_test_in"],
-      "can_toggle": "true",
-      "message": "keypad test phone in",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
-    },
-    {
-      "id": "14",
-      "name": "rfid_hand2",
-      "device_id": "26",
-      "event": "code",
-      "eventType": "rfId",
-      "data": "8E73478339",
-      "description": "open vent",
-      "dependencies": [],
-      "actions": ["vent_latch_toggle"],
-      "can_toggle": "true",
-      "message": "backup opened vent",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "15",
@@ -261,36 +135,59 @@
       "device_id": "13",
       "event": "toggle",
       "eventType": "magnetSwitch",
-      "data": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      "data": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
       "description": "players opened door after phone call",
-      "dependencies": ["phone1"],
-      "actions": ["second_drawer_toggle"],
+      "dependencies": [
+        "phone1"
+      ],
+      "actions": [
+        "second_drawer_toggle"
+      ],
       "can_toggle": "true",
       "message": "opened jack_in_the_box",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
-      "id": "16",
-      "name": "keypad_phone_test",
-      "device_id": "11",
-      "event": "code",
-      "eventType": "keypad",
-      "data": "666",
-      "description": "test incomming call",
-      "dependencies": ["continue_game"],
-      "actions": ["chest_door_stop"],
-      "can_toggle": "true",
-      "message": "keypad test phone in",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "end_game",
+          "active": false
+        }
+      ],
+      "id": "",
+      "name": "hgjgjngcf",
+      "device_id": "cfjdxtjft",
+      "event": "rangeTrigger",
+      "eventType": "thermometer",
+      "data": "fhntfhndrt",
+      "description": "dndrtner",
+      "dependencies": [
+        "end_game"
+      ],
+      "actions": [
+        null
+      ],
+      "message": ""
     }
   ],
-  "actions": [{
+  "actions": [
+    {
       "id": "1",
       "name": "play_start_music",
       "device_id": "30",
@@ -305,10 +202,12 @@
       "repeatable": "true",
       "actions": [],
       "message": "played music",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "2",
@@ -325,10 +224,12 @@
       "repeatable": "true",
       "actions": [],
       "message": "played music",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "3",
@@ -342,13 +243,18 @@
       "data": "1",
       "description": "Jump Scare!!!!",
       "repeatable": "true",
-      "dependencies": ["play_box_music", "play_start_music"],
+      "dependencies": [
+        "play_box_music",
+        "play_start_music"
+      ],
       "actions": [],
       "message": "Jump scare",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "4",
@@ -365,10 +271,12 @@
       "dependencies": [],
       "actions": [],
       "message": "open_door",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "5",
@@ -385,10 +293,12 @@
       "dependencies": [],
       "actions": [],
       "message": "LED on",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "6",
@@ -405,10 +315,12 @@
       "dependencies": [],
       "actions": [],
       "message": "LED off",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "7",
@@ -425,10 +337,12 @@
       "dependencies": [],
       "actions": [],
       "message": "chest_door_on",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "8",
@@ -445,10 +359,12 @@
       "dependencies": [],
       "actions": [],
       "message": "Top drawer open",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "9",
@@ -465,10 +381,12 @@
       "dependencies": [],
       "actions": [],
       "message": "second_drawer_on",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "10",
@@ -485,10 +403,12 @@
       "dependencies": [],
       "actions": [],
       "message": "vent_latch_on",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "11",
@@ -505,10 +425,12 @@
       "dependencies": [],
       "actions": [],
       "message": "LED off",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "12",
@@ -519,16 +441,21 @@
       "wait": 0,
       "action": "outGoingCall",
       "actionType": "phoneAT",
-      "data": [90, 15],
+      "data": [
+        90,
+        15
+      ],
       "description": "phone out r u wrath",
       "repeatable": "true",
       "dependencies": [],
       "actions": [],
       "message": "phone out r u wrath",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "13",
@@ -539,16 +466,21 @@
       "wait": 0,
       "action": "inCommingCall",
       "actionType": "phoneAT",
-      "data": [8, 5],
+      "data": [
+        8,
+        5
+      ],
       "description": "phone out test",
       "repeatable": "true",
       "dependencies": [],
       "actions": [],
       "message": "phone out",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "14",
@@ -565,10 +497,12 @@
       "dependencies": [],
       "actions": [],
       "message": "chest_door_on",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "14",
@@ -585,10 +519,12 @@
       "dependencies": [],
       "actions": [],
       "message": "chest_door_off",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     },
     {
       "id": "14",
@@ -599,19 +535,25 @@
       "wait": 0,
       "action": "outGoingCall",
       "actionType": "phoneAT",
-      "data": [2, 5],
+      "data": [
+        2,
+        5
+      ],
       "description": "phone out test",
       "repeatable": "true",
       "dependencies": [],
       "actions": [],
       "message": "phone continue",
-      "states": [{
-        "name": "start_game",
-        "active": true
-      }]
+      "states": [
+        {
+          "name": "start_game",
+          "active": true
+        }
+      ]
     }
   ],
-  "triggers": [{
+  "triggers": [
+    {
       "name": "start video",
       "trigger": "start_game",
       "audio": "someFile.mp3",
@@ -633,7 +575,8 @@
       "can_toggle": "true"
     }
   ],
-  "hints": [{
+  "hints": [
+    {
       "name": "Start hint",
       "hint": "Read the whole thing bro"
     },

@@ -1,6 +1,7 @@
 //@ts-check
 const path = require('path');
 const fs = require('fs');
+const jsonfile = require("jsonfile");
 var log = require('./loggingController').log;
 var gameController = require('./gameController');
 var SocketController = require("./socketController")
@@ -11,7 +12,7 @@ var scripts = []
 readScriptsInDirectory();
 
 exports.createScript = function (req, res) {
-    res.send("creating script")
+    res.send(`{"message":"creating script"}`)
 }
 
 exports.readScript = function (req, res) {
@@ -26,11 +27,13 @@ exports.readScripts = function (req, res) {
 }
 
 exports.updateScript = function (req, res) {
-    res.send("updating script")
+    log(req.body);
+    localUpdateScript(req.body);
+    res.send(`{"message":"updating script"}`)
 }
 
 exports.deleteScript = function (req, res) {
-    res.send("deleting script")
+    res.send(`{"message":"deleting script"}`)
 }
 
 exports.updateScriptDir = function (req, res) {
@@ -127,4 +130,9 @@ function getAction(actions, actionName) {
             }
         })
     })
+}
+
+function localUpdateScript(script){
+    const file = `${directoryPath}/${script.name}.json`;
+    jsonfile.writeFileSync(file, script, { spaces: 2 })
 }
