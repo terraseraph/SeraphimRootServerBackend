@@ -2,7 +2,24 @@
     "name": "TimeMachine",
     "id": "3",
     "masterId": "255",
-	"time": {"hours":"0", "minutes":"60", "seconds":"0"},
+    "time": {
+        "hours": "0",
+        "minutes": "60",
+        "seconds": "0"
+    },
+    "states": [{
+            "name": "start_game",
+            "active": false
+        },
+        {
+            "name": "end_game",
+            "active": false
+        },
+        {
+            "name": "open_door",
+            "active": false
+        }
+    ],
     "events": [{
             "id": "1",
             "name": "start_timeMachine_game",
@@ -14,7 +31,10 @@
             "dependencies": [],
             "actions": ["chest_door_start"],
             "message": "started the game",
-            "state": "start_game"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "2",
@@ -42,7 +62,10 @@
             "actions": ["top_drawer_toggle"],
             "can_toggle": "true",
             "message": "opened box",
-            "state": "open_door"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "4",
@@ -56,7 +79,10 @@
             "actions": ["second_drawer_toggle"],
             "can_toggle": "true",
             "message": "opened box",
-            "state": "open_door"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "5",
@@ -70,7 +96,10 @@
             "actions": ["vent_latch_toggle"],
             "can_toggle": "true",
             "message": "opened box",
-            "state": "open_door"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "6",
@@ -84,7 +113,10 @@
             "actions": ["play_start_music"],
             "can_toggle": "true",
             "message": "opened box",
-            "state": "open_door"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "7",
@@ -98,7 +130,10 @@
             "actions": ["second_drawer_toggle"],
             "can_toggle": "true",
             "message": "opened jack_in_the_box",
-            "state": "jack_in_the_box"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "8",
@@ -112,7 +147,10 @@
             "actions": ["vent_latch_toggle"],
             "can_toggle": "true",
             "message": "opened vent",
-            "state": "vent_opened"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "9",
@@ -126,7 +164,10 @@
             "actions": ["chest_door_stop"],
             "can_toggle": "true",
             "message": "opened chest",
-            "state": "chest_opened"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "10",
@@ -140,7 +181,10 @@
             "actions": ["top_drawer_toggle"],
             "can_toggle": "true",
             "message": "Tetris",
-            "state": "tetris"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "11",
@@ -154,7 +198,10 @@
             "actions": ["phone_wrath"],
             "can_toggle": "true",
             "message": "phone out",
-            "state": "phone1"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "12",
@@ -168,7 +215,10 @@
             "actions": ["continue_phone"],
             "can_toggle": "true",
             "message": "phone out",
-            "state": "continue_game"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "13",
@@ -182,7 +232,10 @@
             "actions": ["phone_test_in"],
             "can_toggle": "true",
             "message": "keypad test phone in",
-            "state": "end_game"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "14",
@@ -196,7 +249,10 @@
             "actions": ["vent_latch_toggle"],
             "can_toggle": "true",
             "message": "backup opened vent",
-            "state": "vent_opened"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "15",
@@ -210,7 +266,10 @@
             "actions": ["second_drawer_toggle"],
             "can_toggle": "true",
             "message": "opened jack_in_the_box",
-            "state": "end_game"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "16",
@@ -224,7 +283,10 @@
             "actions": ["chest_door_stop"],
             "can_toggle": "true",
             "message": "keypad test phone in",
-            "state": "chest_opened"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         }
     ],
     "actions": [{
@@ -242,7 +304,10 @@
             "repeatable": "true",
             "actions": [],
             "message": "played music",
-            "state": "play_start_music"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "2",
@@ -259,7 +324,10 @@
             "repeatable": "true",
             "actions": [],
             "message": "played music",
-            "state": "play_start_music"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "3",
@@ -276,7 +344,10 @@
             "dependencies": ["play_box_music", "play_start_music"],
             "actions": [],
             "message": "Jump scare",
-            "state": "play_start_music"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "4",
@@ -293,7 +364,10 @@
             "dependencies": [],
             "actions": [],
             "message": "open_door",
-            "state": "open_door"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "5",
@@ -310,7 +384,10 @@
             "dependencies": [],
             "actions": [],
             "message": "LED on",
-            "state": "test_led"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "6",
@@ -327,7 +404,10 @@
             "dependencies": [],
             "actions": [],
             "message": "LED off",
-            "state": "test_led_off"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "7",
@@ -344,7 +424,10 @@
             "dependencies": [],
             "actions": [],
             "message": "chest_door_on",
-            "state": "test_led_off"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "8",
@@ -361,7 +444,10 @@
             "dependencies": [],
             "actions": [],
             "message": "Top drawer open",
-            "state": "top_drawer_on"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "9",
@@ -378,7 +464,10 @@
             "dependencies": [],
             "actions": [],
             "message": "second_drawer_on",
-            "state": "second_drawer_on"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "10",
@@ -395,7 +484,10 @@
             "dependencies": [],
             "actions": [],
             "message": "vent_latch_on",
-            "state": "vent_latch_on"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "11",
@@ -412,7 +504,10 @@
             "dependencies": [],
             "actions": [],
             "message": "LED off",
-            "state": "test_led_off"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "12",
@@ -429,7 +524,10 @@
             "dependencies": [],
             "actions": [],
             "message": "phone out r u wrath",
-            "state": "phoned_wrath"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "13",
@@ -446,7 +544,10 @@
             "dependencies": [],
             "actions": [],
             "message": "phone out",
-            "state": "phone_in_tested"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "14",
@@ -463,7 +564,10 @@
             "dependencies": [],
             "actions": [],
             "message": "chest_door_on",
-            "state": "test_led_off"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "14",
@@ -480,7 +584,10 @@
             "dependencies": [],
             "actions": [],
             "message": "chest_door_off",
-            "state": "test_led_off"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         },
         {
             "id": "14",
@@ -497,44 +604,45 @@
             "dependencies": [],
             "actions": [],
             "message": "phone continue",
-            "state": "continue_phone"
+            "states": [{
+                "name": "start_game",
+                "active": true
+            }]
         }
     ],
-	  "triggers": [
-    {
-      "name": "start video",
-      "trigger": "start_game",
-      "audio": "someFile.mp3",
-      "video": "some video.mp4",
-      "timeValue": {
-        "hours": "0",
-        "minutes": "60",
-        "seconds": "0"
-      },
-      "hint": "end hint",
-      "can_toggle": "true"
-    },
-    {
-      "name": "end video",
-      "trigger": "end_game",
-      "audio": "anoptherfile.mp3",
-      "video": "another video.mp4",
-      "hint": "",
-      "can_toggle": "true"
-    }
-  ],
-  "hints": [
-    {
-      "name": "Start hint",
-      "hint": "Read the whole thing bro"
-    },
-    {
-      "name": "not hint",
-      "hint": "make sure you drop some loose change"
-    },
-    {
-      "name": "end hint",
-      "hint": "waughhhh"
-    }
-  ]
+    "triggers": [{
+            "name": "start video",
+            "trigger": "start_game",
+            "audio": "someFile.mp3",
+            "video": "some video.mp4",
+            "timeValue": {
+                "hours": "0",
+                "minutes": "60",
+                "seconds": "0"
+            },
+            "hint": "end hint",
+            "can_toggle": "true"
+        },
+        {
+            "name": "end video",
+            "trigger": "end_game",
+            "audio": "anoptherfile.mp3",
+            "video": "another video.mp4",
+            "hint": "",
+            "can_toggle": "true"
+        }
+    ],
+    "hints": [{
+            "name": "Start hint",
+            "hint": "Read the whole thing bro"
+        },
+        {
+            "name": "not hint",
+            "hint": "make sure you drop some loose change"
+        },
+        {
+            "name": "end hint",
+            "hint": "waughhhh"
+        }
+    ]
 }
