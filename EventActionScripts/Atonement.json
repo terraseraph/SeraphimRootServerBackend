@@ -25,7 +25,7 @@
   "events": [
     {
       "id": "1",
-      "name": "iougiuyfffif",
+      "name": "first event",
       "device_id": "10",
       "event": "rangeTrigger",
       "eventType": "thermometer",

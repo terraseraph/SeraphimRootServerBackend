@@ -18,7 +18,7 @@
     },
     {
       "name": "open_door",
-      "active": false
+      "active": true
     }
   ],
   "events": [
@@ -35,38 +35,6 @@
         "chest_door_start"
       ],
       "message": "started the game",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
-    },
-    {
-      "id": "7",
-      "name": "jack_in_the_box",
-      "device_id": "24",
-      "event": "toggle",
-      "eventType": "magnetSwitch",
-      "data": [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
-      ],
-      "description": "players opened jack in the box",
-      "dependencies": [],
-      "actions": [
-        "second_drawer_toggle"
-      ],
-      "can_toggle": "true",
-      "message": "opened jack_in_the_box",
       "states": [
         {
           "name": "start_game",
@@ -166,162 +134,25 @@
     {
       "states": [
         {
-          "name": "end_game",
-          "active": false
+          "name": "open_door",
+          "active": true
         }
       ],
-      "id": "",
-      "name": "hgjgjngcf",
-      "device_id": "cfjdxtjft",
-      "event": "rangeTrigger",
-      "eventType": "thermometer",
-      "data": "fhntfhndrt",
-      "description": "dndrtner",
+      "id": "111",
+      "name": "the blockes@#@#",
+      "device_id": "dsfewf",
+      "event": "code",
+      "eventType": "keypad",
+      "data": "fefaewf",
+      "description": "aesfaef",
       "dependencies": [
         "end_game"
       ],
-      "actions": [
-        null
-      ],
+      "actions": [],
       "message": ""
     }
   ],
   "actions": [
-    {
-      "id": "1",
-      "name": "play_start_music",
-      "device_id": "30",
-      "event": "noneE",
-      "eventType": "noneET",
-      "action": "play",
-      "actionType": "mp3",
-      "wait": 0,
-      "data": "1",
-      "description": "the beginning of the game, code typed or something",
-      "dependencies": [],
-      "repeatable": "true",
-      "actions": [],
-      "message": "played music",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
-    },
-    {
-      "id": "2",
-      "name": "play_box_music",
-      "device_id": "30",
-      "event": "noneE",
-      "eventType": "noneET",
-      "wait": 0,
-      "action": "play",
-      "actionType": "mp3",
-      "data": "3",
-      "description": "the music!!!!!!!!!",
-      "dependencies": [],
-      "repeatable": "true",
-      "actions": [],
-      "message": "played music",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
-    },
-    {
-      "id": "3",
-      "name": "do_third_action",
-      "device_id": "20",
-      "event": "noneE",
-      "eventType": "noneET",
-      "wait": 0,
-      "action": "start",
-      "actionType": "buzzer",
-      "data": "1",
-      "description": "Jump Scare!!!!",
-      "repeatable": "true",
-      "dependencies": [
-        "play_box_music",
-        "play_start_music"
-      ],
-      "actions": [],
-      "message": "Jump scare",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
-    },
-    {
-      "id": "4",
-      "name": "open_door",
-      "device_id": "21",
-      "event": "noneE",
-      "eventType": "noneET",
-      "wait": 0,
-      "action": "on",
-      "actionType": "relay",
-      "data": "929",
-      "description": "Jump Scare!!!!",
-      "repeatable": "true",
-      "dependencies": [],
-      "actions": [],
-      "message": "open_door",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
-    },
-    {
-      "id": "5",
-      "name": "test_led",
-      "device_id": "23",
-      "event": "noneE",
-      "eventType": "noneET",
-      "wait": 0,
-      "action": "start",
-      "actionType": "relay",
-      "data": "4",
-      "description": "LED on",
-      "repeatable": "true",
-      "dependencies": [],
-      "actions": [],
-      "message": "LED on",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
-    },
-    {
-      "id": "6",
-      "name": "test_led_off",
-      "device_id": "23",
-      "event": "noneE",
-      "eventType": "noneET",
-      "wait": 0,
-      "action": "stop",
-      "actionType": "relay",
-      "data": "4",
-      "description": "LED off",
-      "repeatable": "true",
-      "dependencies": [],
-      "actions": [],
-      "message": "LED off",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
-    },
     {
       "id": "7",
       "name": "chest_door_toggle",
@@ -403,147 +234,6 @@
       "dependencies": [],
       "actions": [],
       "message": "vent_latch_on",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
-    },
-    {
-      "id": "11",
-      "name": "tetris_success",
-      "device_id": "30",
-      "event": "noneE",
-      "eventType": "noneET",
-      "wait": 0,
-      "action": "play",
-      "actionType": "mp3",
-      "data": "3",
-      "description": "LED off",
-      "repeatable": "true",
-      "dependencies": [],
-      "actions": [],
-      "message": "LED off",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
-    },
-    {
-      "id": "12",
-      "name": "phone_wrath",
-      "device_id": "12",
-      "event": "noneE",
-      "eventType": "noneET",
-      "wait": 0,
-      "action": "outGoingCall",
-      "actionType": "phoneAT",
-      "data": [
-        90,
-        15
-      ],
-      "description": "phone out r u wrath",
-      "repeatable": "true",
-      "dependencies": [],
-      "actions": [],
-      "message": "phone out r u wrath",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
-    },
-    {
-      "id": "13",
-      "name": "phone_test_in",
-      "device_id": "12",
-      "event": "noneE",
-      "eventType": "noneET",
-      "wait": 0,
-      "action": "inCommingCall",
-      "actionType": "phoneAT",
-      "data": [
-        8,
-        5
-      ],
-      "description": "phone out test",
-      "repeatable": "true",
-      "dependencies": [],
-      "actions": [],
-      "message": "phone out",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
-    },
-    {
-      "id": "14",
-      "name": "chest_door_start",
-      "device_id": "31",
-      "event": "noneE",
-      "eventType": "noneET",
-      "wait": 0,
-      "action": "start",
-      "actionType": "relay",
-      "data": "4",
-      "description": "Chest Door On",
-      "repeatable": "true",
-      "dependencies": [],
-      "actions": [],
-      "message": "chest_door_on",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
-    },
-    {
-      "id": "14",
-      "name": "chest_door_stop",
-      "device_id": "31",
-      "event": "noneE",
-      "eventType": "noneET",
-      "wait": 0,
-      "action": "stop",
-      "actionType": "relay",
-      "data": "4",
-      "description": "Chest Door Off",
-      "repeatable": "true",
-      "dependencies": [],
-      "actions": [],
-      "message": "chest_door_off",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
-    },
-    {
-      "id": "14",
-      "name": "continue_phone",
-      "device_id": "12",
-      "event": "noneE",
-      "eventType": "noneET",
-      "wait": 0,
-      "action": "outGoingCall",
-      "actionType": "phoneAT",
-      "data": [
-        2,
-        5
-      ],
-      "description": "phone out test",
-      "repeatable": "true",
-      "dependencies": [],
-      "actions": [],
-      "message": "phone continue",
       "states": [
         {
           "name": "start_game",

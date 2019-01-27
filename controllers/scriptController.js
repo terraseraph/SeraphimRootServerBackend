@@ -135,4 +135,10 @@ function getAction(actions, actionName) {
 function localUpdateScript(script){
     const file = `${directoryPath}/${script.name}.json`;
     jsonfile.writeFileSync(file, script, { spaces: 2 })
+    for(var i = 0 ; i < scripts.length ; i++){
+        if(scripts[i].name == script.name){
+            scripts[i] = script;
+            log("Updated script: ", scripts[i].name);
+        }
+    }
 }
