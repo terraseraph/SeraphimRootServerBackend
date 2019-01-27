@@ -4,7 +4,7 @@
   "masterId": "255",
   "time": {
     "hours": "0",
-    "minutes": "60",
+    "minutes": "30",
     "seconds": "0"
   },
   "states": [
@@ -17,8 +17,12 @@
       "active": false
     },
     {
-      "name": "open_door",
+      "name": "open_doo",
       "active": true
+    },
+    {
+      "name": "cnu5yncy",
+      "active": false
     }
   ],
   "events": [
@@ -38,6 +42,14 @@
       "states": [
         {
           "name": "start_game",
+          "active": true
+        },
+        {
+          "name": "the_mighty_one",
+          "active": true
+        },
+        {
+          "name": "open_doorcftbtrrtx",
           "active": true
         }
       ]
@@ -244,24 +256,19 @@
   ],
   "triggers": [
     {
-      "name": "start video",
-      "trigger": "start_game",
-      "audio": "someFile.mp3",
-      "video": "some video.mp4",
-      "timeValue": {
-        "hours": "0",
-        "minutes": "60",
-        "seconds": "0"
-      },
-      "hint": "end hint",
-      "can_toggle": "true"
-    },
-    {
       "name": "end video",
       "trigger": "end_game",
       "audio": "anoptherfile.mp3",
       "video": "another video.mp4",
       "hint": "",
+      "can_toggle": "true"
+    },
+    {
+      "name": "Best trigger",
+      "trigger": "start_game",
+      "audio": "audio.mp3",
+      "video": "movie.mp4",
+      "hint": "sopme hint",
       "can_toggle": "true"
     }
   ],

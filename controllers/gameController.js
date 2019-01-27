@@ -13,9 +13,9 @@ class Game {
     this.name = name;
     this.timeLimit = timeLimit;
     this.time = {
-      hrs: 0,
-      min: 0,
-      sec: 0
+      hours: 0,
+      minutes: 0,
+      seconds: 0
     };
     this.script = script;
     this.states = [];
@@ -39,11 +39,12 @@ class Game {
       countdown: this.countdown,
       precision: "seconds",
       startValues: {
-        hours: this.timeLimit.hrs,
-        minutes: this.timeLimit.min,
-        seconds: this.timeLimit.sec
+        hours: this.timeLimit.hours,
+        minutes: this.timeLimit.minutes,
+        seconds: this.timeLimit.seconds
       }
     });
+    log(this.timeLimit)
     this.prepareTimerEventListners();
   }
 
@@ -132,11 +133,11 @@ class Game {
       }
       t.prepareStructure();
       // @ts-ignore
-      t.time.hrs = t.timer.getTimeValues().hours;
+      t.time.hours = t.timer.getTimeValues().hours;
       // @ts-ignore
-      t.time.min = t.timer.getTimeValues().minutes;
+      t.time.minutes = t.timer.getTimeValues().minutes;
       // @ts-ignore
-      t.time.sec = t.timer.getTimeValues().seconds;
+      t.time.seconds= t.timer.getTimeValues().seconds;
       SocketController.socketSendEvent({
         instance_update: t
       });
