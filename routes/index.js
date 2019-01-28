@@ -3,6 +3,7 @@ var router = express.Router();
 const app = require('../app')
 const ScriptController = require("../controllers/scriptController");
 const GameController = require("../controllers/gameController");
+const BranchController = require("../controllers/branchController");
 var log = require('../controllers/loggingController').log;
 /* GET home page. */
 
@@ -18,9 +19,9 @@ router.get('/', function (req, res, next) {
 //====== Event action paths ==================//
 //===========================================//
 
-// router.post('/force/event', ScriptController.forceEvent)
-router.route('/force/action').post(ScriptController.forceAction);
-router.route('/force/event').post(ScriptController.forceEvent);
+
+router.route('/script/force/action').post(ScriptController.forceAction);
+router.route('/script/force/event').post(ScriptController.forceEvent);
 
 //=============================================//
 //====== Script paths ========================//
@@ -52,6 +53,30 @@ router.put('/game/time', GameController.updateGameTime)
 router.get('/game/time/pause/:name', GameController.pauseGame)
 router.get('/game/time/resume/:name', GameController.resumeGame)
 
+router.route('/game/force/action').post(GameController.forceAction);
+router.route('/game/force/event').post(GameController.forceEvent);
+
 router.delete('/game/:name', GameController.deleteGame)
+
+
+
+
+//=============================================//
+//====== Branch paths ==========================//
+//===========================================//
+router.post('/branch/event', BranchController.branchSendEvent);
+router.post('/branch/action', BranchController.branchSendAction);
+
+router.post('/branch/script/update', BranchController.branchUpdateScript);
+
+router.post('/branch/trigger', BranchController.branchSendTrigger);
+router.post('/branch/trigger/audio', BranchController.branchSendAudio);
+router.post('/branch/trigger/video', BranchController.branchSendVideo);
+
+router.post('/branch/hint', BranchController.branchSendHint);
+router.post('/branch/hint/clear', BranchController.branchClearHint);
+
+
+
 
 module.exports = router;

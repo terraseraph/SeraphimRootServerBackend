@@ -46,10 +46,12 @@ exports.updateScriptDir = function (req, res) {
 exports.forceEvent = function (req, res) {
     var name = req.body.name
     var eventName = req.body.forceEvent
+    var time = req.body.completedTime
     console.log(name, eventName)
     getScript(name).then((s) => {
         getEvent(s.events, eventName).then((evt) => {
             evt.status = "complete";
+            evt.completed_time = time;
             var msg = {
                 event: evt,
                 script_name: name
@@ -100,6 +102,40 @@ function readScriptsInDirectory() {
     })
 }
 
+function readScriptInDirectory(scriptName) {
+    return new Promise((resolve, reject) => {
+        readScriptsInDirectory().then(lScripts => {
+            for (var i = 0; i < lScripts.length; i++) {
+                if (lScripts[i].name == scriptName) {
+                    resolve(lScripts[i]);
+                }
+            }
+        })
+    })
+}
+
+// Gets the script from memory
+exports.localGetScript = function (name) {
+    getScript().then(s => {
+        return s;
+    })
+}
+
+// Gets the script from the filesystem to refresh
+exports.localGetFreshScript = function (scriptName) {
+    return new Promise((resolve, reject) => {
+        readScriptInDirectory(scriptName).then(script => {
+            for (var i = 0; i < scripts.length; i++) {
+                if (scripts[i].name == scriptName) {
+                    scripts[i] = script;
+                    resolve(script);
+                }
+            }
+        })
+    })
+}
+
+
 function getScript(name) {
     return new Promise((resolve, reject) => {
         scripts.forEach(function (script) {
@@ -132,11 +168,13 @@ function getAction(actions, actionName) {
     })
 }
 
-function localUpdateScript(script){
+function localUpdateScript(script) {
     const file = `${directoryPath}/${script.name}.json`;
-    jsonfile.writeFileSync(file, script, { spaces: 2 })
-    for(var i = 0 ; i < scripts.length ; i++){
-        if(scripts[i].name == script.name){
+    jsonfile.writeFileSync(file, script, {
+        spaces: 2
+    })
+    for (var i = 0; i < scripts.length; i++) {
+        if (scripts[i].name == script.name) {
             scripts[i] = script;
             log("Updated script: ", scripts[i].name);
         }

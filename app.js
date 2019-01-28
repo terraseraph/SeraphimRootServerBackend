@@ -98,7 +98,7 @@ io.on("connection", function (socket) {
 
 /** Server Settings */
 var port = 4300; //TODO: get this from a config file
-var ipAddress = "localhost"; //TODO: get this froma  config file too
+var ipAddress = "0.0.0.0"; //TODO: get this froma  config file too
 
 server.listen(port, ipAddress);
 server.on("error", onError);

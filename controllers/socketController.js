@@ -38,6 +38,11 @@ exports.socketSendAction = function (action) {
     io.emit(`message`, action)
 }
 
+exports.socketEmit = function (msg) {
+    // @ts-ignore
+    io.emit(`message`, msg)
+}
+
 function updateTime(msg) {
     // @ts-ignore
     return new Promise((resolve, reject) => {
@@ -62,6 +67,13 @@ function forceEvent(msg) {
 }
 
 function forceAction(msg) {
+    // @ts-ignore
+    io.emit(`message`, msg)
+}
+
+function emit(msg) {
+    log("msg");
+
     // @ts-ignore
     io.emit(`message`, msg)
 }

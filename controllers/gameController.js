@@ -5,6 +5,8 @@
 var Timer = require("easytimer");
 var SocketController = require("./socketController");
 var log = require("./loggingController").log;
+var ScriptController = require("./scriptController");
+const BranchController = require("./branchController");
 // @ts-ignore
 var timerArr = [];
 
@@ -76,6 +78,15 @@ class Game {
     return this.time;
   }
 
+  getTimeStaticValues(){
+    let r = {
+      hours: this.time.hours,
+      minutes: this.time.minutes,
+      seconds: this.time.seconds,
+    }
+    return r;
+  }
+
   setScript(script) {
     this.script = script;
   }
@@ -105,6 +116,22 @@ class Game {
   resetTime() {
     // @ts-ignore
     this.timer.reset();
+  }
+
+  checkStateTriggers(state){
+    for(var t of this.script.triggers){
+      if(t.state == state){
+        log("DO TRIGGER ON THIS STATE!!")
+      }
+    }
+  }
+
+  checkTimeTriggers(time){
+    for(var t of this.script.triggers){
+      if(t.time == time){
+        log("DO TRIGGER ON THIS TIME!!")
+      }
+    }
   }
 
   updateTime(customTime) {
@@ -141,6 +168,7 @@ class Game {
       SocketController.socketSendEvent({
         instance_update: t
       });
+      this.checkTimeTriggers(t.time);
     });
     // @ts-ignore
     this.timer.addEventListener("targetAchieved", function (e) {
@@ -180,18 +208,21 @@ var gamesJson = {};
 //===========================================//
 
 exports.newGame = function (req, res) {
-  var script = req.body.name;
+  var exScript = req.body.name;
   var timeLimit = req.body.timeLimit;
+  ScriptController.localGetFreshScript(exScript.name).then(script =>{
+    // remove duplicate game instance
+    removeDuplicateInstance(script).then(() => {
+      //if no time, then go by script time
+      var game = new Game(script.name, timeLimit, script);
+      game.startTime();
+      gamesJson[`${script.name}`] = game;
+      // games.push(game);
+      res.send(game);
+    });
 
-  // remove duplicate game instance
-  removeDuplicateInstance(script).then(() => {
-    //if no time, then go by script time
-    var game = new Game(script.name, timeLimit, script);
-    game.startTime();
-    gamesJson[`${script.name}`] = game;
-    // games.push(game);
-    res.send(game);
-  });
+
+  })
   // TODO: test
 };
 
@@ -261,6 +292,57 @@ exports.resumeGame = function (req, res) {
     res.send(`${name} resumed`);
   }
 };
+
+// ===================================================================== //
+// =======================Force Event Action =========================== //
+// ===================================================================== //
+
+
+exports.forceEvent = function (req, res) {
+  var name = req.body.name
+  var eventName = req.body.forceEvent
+  var time = req.body.completedTime
+  console.log(name, eventName)
+  getScriptInstance(name).then((instanceName) => {
+    gamesJson[`${instanceName}`].script.events.forEach(function(evt){
+      if(evt.name == eventName){
+        const t = gamesJson[`${instanceName}`].getTimeStaticValues();
+        let address = gamesJson[`${instanceName}`].script.branch_address;
+        evt.status = "complete";
+        evt.completed_time = t;
+        BranchController.localBranchSendEvent(instanceName, eventName, address);
+        res.send(gamesJson[`${instanceName}`]);
+      }
+    })
+  })
+}
+
+exports.forceAction = function (req, res) {
+  var name = req.body.name
+  var actionName = req.body.forceAction
+  getScriptInstance(name).then((instanceName) => {
+    gamesJson[`${instanceName}`].script.actions.forEach(function(act){
+      if(act.name == actionName){
+        act.status = "complete";
+        let address = gamesJson[`${instanceName}`].script.branch_address;
+        BranchController.localBranchSendAction(instanceName, actionName, address);
+      }
+    })
+  })
+}
+
+function getScriptInstance(name) {
+  return new Promise((resolve, reject) => {
+  for (var key in gamesJson) {
+    if (gamesJson.hasOwnProperty(`${key}`)) {
+      if (gamesJson[`${key}`].name == name) {
+        resolve(key);
+      }
+    }
+  }
+
+  })
+}
 
 //=============================================//
 //====== Local functions ========================//
