@@ -2,8 +2,11 @@
 var SocketController = require("./socketController");
 var log = require("./loggingController").log;
 var ScriptController = require("./scriptController");
-var $ = require('jquery');
-
+var $ = require('jQuery');
+var branchRoutes = {
+    event : `/server/event`,
+    action : `/server/action`
+}
 
 
 // ============================================================== //
@@ -40,7 +43,7 @@ function sendEvent(scriptName, eventName, branchUrl){
             scriptName: scriptName,
             eventName: eventName
         }
-        $.post(branchUrl, msg, function(data){
+        $.post(branchUrl + branchRoutes.event, msg, function(data){
             log(data);
             resolve(data);
         })
@@ -54,7 +57,7 @@ function sendAction(scriptName, actionName, branchUrl){
             scriptName: scriptName,
             actionName: actionName
         }
-        $.post(branchUrl, msg, function(data){
+        $.post(branchUrl + branchRoutes.action, msg, function(data){
             log(data);
             resolve(data);
         })

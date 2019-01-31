@@ -168,7 +168,7 @@ class Game {
       SocketController.socketSendEvent({
         instance_update: t
       });
-      this.checkTimeTriggers(t.time);
+      t.checkTimeTriggers(t.time);
     });
     // @ts-ignore
     this.timer.addEventListener("targetAchieved", function (e) {
