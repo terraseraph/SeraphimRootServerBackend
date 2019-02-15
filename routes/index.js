@@ -48,6 +48,7 @@ router.post('/game', GameController.newGame)
 router.get('/game/:name', GameController.readGame)
 router.get('/game', GameController.readAll)
 router.put('/game/state', GameController.updateGameState)
+router.put('/game/event/complete', GameController.setEventCompleted)
 
 router.put('/game/time', GameController.updateGameTime)
 router.get('/game/time/pause/:name', GameController.pauseGame)

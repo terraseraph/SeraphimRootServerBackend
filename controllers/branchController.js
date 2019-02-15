@@ -20,10 +20,6 @@ exports.branchSendEvent = function(req, res){
     sendEvent(scriptName, eventName, branchUrl);
 }
 
-exports.localBranchSendEvent = function(scriptName, eventName, branchUrl){
-    sendEvent(scriptName, eventName, branchUrl);
-}
-
 
 exports.branchSendAction = function(req, res){
     var scriptName = req.body.scriptName;
@@ -33,12 +29,13 @@ exports.branchSendAction = function(req, res){
 }
 
 
-function sendEvent(scriptName, eventName, branchUrl){
+function sendEvent(scriptName, eventName, branchUrl, masterId){
     return new Promise((resolve, reject) =>{
         
         var msg = {
             scriptName: scriptName,
-            eventName: eventName
+            eventName: eventName,
+            masterId: masterId
         }
 
         var url = (branchUrl + branchRoutes.event);
@@ -60,6 +57,7 @@ function sendEvent(scriptName, eventName, branchUrl){
         // })
     })
 }
+exports.sendEvent = sendEvent;
 
 function sendAction(scriptName, actionName, branchUrl, masterId){
     return new Promise((resolve, reject) =>{

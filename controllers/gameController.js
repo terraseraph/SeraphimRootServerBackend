@@ -316,9 +316,10 @@ exports.forceEvent = function (req, res) {
       if(evt.name == eventName){
         const t = gamesJson[`${instanceName}`].getTimeStaticValues();
         let address = gamesJson[`${instanceName}`].script.branch_address;
+        let masterId = gamesJson[`${instanceName}`].script.masterId;
         evt.status = "complete";
         evt.completed_time = t;
-        BranchController.localBranchSendEvent(instanceName, eventName, address);
+        BranchController.sendEvent(instanceName, eventName, address, masterId);
         res.send(gamesJson[`${instanceName}`]);
       }
     })
@@ -340,6 +341,23 @@ exports.forceAction = function (req, res) {
     })
   })
 }
+
+function setEventCompleted(req, res){
+  var scriptName = req.body.branch_name;
+  var eventName = req.body.name;
+  getScriptInstance(scriptName).then((instanceName) => {
+    gamesJson[`${instanceName}`].script.events.forEach(function(evt){
+      if(evt.name == eventName){
+        const t = gamesJson[`${instanceName}`].getTimeStaticValues();
+        evt.status = "complete";
+        evt.completed_time = t;
+        res.send({event : "completed"});
+      }
+    })
+  })
+}
+exports.setEventCompleted = setEventCompleted;
+
 
 function getScriptInstance(name) {
   return new Promise((resolve, reject) => {
