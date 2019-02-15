@@ -2,7 +2,8 @@
 var SocketController = require("./socketController");
 var log = require("./loggingController").log;
 var ScriptController = require("./scriptController");
-var $ = require('jQuery');
+// var $ = require('jQuery');
+var request = require('request');
 var branchRoutes = {
     event : `/server/event`,
     action : `/server/action`
@@ -31,10 +32,6 @@ exports.branchSendAction = function(req, res){
     sendAction(scriptName, actionName, branchUrl);
 }
 
-exports.localBranchSendAction = function(scriptName, actionName, branchUrl){
-    sendAction(scriptName, actionName, branchUrl);
-}
-
 
 function sendEvent(scriptName, eventName, branchUrl){
     return new Promise((resolve, reject) =>{
@@ -43,26 +40,56 @@ function sendEvent(scriptName, eventName, branchUrl){
             scriptName: scriptName,
             eventName: eventName
         }
-        $.post(branchUrl + branchRoutes.event, msg, function(data){
-            log(data);
-            resolve(data);
+
+        var url = (branchUrl + branchRoutes.event);
+        var options = {
+            method: 'post',
+            body: msg,
+            json: true,
+            url: url
+        }
+        request(options, (err, res, body)=>{
+            var result = { "Success": res}
+            resolve(result)
         })
+
+
+        // $.post(branchUrl + branchRoutes.event, msg, function(data){
+        //     log(data);
+        //     resolve(data);
+        // })
     })
 }
 
-function sendAction(scriptName, actionName, branchUrl){
+function sendAction(scriptName, actionName, branchUrl, masterId){
     return new Promise((resolve, reject) =>{
 
         var msg = {
             scriptName: scriptName,
-            actionName: actionName
+            actionName: actionName,
+            masterId: masterId
         }
-        $.post(branchUrl + branchRoutes.action, msg, function(data){
-            log(data);
-            resolve(data);
+
+
+        var url = (branchUrl + branchRoutes.action);
+        var options = {
+            method: 'post',
+            body: msg,
+            json: true,
+            url: url
+        }
+        log("============sending action==================", options)
+        request(options, (err, res, body)=>{
+            var result = { "Success": res}
+            resolve(result)
         })
+        // $.post(branchUrl + branchRoutes.action, msg, function(data){
+        //     log(data);
+        //     resolve(data);
+        // })
     })
 }
+exports.sendAction = sendAction;
 
 
 exports.branchUpdateScript = function(){

@@ -279,17 +279,25 @@ exports.deleteGame = function (req, res) {
 
 exports.pauseGame = function (req, res) {
   var name = req.params.name;
+  var result = {
+    status : "paused",
+    name : name
+  }
   if (gamesJson.hasOwnProperty(name)) {
     gamesJson[`${name}`].pauseTime();
-    res.send(`${name} paused`);
+    res.send(result);
   }
 };
 
 exports.resumeGame = function (req, res) {
   var name = req.params.name;
+  var result = {
+    status : "resumed",
+    name : name
+  }
   if (gamesJson.hasOwnProperty(name)) {
     gamesJson[`${name}`].resumeTime();
-    res.send(`${name} resumed`);
+    res.send(result);
   }
 };
 
@@ -321,11 +329,13 @@ exports.forceAction = function (req, res) {
   var name = req.body.name
   var actionName = req.body.forceAction
   getScriptInstance(name).then((instanceName) => {
+    var masterId = gamesJson[`${instanceName}`].script.masterId;
+    log("============ gameController.forceAction, sending action==================", gamesJson[`${instanceName}`].script)
     gamesJson[`${instanceName}`].script.actions.forEach(function(act){
       if(act.name == actionName){
         act.status = "complete";
         let address = gamesJson[`${instanceName}`].script.branch_address;
-        BranchController.localBranchSendAction(instanceName, actionName, address);
+        BranchController.sendAction(instanceName, actionName, address, masterId);
       }
     })
   })
@@ -333,10 +343,11 @@ exports.forceAction = function (req, res) {
 
 function getScriptInstance(name) {
   return new Promise((resolve, reject) => {
-  for (var key in gamesJson) {
+    for (var key in gamesJson) {
     if (gamesJson.hasOwnProperty(`${key}`)) {
       if (gamesJson[`${key}`].name == name) {
         resolve(key);
+        return;
       }
     }
   }

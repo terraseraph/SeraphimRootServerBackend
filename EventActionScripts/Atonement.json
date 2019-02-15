@@ -43,22 +43,6 @@
         {
           "name": "start_game",
           "active": true
-        },
-        {
-          "name": "open_door",
-          "active": true
-        },
-        {
-          "name": "open_door",
-          "active": false
-        },
-        {
-          "name": "open_door",
-          "active": false
-        },
-        {
-          "name": "end_game",
-          "active": true
         }
       ]
     },
@@ -194,7 +178,7 @@
       "data": "1",
       "description": "the beginning of the game, code typed or something",
       "dependencies": [],
-      "repeatable": "true",
+      "repeatable": false,
       "actions": [],
       "message": "played music",
       "states": [
