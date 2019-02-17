@@ -5,15 +5,15 @@ var ScriptController = require("./scriptController");
 // var $ = require('jQuery');
 var request = require('request');
 var branchRoutes = {
-    event : `/server/event`,
-    action : `/server/action`
+    event: `/server/event`,
+    action: `/server/action`
 }
 
 
 // ============================================================== //
 // ================= Branch Server Routes ====================== //
 // ============================================================== //
-exports.branchSendEvent = function(req, res){
+exports.branchSendEvent = function (req, res) {
     var scriptName = req.body.scriptName;
     var eventName = req.body.eventName;
     var branchUrl = req.body.branch_address;
@@ -21,7 +21,7 @@ exports.branchSendEvent = function(req, res){
 }
 
 
-exports.branchSendAction = function(req, res){
+exports.branchSendAction = function (req, res) {
     var scriptName = req.body.scriptName;
     var actionName = req.body.actionName;
     var branchUrl = req.body.branch_address;
@@ -29,9 +29,9 @@ exports.branchSendAction = function(req, res){
 }
 
 
-function sendEvent(scriptName, eventName, branchUrl, masterId){
-    return new Promise((resolve, reject) =>{
-        
+function sendEvent(scriptName, eventName, branchUrl, masterId) {
+    return new Promise((resolve, reject) => {
+
         var msg = {
             scriptName: scriptName,
             eventName: eventName,
@@ -45,8 +45,10 @@ function sendEvent(scriptName, eventName, branchUrl, masterId){
             json: true,
             url: url
         }
-        request(options, (err, res, body)=>{
-            var result = { "Success": res}
+        request(options, (err, res, body) => {
+            var result = {
+                "Success": res
+            }
             resolve(result)
         })
 
@@ -59,8 +61,8 @@ function sendEvent(scriptName, eventName, branchUrl, masterId){
 }
 exports.sendEvent = sendEvent;
 
-function sendAction(scriptName, actionName, branchUrl, masterId){
-    return new Promise((resolve, reject) =>{
+function sendAction(scriptName, actionName, branchUrl, masterId) {
+    return new Promise((resolve, reject) => {
 
         var msg = {
             scriptName: scriptName,
@@ -77,8 +79,10 @@ function sendAction(scriptName, actionName, branchUrl, masterId){
             url: url
         }
         log("============sending action==================", options)
-        request(options, (err, res, body)=>{
-            var result = { "Success": res}
+        request(options, (err, res, body) => {
+            var result = {
+                "Success": res
+            }
             resolve(result)
         })
         // $.post(branchUrl + branchRoutes.action, msg, function(data){
@@ -90,7 +94,7 @@ function sendAction(scriptName, actionName, branchUrl, masterId){
 exports.sendAction = sendAction;
 
 
-exports.branchUpdateScript = function(){
+exports.branchUpdateScript = function () {
 
 }
 
@@ -98,7 +102,7 @@ exports.branchUpdateScript = function(){
 // ================= Screen Display routes ====================== //
 // ============================================================== //
 
-exports.branchSendTrigger = function(req, res){
+exports.branchSendTrigger = function (req, res) {
     var scriptName = req.body.scriptName;
     var triggerName = req.body.triggerName;
     var msg = {
@@ -110,7 +114,7 @@ exports.branchSendTrigger = function(req, res){
 }
 
 
-exports.branchSendHint = function(req, res){
+exports.branchSendHint = function (req, res) {
     var scriptName = req.body.scriptName;
     var hintText = req.body.hintText;
     var msg = {
@@ -119,9 +123,14 @@ exports.branchSendHint = function(req, res){
         hintText: hintText
     }
     SocketController.socketEmit(msg);
+    var response = {
+        message: msg,
+        success: true
+    }
+    res.send(response);
 }
 
-exports.branchClearHint = function(req, res){
+exports.branchClearHint = function (req, res) {
     var scriptName = req.body.scriptName;
     var msg = {
         message_type: "hint",
@@ -132,7 +141,7 @@ exports.branchClearHint = function(req, res){
 }
 
 
-exports.branchSendAudio = function(req, res){
+exports.branchSendAudio = function (req, res) {
     var scriptName = req.body.scriptName;
     var audioFile = req.body.audioFile;
     var msg = {
@@ -144,7 +153,7 @@ exports.branchSendAudio = function(req, res){
 }
 
 
-exports.branchSendVideo = function(req, res){
+exports.branchSendVideo = function (req, res) {
     var scriptName = req.body.scriptName;
     var videoFile = req.body.videoFile;
     var msg = {
@@ -154,7 +163,3 @@ exports.branchSendVideo = function(req, res){
     }
     SocketController.socketEmit(msg);
 }
-
-
-
-

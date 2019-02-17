@@ -9,8 +9,7 @@
     "seconds": "35"
   },
   "states": [],
-  "events": [
-    {
+  "events": [{
       "id": "1",
       "name": "start_relay1",
       "device_id": "13",
@@ -23,12 +22,16 @@
         "relay1"
       ],
       "message": "started the game",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }],
+      "status": "complete",
+      "completed_time": {
+        "hours": 0,
+        "minutes": 30,
+        "seconds": 32
+      }
     },
     {
       "states": [],
@@ -39,7 +42,9 @@
       "eventType": "keypad",
       "data": "222222",
       "description": "",
-      "dependencies": [],
+      "dependencies": [
+        "start_game"
+      ],
       "actions": [
         "realy2"
       ],
@@ -73,7 +78,13 @@
       "actions": [
         "relay1_off"
       ],
-      "message": ""
+      "message": "",
+      "status": "complete",
+      "completed_time": {
+        "hours": 0,
+        "minutes": 30,
+        "seconds": 32
+      }
     },
     {
       "states": [],
@@ -104,10 +115,60 @@
         "relay3_off"
       ],
       "message": ""
+    },
+    {
+      "states": [],
+      "id": "",
+      "name": "relay4_toggle",
+      "device_id": "13",
+      "event": "code",
+      "eventType": "keypad",
+      "data": "777777",
+      "description": "",
+      "dependencies": [],
+      "actions": [
+        "6off_2_on"
+      ],
+      "message": ""
+    },
+    {
+      "states": [],
+      "id": "",
+      "name": "relay27on",
+      "device_id": "13",
+      "event": "code",
+      "eventType": "keypad",
+      "data": "888888",
+      "description": "",
+      "dependencies": [],
+      "actions": [
+        "27on"
+      ],
+      "message": ""
+    },
+    {
+      "states": [],
+      "id": "",
+      "name": "27off",
+      "device_id": "13",
+      "event": "code",
+      "eventType": "keypad",
+      "data": "999999",
+      "description": "",
+      "dependencies": [],
+      "actions": [
+        "27off"
+      ],
+      "message": "",
+      "status": "complete",
+      "completed_time": {
+        "hours": 0,
+        "minutes": 30,
+        "seconds": 32
+      }
     }
   ],
-  "actions": [
-    {
+  "actions": [{
       "id": "7",
       "name": "relay1",
       "device_id": "12",
@@ -138,7 +199,8 @@
       "message": "",
       "repeatable": true,
       "states": [],
-      "wait": 0
+      "wait": 0,
+      "status": "complete"
     },
     {
       "id": "",
@@ -153,7 +215,8 @@
       "repeatable": true,
       "message": "",
       "states": [],
-      "wait": 0
+      "wait": 0,
+      "status": "complete"
     },
     {
       "id": "",
@@ -200,10 +263,56 @@
       "message": "",
       "states": [],
       "wait": 0
+    },
+    {
+      "id": "",
+      "name": "relay4_toggle",
+      "device_id": "12",
+      "action": "toggleA",
+      "actionType": "relay",
+      "data": "5",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "27off",
+      "device_id": "12",
+      "action": "stop",
+      "actionType": "relay",
+      "data": "27",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true,
+      "status": "complete"
+    },
+    {
+      "id": "",
+      "name": "27on",
+      "device_id": "12",
+      "action": "start",
+      "actionType": "relay",
+      "data": "27",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true,
+      "status": "complete"
     }
   ],
-  "triggers": [
-    {
+  "triggers": [{
       "name": "end video",
       "trigger": "end_game",
       "audio": "anoptherfile.mp3",
@@ -220,8 +329,7 @@
       "can_toggle": "true"
     }
   ],
-  "hints": [
-    {
+  "hints": [{
       "name": "Start hint",
       "hint": "Read the whole thing bro"
     },
@@ -236,8 +344,8 @@
   ],
   "timeUpdate": {
     "hours": 0,
-    "minutes": 29,
-    "seconds": 53
+    "minutes": 30,
+    "seconds": 32
   },
   "ended": false
 }
