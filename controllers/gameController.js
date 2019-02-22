@@ -19,8 +19,10 @@ class Game {
       minutes: 0,
       seconds: 0
     };
+
+    this.completedEvents = [];
     this.script = script;
-    this.states = [];
+    this.states = script.states;
     this.countdown = true;
     this.ended = false;
     this.prepareStructure();
@@ -29,7 +31,7 @@ class Game {
 
   prepareStructure() {
     this.script.timeUpdate = this.time;
-    this.script.states = this.states;
+    // this.states = this.script.states;
     this.script.ended = this.ended;
   }
 
@@ -62,6 +64,12 @@ class Game {
     this.states.push(state);
   }
 
+  resetStates() {
+    this.states.forEach(state => {
+      state.active = false;
+    });
+  }
+
   getStates() {
     return this.states;
   }
@@ -78,13 +86,33 @@ class Game {
     return this.time;
   }
 
-  getTimeStaticValues(){
+  getTimeStaticValues() {
     let r = {
       hours: this.time.hours,
       minutes: this.time.minutes,
       seconds: this.time.seconds,
     }
     return r;
+  }
+
+  setEventComplete(eventName) {
+    var t = this.getTimeStaticValues();
+    var evt = {
+      name: eventName,
+      completed_time: t,
+      status: "complete"
+    }
+    var newEvt = true
+    for (var i = 0; i < this.completedEvents.length; i++) {
+      if (this.completedEvents[i].eventName == eventName) {
+        newEvt = false;
+        return;
+      }
+      if (i == this.completedEvents.length - 1 && newEvt == true) {
+        this.completedEvents.push(evt);
+      }
+    }
+
   }
 
   setScript(script) {
@@ -118,17 +146,17 @@ class Game {
     this.timer.reset();
   }
 
-  checkStateTriggers(state){
-    for(var t of this.script.triggers){
-      if(t.state == state){
+  checkStateTriggers(state) {
+    for (var t of this.script.triggers) {
+      if (t.state == state) {
         log("DO TRIGGER ON THIS STATE!!")
       }
     }
   }
 
-  checkTimeTriggers(time){
-    for(var t of this.script.triggers){
-      if(t.time == time){
+  checkTimeTriggers(time) {
+    for (var t of this.script.triggers) {
+      if (t.time == time) {
         log("DO TRIGGER ON THIS TIME!!")
       }
     }
@@ -164,7 +192,7 @@ class Game {
       // @ts-ignore
       t.time.minutes = t.timer.getTimeValues().minutes;
       // @ts-ignore
-      t.time.seconds= t.timer.getTimeValues().seconds;
+      t.time.seconds = t.timer.getTimeValues().seconds;
       SocketController.socketSendEvent({
         instance_update: t
       });
@@ -210,13 +238,15 @@ var gamesJson = {};
 exports.newGame = function (req, res) {
   var exScript = req.body.name;
   var timeLimit = req.body.timeLimit;
-  ScriptController.localGetFreshScript(exScript.name).then(script =>{
+  ScriptController.localGetFreshScript(exScript.name).then(script => {
     // remove duplicate game instance
     removeDuplicateInstance(script).then(() => {
       //if no time, then go by script time
       var game = new Game(script.name, timeLimit, script);
+      game.resetStates();
       game.startTime();
       gamesJson[`${script.name}`] = game;
+      BranchController.branchResetStates(script);
       // games.push(game);
       res.send(game);
     });
@@ -280,8 +310,8 @@ exports.deleteGame = function (req, res) {
 exports.pauseGame = function (req, res) {
   var name = req.params.name;
   var result = {
-    status : "paused",
-    name : name
+    status: "paused",
+    name: name
   }
   if (gamesJson.hasOwnProperty(name)) {
     gamesJson[`${name}`].pauseTime();
@@ -292,8 +322,8 @@ exports.pauseGame = function (req, res) {
 exports.resumeGame = function (req, res) {
   var name = req.params.name;
   var result = {
-    status : "resumed",
-    name : name
+    status: "resumed",
+    name: name
   }
   if (gamesJson.hasOwnProperty(name)) {
     gamesJson[`${name}`].resumeTime();
@@ -305,20 +335,21 @@ exports.resumeGame = function (req, res) {
 // =======================Force Event Action =========================== //
 // ===================================================================== //
 
-
+// Outgoing force event to branch
 exports.forceEvent = function (req, res) {
   var name = req.body.name
   var eventName = req.body.forceEvent
-  var time = req.body.completedTime
   console.log(name, eventName)
   getScriptInstance(name).then((instanceName) => {
-    gamesJson[`${instanceName}`].script.events.forEach(function(evt){
-      if(evt.name == eventName){
-        const t = gamesJson[`${instanceName}`].getTimeStaticValues();
+    gamesJson[`${instanceName}`].script.events.forEach(function (evt) {
+      if (evt.name == eventName) {
         let address = gamesJson[`${instanceName}`].script.branch_address;
         let masterId = gamesJson[`${instanceName}`].script.masterId;
-        evt.status = "complete";
-        evt.completed_time = t;
+        // evt.status = "complete";
+        // evt.completed_time = t;
+
+        //Set the script states
+        // setScriptStates(instanceName, evt.states);
         BranchController.sendEvent(instanceName, eventName, address, masterId);
         res.send(gamesJson[`${instanceName}`]);
       }
@@ -326,14 +357,17 @@ exports.forceEvent = function (req, res) {
   })
 }
 
+
+
+
 exports.forceAction = function (req, res) {
   var name = req.body.name
   var actionName = req.body.forceAction
   getScriptInstance(name).then((instanceName) => {
     var masterId = gamesJson[`${instanceName}`].script.masterId;
     log("============ gameController.forceAction, sending action==================", gamesJson[`${instanceName}`].script)
-    gamesJson[`${instanceName}`].script.actions.forEach(function(act){
-      if(act.name == actionName){
+    gamesJson[`${instanceName}`].script.actions.forEach(function (act) {
+      if (act.name == actionName) {
         act.status = "complete";
         let address = gamesJson[`${instanceName}`].script.branch_address;
         BranchController.sendAction(instanceName, actionName, address, masterId);
@@ -342,33 +376,49 @@ exports.forceAction = function (req, res) {
   })
 }
 
-function setEventCompleted(req, res){
-  var scriptName = req.body.branch_name;
-  var eventName = req.body.name;
+
+/**
+ *From branch server, event has been completed
+ *
+ * @param {*} req
+ * @param {*} res
+ */
+exports.setEventCompleted = function (req, res) {
+  var scriptName = req.body.event.branch_name;
+  var eventName = req.body.event.name;
+  var updatedStates = req.body.states;
+  log("=========Completed Event===========")
+  log(updatedStates);
+  instanceEventCompletion(eventName, scriptName, updatedStates)
+  res.send({
+    event: "completed"
+  });
+}
+
+
+function instanceEventCompletion(eventName, scriptName, updatedStates) {
   getScriptInstance(scriptName).then((instanceName) => {
-    gamesJson[`${instanceName}`].script.events.forEach(function(evt){
-      if(evt.name == eventName){
+    gamesJson[`${instanceName}`].script.events.forEach(function (evt) {
+      if (evt.name == eventName) {
         const t = gamesJson[`${instanceName}`].getTimeStaticValues();
         evt.status = "complete";
         evt.completed_time = t;
-        res.send({event : "completed"});
+        setScriptStates(instanceName, evt.states);
       }
     })
   })
 }
-exports.setEventCompleted = setEventCompleted;
-
 
 function getScriptInstance(name) {
   return new Promise((resolve, reject) => {
     for (var key in gamesJson) {
-    if (gamesJson.hasOwnProperty(`${key}`)) {
-      if (gamesJson[`${key}`].name == name) {
-        resolve(key);
-        return;
+      if (gamesJson.hasOwnProperty(`${key}`)) {
+        if (gamesJson[`${key}`].name == name) {
+          resolve(key);
+          return;
+        }
       }
     }
-  }
 
   })
 }
@@ -460,6 +510,25 @@ function localDeleteGame(scriptName) {
       resolve(`{"removed": false}`);
     }
   });
+}
+
+
+
+/**
+ *Set the states to reflect the event
+ *
+ * @param {*} instanceName
+ * @param {*} eventStates
+ */
+function setScriptStates(instanceName, eventStates) {
+  var gStates = gamesJson[`${instanceName}`].states;
+  for (var i = 0; i < eventStates.length; i++) {
+    for (var j = 0; j < gStates.length; j++) {
+      if (gStates[j].name == eventStates[i].name) {
+        gStates[j].active = eventStates[i].active;
+      }
+    }
+  }
 }
 
 /**

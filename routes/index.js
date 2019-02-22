@@ -31,6 +31,7 @@ router.post('/script', ScriptController.createScript)
 router.get('/script/:name', ScriptController.readScript)
 
 router.get('/script', ScriptController.readScripts)
+router.get('/scriptf', ScriptController.getFreshScriptsFromDirectory) //Use for getting un altered scripts fromm memory
 
 router.put('/script', ScriptController.updateScript)
 

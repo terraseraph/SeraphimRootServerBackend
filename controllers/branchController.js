@@ -6,7 +6,9 @@ var ScriptController = require("./scriptController");
 var request = require('request');
 var branchRoutes = {
     event: `/server/event`,
-    action: `/server/action`
+    action: `/server/action`,
+    updateScript: `/scripts/update`,
+    resetStates: `/scripts/selected/reset`
 }
 
 
@@ -93,9 +95,33 @@ function sendAction(scriptName, actionName, branchUrl, masterId) {
 }
 exports.sendAction = sendAction;
 
+exports.branchResetStates = function (script) {
+    var url = (script.branch_address + branchRoutes.resetStates);
+    var options = {
+        method: 'get',
+        url: url
+    }
+    request(options, (err, res, body) => {
+        var result = {
+            "Success": res
+        }
+        log(result)
+    })
+}
 
-exports.branchUpdateScript = function () {
 
+exports.branchUpdateScript = function (script) {
+    var url = (script.branch_address + branchRoutes.updateScript);
+    var options = {
+        method: 'get',
+        url: url
+    }
+    request(options, (err, res, body) => {
+        var result = {
+            "Success": res
+        }
+        log(result)
+    })
 }
 
 // ============================================================== //

@@ -4,12 +4,15 @@ const fs = require('fs');
 const jsonfile = require("jsonfile");
 var log = require('./loggingController').log;
 var gameController = require('./gameController');
-var SocketController = require("./socketController")
+var SocketController = require("./socketController");
 const directoryPath = path.join(__dirname, '../EventActionScripts');
+const BranchController = require("./branchController");
 var scripts = []
 
 /** On init */
-readScriptsInDirectory();
+readScriptsInDirectory().then(sc => {
+    scripts = sc;
+});
 
 exports.createScript = function (req, res) {
     res.send(`{"message":"creating script"}`)
@@ -23,7 +26,10 @@ exports.readScript = function (req, res) {
 }
 
 exports.readScripts = function (req, res) {
-    res.send(scripts)
+    // res.send(scripts)
+    readScriptsInDirectory().then(s => {
+        res.send(s)
+    })
 }
 
 exports.updateScript = function (req, res) {
@@ -37,7 +43,16 @@ exports.deleteScript = function (req, res) {
 }
 
 exports.updateScriptDir = function (req, res) {
-    res.send(readScriptsInDirectory());
+    readScriptsInDirectory().then(sc => {
+        res.send(sc);
+
+    })
+}
+
+exports.getFreshScriptsFromDirectory = function (req, res) {
+    readScriptsInDirectory().then(s => {
+        res.send(s)
+    })
 }
 
 /** 
@@ -83,7 +98,8 @@ exports.forceAction = function (req, res) {
 
 /** Get all json event action scripts from directory */
 function readScriptsInDirectory() {
-    scripts = []
+    // scripts = []
+    var fScripts = []
     return new Promise((resolve, reject) => {
         fs.readdir(directoryPath, function (err, files) {
             if (err) {
@@ -92,10 +108,9 @@ function readScriptsInDirectory() {
             files.forEach(function (file) {
                 var script = fs.readFileSync(directoryPath + `/${file}`, 'utf8')
                 var pScript = JSON.parse(script)
-                // gameController.localNewGame(pScript, pScript.time, false);
-                scripts.push(pScript)
-                if (scripts.length == files.length) {
-                    resolve(scripts)
+                fScripts.push(pScript)
+                if (fScripts.length == files.length) {
+                    resolve(fScripts)
                 }
             });
         });
@@ -173,10 +188,13 @@ function localUpdateScript(script) {
     jsonfile.writeFileSync(file, script, {
         spaces: 2
     })
+    //update local script version to the updated version
     for (var i = 0; i < scripts.length; i++) {
         if (scripts[i].name == script.name) {
             scripts[i] = script;
             log("Updated script: ", scripts[i].name);
         }
     }
+    // update branch servers script too
+    BranchController.branchUpdateScript(script);
 }
