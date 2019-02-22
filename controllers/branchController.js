@@ -130,13 +130,14 @@ exports.branchUpdateScript = function (script) {
 
 exports.branchSendTrigger = function (req, res) {
     var scriptName = req.body.scriptName;
-    var triggerName = req.body.triggerName;
+    var trigger = req.body.trigger;
     var msg = {
         message_type: "trigger",
         scriptName: scriptName,
-        triggerName: triggerName
+        trigger: trigger
     }
     SocketController.socketEmit(msg);
+    res.send("Triggerd!")
 }
 
 

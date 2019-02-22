@@ -360,7 +360,7 @@
       "name": "end video",
       "trigger": "end_game",
       "audio": "anoptherfile.mp3",
-      "video": "another video.mp4",
+      "video": "http://localhost:4400/video",
       "hint": "",
       "can_toggle": "true"
     },
@@ -368,7 +368,7 @@
       "name": "Best trigger",
       "trigger": "start_game",
       "audio": "audio.mp3",
-      "video": "movie.mp4",
+      "video": "https://www.youtube.com/watch?v=hp97GjuULX8",
       "hint": "sopme hint",
       "can_toggle": "true"
     }
