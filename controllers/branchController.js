@@ -96,16 +96,18 @@ function sendAction(scriptName, actionName, branchUrl, masterId) {
 exports.sendAction = sendAction;
 
 exports.branchResetStates = function (script) {
-    var url = (script.branch_address + branchRoutes.resetStates);
-    var options = {
-        method: 'get',
-        url: url
-    }
-    request(options, (err, res, body) => {
-        var result = {
-            "Success": res
+    return new Promise((resolve, reject) => {
+        var url = (script.branch_address + branchRoutes.resetStates);
+        var options = {
+            method: 'get',
+            url: url
         }
-        log(result)
+        request(options, (err, res, body) => {
+            var result = {
+                "Success": res
+            }
+            resolve(result);
+        })
     })
 }
 
@@ -137,7 +139,9 @@ exports.branchSendTrigger = function (req, res) {
         trigger: trigger
     }
     SocketController.socketEmit(msg);
-    res.send("Triggerd!")
+    res.send({
+        "Success": "Triggerd!"
+    });
 }
 
 

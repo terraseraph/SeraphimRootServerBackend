@@ -116,6 +116,9 @@ function readScriptsInDirectory() {
         });
     })
 }
+exports.readScriptsInDirectory = readScriptsInDirectory;
+
+
 
 function readScriptInDirectory(scriptName) {
     return new Promise((resolve, reject) => {
