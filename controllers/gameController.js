@@ -31,8 +31,12 @@ class Game {
     this.ended = false;
     this.prepareStructure();
     // this.createGameTimer();
-    this.timerSecondsUpdatedListner = this.timerSecondsUpdatedListner.bind(this);
-    this.timerTargetAchievedListner = this.timerTargetAchievedListner.bind(this);
+    this.timerSecondsUpdatedListner = this.timerSecondsUpdatedListner.bind(
+      this
+    );
+    this.timerTargetAchievedListner = this.timerTargetAchievedListner.bind(
+      this
+    );
   }
 
   prepareStructure() {
@@ -59,7 +63,7 @@ class Game {
         seconds: this.timeLimit.seconds
       }
     });
-    log(this.timeLimit)
+    log(this.timeLimit);
     this.prepareTimerEventListners();
   }
 
@@ -101,8 +105,8 @@ class Game {
     let r = {
       hours: this.time.hours,
       minutes: this.time.minutes,
-      seconds: this.time.seconds,
-    }
+      seconds: this.time.seconds
+    };
     return r;
   }
 
@@ -112,8 +116,8 @@ class Game {
       name: eventName,
       completed_time: t,
       status: "complete"
-    }
-    var newEvt = true
+    };
+    var newEvt = true;
     for (var i = 0; i < this.completedEvents.length; i++) {
       if (this.completedEvents[i].eventName == eventName) {
         newEvt = false;
@@ -123,7 +127,6 @@ class Game {
         this.completedEvents.push(evt);
       }
     }
-
   }
 
   setScript(script) {
@@ -160,7 +163,7 @@ class Game {
   checkStateTriggers(state) {
     for (var t of this.script.triggers) {
       if (t.state == state) {
-        log("DO TRIGGER ON THIS STATE!!")
+        log("DO TRIGGER ON THIS STATE!!");
       }
     }
   }
@@ -168,7 +171,7 @@ class Game {
   checkTimeTriggers(time) {
     for (var t of this.script.triggers) {
       if (t.time == time) {
-        log("DO TRIGGER ON THIS TIME!!")
+        log("DO TRIGGER ON THIS TIME!!");
       }
     }
   }
@@ -193,9 +196,15 @@ class Game {
   prepareTimerEventListners() {
     var t = this;
     // @ts-ignore
-    this.timer.addEventListener("secondsUpdated", this.timerSecondsUpdatedListner);
+    this.timer.addEventListener(
+      "secondsUpdated",
+      this.timerSecondsUpdatedListner
+    );
     // @ts-ignore
-    this.timer.addEventListener("targetAchieved", this.timerTargetAchievedListner);
+    this.timer.addEventListener(
+      "targetAchieved",
+      this.timerTargetAchievedListner
+    );
   }
 
   timerSecondsUpdatedListner() {
@@ -217,8 +226,13 @@ class Game {
   }
 
   timerTargetAchievedListner() {
+    var complete_state = {
+      name: "timer_complete",
+      active: true
+    };
     var t = this;
     t.endGame();
+    setScriptStates(t.name, [complete_state]);
     SocketController.socketSendEvent({
       instance_update: t
     });
@@ -230,33 +244,41 @@ class Game {
       // @ts-ignore
       var t = this;
       // @ts-ignore
-      this.timer.removeEventListener("secondsUpdated", this.timerSecondsUpdatedListner);
+      this.timer.removeEventListener(
+        "secondsUpdated",
+        this.timerSecondsUpdatedListner
+      );
       // @ts-ignore
-      this.timer.removeEventListener("targetAchieved", this.timerTargetAchievedListner);
+      this.timer.removeEventListener(
+        "targetAchieved",
+        this.timerTargetAchievedListner
+      );
       resolve();
     });
   }
 }
 
-
-
 //=============================================//
 //====== HTTP functions ========================//
 //===========================================//
 
-exports.newGame = function (req, res) {
+exports.newGame = function(req, res) {
   var exScript = req.body.name;
   var timeLimit = req.body.timeLimit;
-  localNewGame(exScript.name, timeLimit, (game) => {
+  localNewGame(exScript.name, timeLimit, game => {
     res.send(game);
-  })
+  });
 };
 
-function localNewGame(scriptName, timeLimit = {
-  hours: 0,
-  minutes: 0,
-  seconds: 0
-}, callback = null) {
+function localNewGame(
+  scriptName,
+  timeLimit = {
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  },
+  callback = null
+) {
   ScriptController.localGetFreshScript(scriptName).then(script => {
     // remove duplicate game instance
     removeDuplicateInstance(script).then(() => {
@@ -269,11 +291,11 @@ function localNewGame(scriptName, timeLimit = {
         log(result);
       });
       callback(game);
-    })
-  })
-};
+    });
+  });
+}
 
-exports.readGame = function (req, res) {
+exports.readGame = function(req, res) {
   var name = req.params.name;
 
   //TODO: test
@@ -287,7 +309,7 @@ exports.readGame = function (req, res) {
 
 // @ts-ignore
 // @ts-ignore
-exports.readAll = function (req, res) {
+exports.readAll = function(req, res) {
   // res.send(games);
   JsonToArr(gamesJson).then(arr => {
     res.send(arr);
@@ -296,21 +318,21 @@ exports.readAll = function (req, res) {
 
 // @ts-ignore
 // @ts-ignore
-exports.updateGameState = function (req, res) {
+exports.updateGameState = function(req, res) {
   var name = req.body.name;
   var state = req.body.state;
   localUpdateState(name, state);
 };
 
 // @ts-ignore
-exports.updateGameTime = function (req, res) {
+exports.updateGameTime = function(req, res) {
   var name = req.body.name;
   var time = req.body.time;
   localUpdateTime(name, time);
   res.send(time);
 };
 
-exports.deleteGame = function (req, res) {
+exports.deleteGame = function(req, res) {
   var scriptName = req.params.name;
   // @ts-ignore
   var gRemoved;
@@ -325,24 +347,24 @@ exports.deleteGame = function (req, res) {
   });
 };
 
-exports.pauseGame = function (req, res) {
+exports.pauseGame = function(req, res) {
   var name = req.params.name;
   var result = {
     status: "paused",
     name: name
-  }
+  };
   if (gamesJson.hasOwnProperty(name)) {
     gamesJson[`${name}`].pauseTime();
     res.send(result);
   }
 };
 
-exports.resumeGame = function (req, res) {
+exports.resumeGame = function(req, res) {
   var name = req.params.name;
   var result = {
     status: "resumed",
     name: name
-  }
+  };
   if (gamesJson.hasOwnProperty(name)) {
     gamesJson[`${name}`].resumeTime();
     res.send(result);
@@ -354,41 +376,45 @@ exports.resumeGame = function (req, res) {
 // ===================================================================== //
 
 // Outgoing force event to branch
-exports.forceEvent = function (req, res) {
-  var name = req.body.name
-  var eventName = req.body.forceEvent
-  console.log(name, eventName)
-  getScriptInstance(name).then((instanceName) => {
-    gamesJson[`${instanceName}`].script.events.forEach(function (evt) {
+exports.forceEvent = function(req, res) {
+  var name = req.body.name;
+  var eventName = req.body.forceEvent;
+  console.log(name, eventName);
+  getScriptInstance(name).then(instanceName => {
+    gamesJson[`${instanceName}`].script.events.forEach(function(evt) {
       if (evt.name == eventName) {
         let address = gamesJson[`${instanceName}`].script.branch_address;
         let masterId = gamesJson[`${instanceName}`].script.masterId;
         BranchController.sendEvent(instanceName, eventName, address, masterId);
         res.send(gamesJson[`${instanceName}`]);
       }
-    })
-  })
-}
+    });
+  });
+};
 
-
-
-
-exports.forceAction = function (req, res) {
-  var name = req.body.name
-  var actionName = req.body.forceAction
-  getScriptInstance(name).then((instanceName) => {
+exports.forceAction = function(req, res) {
+  var name = req.body.name;
+  var actionName = req.body.forceAction;
+  getScriptInstance(name).then(instanceName => {
     var masterId = gamesJson[`${instanceName}`].script.masterId;
-    log("============ gameController.forceAction, sending action==================", gamesJson[`${instanceName}`].script)
-    gamesJson[`${instanceName}`].script.actions.forEach(function (act) {
+    log(
+      "============ gameController.forceAction, sending action==================",
+      gamesJson[`${instanceName}`].script
+    );
+    gamesJson[`${instanceName}`].script.actions.forEach(function(act) {
       if (act.name == actionName) {
         act.status = "complete";
         let address = gamesJson[`${instanceName}`].script.branch_address;
-        BranchController.sendAction(instanceName, actionName, address, masterId);
+        BranchController.sendAction(
+          instanceName,
+          actionName,
+          address,
+          masterId
+        );
       }
-    })
-  })
-}
-
+    });
+  });
+};
 
 /**
  *From branch server, event has been completed
@@ -396,18 +422,18 @@ exports.forceAction = function (req, res) {
  * @param {*} req
  * @param {*} res
  */
-exports.setEventCompleted = function (req, res) {
+exports.setEventCompleted = function(req, res) {
   var scriptName = req.body.event.branch_name;
   var eventName = req.body.event.name;
   var updatedStates = req.body.states;
-  log("=========Completed Event===========")
+  log("=========Completed Event===========");
   log(updatedStates);
-  instanceEventCompletion(eventName, scriptName, updatedStates)
+  instanceEventCompletion(eventName, scriptName, updatedStates);
   setStartAndEndEvents(scriptName, eventName);
   res.send({
     event: "completed"
   });
-}
+};
 
 function setStartAndEndEvents(scriptName, eventName) {
   switch (eventName) {
@@ -417,12 +443,12 @@ function setStartAndEndEvents(scriptName, eventName) {
           hours: parseInt(script.time, 10),
           minutes: parseInt(script.time.minutes, 10),
           seconds: parseInt(script.time.seconds, 10)
-        }
+        };
         localNewGame(scriptName, timeLimit, () => {
+          instanceEventCompletion(eventName, script.name); //TODO: make this better
           log("Created new game from device event");
-        })
-
-      })
+        });
+      });
       break;
     case "end_instance":
       localEndGame(scriptName);
@@ -432,18 +458,17 @@ function setStartAndEndEvents(scriptName, eventName) {
   }
 }
 
-
-function instanceEventCompletion(eventName, scriptName, updatedStates) {
-  getScriptInstance(scriptName).then((instanceName) => {
-    gamesJson[`${instanceName}`].script.events.forEach(function (evt) {
+function instanceEventCompletion(eventName, scriptName, updatedStates = null) {
+  getScriptInstance(scriptName).then(instanceName => {
+    gamesJson[`${instanceName}`].script.events.forEach(function(evt) {
       if (evt.name == eventName) {
         const t = gamesJson[`${instanceName}`].getTimeStaticValues();
         evt.status = "complete";
         evt.completed_time = t;
         setScriptStates(instanceName, evt.states);
       }
-    })
-  })
+    });
+  });
 }
 
 function getScriptInstance(name) {
@@ -456,8 +481,7 @@ function getScriptInstance(name) {
         }
       }
     }
-
-  })
+  });
 }
 
 //=============================================//
@@ -465,12 +489,12 @@ function getScriptInstance(name) {
 //===========================================//
 
 /** For external modules */
-exports.loUpdateGameState = function (name, state) {
+exports.loUpdateGameState = function(name, state) {
   localUpdateState(name, state);
 };
 
 /** For external modules */
-exports.loUpdateGameTime = function (name, time) {
+exports.loUpdateGameTime = function(name, time) {
   localUpdateTime(name, time);
 };
 
@@ -489,7 +513,7 @@ function InitializeInstances() {
         log(result);
       });
     }
-  })
+  });
 }
 
 function localUpdateState(name, state) {
@@ -503,7 +527,7 @@ function localUpdateState(name, state) {
 }
 
 // TODO: unused these 2????
-exports.localNewGame = function (script, timeLimit, canStart) {
+exports.localNewGame = function(script, timeLimit, canStart) {
   loNewGame(script, timeLimit, canStart);
 };
 
@@ -568,11 +592,10 @@ function localDeleteGame(scriptName) {
   });
 }
 
-
 function findTriggersByState(instanceName, stateName) {
   let triggersArr = new Array();
   return new Promise((resolve, reject) => {
-    let selectedScript = gamesJson[`${instanceName}`].script
+    let selectedScript = gamesJson[`${instanceName}`].script;
     for (let i = 0; i < selectedScript.triggers.length; i++) {
       const trigger = selectedScript.triggers[i];
       if (trigger.trigger == stateName) {
@@ -582,9 +605,8 @@ function findTriggersByState(instanceName, stateName) {
         resolve(triggersArr);
       }
     }
-  })
+  });
 }
-
 
 /**
  *Set the states to reflect the event
@@ -599,12 +621,14 @@ function setScriptStates(instanceName, eventStates) {
       if (gStates[j].name == eventStates[i].name) {
         gStates[j].active = eventStates[i].active;
         if (eventStates[i].active == true) {
-          findTriggersByState(instanceName, eventStates[i].name).then(triggers => {
-            for (let i = 0; i < triggers.length; i++) {
-              const trigger = triggers[i];
-              sendTrigger(instanceName, trigger)
+          findTriggersByState(instanceName, eventStates[i].name).then(
+            triggers => {
+              for (let i = 0; i < triggers.length; i++) {
+                const trigger = triggers[i];
+                sendTrigger(instanceName, trigger);
+              }
             }
-          })
+          );
         }
       }
     }
@@ -616,7 +640,7 @@ function sendTrigger(instanceName, trigger) {
     message_type: "trigger",
     scriptName: instanceName,
     trigger: trigger
-  }
+  };
   SocketController.socketEmit(msg);
 }
 
