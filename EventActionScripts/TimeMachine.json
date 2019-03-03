@@ -50,7 +50,9 @@
       "eventType": "button",
       "data": "0",
       "description": "players opened door",
-      "dependencies": [],
+      "dependencies": [
+        "end_game"
+      ],
       "actions": [
         "chest_door_toggle"
       ],
@@ -762,7 +764,7 @@
     {
       "name": "start video",
       "trigger": "start_game",
-      "audio": "someFile.mp3",
+      "audio": "sombnihfgeFile.mp3",
       "video": "some video.mp4",
       "timeValue": {
         "hours": "0",
@@ -770,7 +772,8 @@
         "seconds": "0"
       },
       "hint": "end hint",
-      "can_toggle": "true"
+      "can_toggle": "true",
+      "loop_audio": false
     },
     {
       "name": "end video",

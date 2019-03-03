@@ -181,6 +181,9 @@ exports.branchSendAudio = function (req, res) {
         audioFile: audioFile
     }
     SocketController.socketEmit(msg);
+    res.send({
+        success: true
+    })
 }
 
 
@@ -193,4 +196,7 @@ exports.branchSendVideo = function (req, res) {
         videoFile: videoFile
     }
     SocketController.socketEmit(msg);
+    res.send({
+        success: true
+    })
 }

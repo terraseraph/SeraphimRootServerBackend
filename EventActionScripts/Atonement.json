@@ -1,7 +1,7 @@
 {
   "name": "Atonement",
   "id": "1",
-  "branch_address": "192.168.0.51:5002",
+  "branch_address": "http://192.168.0.180:4400",
   "masterId": "255",
   "time": {
     "hours": "0",
@@ -10,38 +10,37 @@
   },
   "states": [
     {
-      "name": "start_game",
-      "active": false
-    },
-    {
-      "name": "end_game",
+      "name": "start_instance",
       "active": true
     },
     {
-      "name": "open_door",
+      "name": "end_instance",
+      "active": true
+    },
+    {
+      "name": "timer_complete",
+      "active": false
+    },
+    {
+      "name": "Background",
       "active": false
     }
   ],
   "events": [
     {
       "id": "1",
-      "name": "first event",
+      "name": "start_instance",
       "device_id": "10",
       "event": "rangeTrigger",
       "eventType": "thermometer",
       "data": "0",
       "description": "the beginning of the game, code typed or something",
-      "dependencies": [
-        "end_game"
-      ],
-      "actions": [
-        "play_box_music",
-        "do_third_action"
-      ],
+      "dependencies": [],
+      "actions": [],
       "message": "started the game",
       "states": [
         {
-          "name": "start_game",
+          "name": "start_instance",
           "active": true
         }
       ]
@@ -132,7 +131,7 @@
     },
     {
       "id": "6",
-      "name": "test_music",
+      "name": "end_instance",
       "device_id": "23",
       "event": "toggle",
       "eventType": "button",
@@ -146,23 +145,10 @@
       "message": "opened box",
       "states": [
         {
-          "name": "start_game",
+          "name": "end_instance",
           "active": true
         }
       ]
-    },
-    {
-      "states": [],
-      "id": "",
-      "name": "drhrynyn",
-      "device_id": "drn65e4",
-      "event": "rangeTrigger",
-      "eventType": "photoRes",
-      "data": "5yn5ynds",
-      "description": "5ynsd5y5y",
-      "dependencies": [],
-      "actions": [],
-      "message": ""
     }
   ],
   "actions": [
@@ -326,32 +312,46 @@
   ],
   "triggers": [
     {
-      "name": "start video",
-      "trigger": "start_game",
+      "name": "Looping background",
+      "trigger": "Background",
       "audio": "someFile.mp3",
-      "video": "some video.mp4",
+      "video": "video/static_small.mp4",
       "timeValue": {
         "hours": "0",
         "minutes": "60",
         "seconds": "0"
       },
-      "hint": "end hint",
-      "can_toggle": "true"
+      "hint": "",
+      "can_toggle": "true",
+      "loop_video": true,
+      "video_type": "background"
     },
     {
       "name": "end video",
-      "trigger": "end_game",
+      "trigger": "end_instance",
       "audio": "anoptherfile.mp3",
-      "video": "another video.mp4",
-      "hint": "",
-      "can_toggle": "true"
+      "video": "video/redline.mp4",
+      "hint": "You win",
+      "can_toggle": "true",
+      "video_type": "custom",
+      "pause_timer": true
     },
     {
-      "name": "UNSET Trigger",
-      "trigger": "",
+      "name": "Play some vid",
+      "trigger": "start_instance",
+      "audio": "",
+      "video": "video/alex.mp4",
+      "hint": "Atonement begin",
+      "can_toggle": "",
+      "audio_type": "start",
+      "pause_timer": true
+    },
+    {
+      "name": "Lose trig",
+      "trigger": "timer_complete",
       "audio": "",
       "video": "",
-      "hint": "",
+      "hint": "You r loser",
       "can_toggle": ""
     }
   ],
