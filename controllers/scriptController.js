@@ -39,7 +39,12 @@ exports.updateScript = function (req, res) {
 }
 
 exports.deleteScript = function (req, res) {
-    res.send(`{"message":"deleting script"}`)
+    fs.unlink(directoryPath + `/${req.params.scriptName}.json`, (e) => {
+        log("complete")
+        res.send({
+            "success": `Deleted ${req.params.scriptName}`
+        });
+    })
 }
 
 exports.updateScriptDir = function (req, res) {

@@ -7,8 +7,7 @@
     "minutes": "60",
     "seconds": "0"
   },
-  "states": [
-    {
+  "states": [{
       "name": "start_game",
       "active": false
     },
@@ -21,8 +20,7 @@
       "active": false
     }
   ],
-  "events": [
-    {
+  "events": [{
       "id": "1",
       "name": "start_dragon_game",
       "device_id": "10",
@@ -35,12 +33,10 @@
         "chest_door_start"
       ],
       "message": "started the game",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "2",
@@ -56,12 +52,10 @@
       ],
       "can_toggle": "true",
       "message": "opened box",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "3",
@@ -77,12 +71,10 @@
       ],
       "can_toggle": "true",
       "message": "opened box",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "4",
@@ -98,12 +90,10 @@
       ],
       "can_toggle": "true",
       "message": "opened box",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "7",
@@ -130,16 +120,13 @@
       ],
       "can_toggle": "true",
       "message": "opened jack_in_the_box",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     }
   ],
-  "actions": [
-    {
+  "actions": [{
       "id": "1",
       "name": "play_start_music",
       "device_id": "30",
@@ -154,12 +141,10 @@
       "repeatable": "true",
       "actions": [],
       "message": "played music",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "2",
@@ -176,12 +161,10 @@
       "repeatable": "true",
       "actions": [],
       "message": "played music",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "3",
@@ -201,16 +184,13 @@
       ],
       "actions": [],
       "message": "Jump scare",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     }
   ],
-  "triggers": [
-    {
+  "triggers": [{
       "name": "start video",
       "trigger": "start_game",
       "audio": "someFile.mp3",
@@ -232,8 +212,7 @@
       "can_toggle": "true"
     }
   ],
-  "hints": [
-    {
+  "hints": [{
       "name": "Start hint",
       "hint": "Read the whole thing bro"
     },
@@ -244,6 +223,27 @@
     {
       "name": "end hint",
       "hint": "waughhhh"
+    }
+  ],
+  "screenConfigs": [{
+      "name": "Screen1",
+      "backgroundType": "Video",
+      "backgroundPath": "video/static_small.mp4",
+      "font": "'Times New Roman', Times, serif",
+      "font_colour": "white",
+      "audio": "",
+      "showTimer": true,
+      "showHints": true
+    },
+    {
+      "name": "screen2",
+      "backgroundType": "Video",
+      "backgroundPath": "video/christmas_background.mp4",
+      "font": "Impact, Charcoal, sans-serif",
+      "font_colour": "BlueViolet",
+      "audio": "",
+      "showTimer": false,
+      "showHints": false
     }
   ]
 }

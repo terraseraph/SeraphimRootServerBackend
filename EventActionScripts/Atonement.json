@@ -8,8 +8,7 @@
     "minutes": "60",
     "seconds": "0"
   },
-  "states": [
-    {
+  "states": [{
       "name": "start_instance",
       "active": true
     },
@@ -26,8 +25,7 @@
       "active": false
     }
   ],
-  "events": [
-    {
+  "events": [{
       "id": "1",
       "name": "start_instance",
       "device_id": "10",
@@ -38,12 +36,10 @@
       "dependencies": [],
       "actions": [],
       "message": "started the game",
-      "states": [
-        {
-          "name": "start_instance",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_instance",
+        "active": true
+      }]
     },
     {
       "id": "2",
@@ -59,12 +55,10 @@
       ],
       "can_toggle": "true",
       "message": "opened box",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "3",
@@ -80,12 +74,10 @@
       ],
       "can_toggle": "true",
       "message": "opened box",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "4",
@@ -101,12 +93,10 @@
       ],
       "can_toggle": "true",
       "message": "opened box",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "5",
@@ -122,12 +112,10 @@
       ],
       "can_toggle": "true",
       "message": "opened box",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "6",
@@ -143,16 +131,13 @@
       ],
       "can_toggle": "true",
       "message": "opened box",
-      "states": [
-        {
-          "name": "end_instance",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "end_instance",
+        "active": true
+      }]
     }
   ],
-  "actions": [
-    {
+  "actions": [{
       "id": "1",
       "name": "play_start_music",
       "device_id": "30",
@@ -167,12 +152,10 @@
       "repeatable": false,
       "actions": [],
       "message": "played music",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "2",
@@ -189,12 +172,10 @@
       "repeatable": "true",
       "actions": [],
       "message": "played music",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "3",
@@ -214,12 +195,10 @@
       ],
       "actions": [],
       "message": "Jump scare",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "4",
@@ -236,12 +215,10 @@
       "dependencies": [],
       "actions": [],
       "message": "open_door",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "5",
@@ -258,12 +235,10 @@
       "dependencies": [],
       "actions": [],
       "message": "LED on",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "6",
@@ -280,12 +255,10 @@
       "dependencies": [],
       "actions": [],
       "message": "LED off",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "7",
@@ -302,16 +275,13 @@
       "dependencies": [],
       "actions": [],
       "message": "chest_door_on",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     }
   ],
-  "triggers": [
-    {
+  "triggers": [{
       "name": "Looping background",
       "trigger": "Background",
       "audio": "someFile.mp3",
@@ -355,8 +325,7 @@
       "can_toggle": ""
     }
   ],
-  "hints": [
-    {
+  "hints": [{
       "name": "Draw hint",
       "hint": "The thing is in the thing!!!!"
     },
@@ -367,6 +336,27 @@
     {
       "name": "end hint",
       "hint": "waughhhh"
+    }
+  ],
+  "screenConfigs": [{
+      "name": "Screen1",
+      "backgroundType": "Video",
+      "backgroundPath": "video/static_small.mp4",
+      "font": "'Times New Roman', Times, serif",
+      "font_colour": "white",
+      "audio": "",
+      "showTimer": true,
+      "showHints": true
+    },
+    {
+      "name": "screen2",
+      "backgroundType": "Video",
+      "backgroundPath": "video/christmas_background.mp4",
+      "font": "Impact, Charcoal, sans-serif",
+      "font_colour": "BlueViolet",
+      "audio": "",
+      "showTimer": false,
+      "showHints": false
     }
   ]
 }

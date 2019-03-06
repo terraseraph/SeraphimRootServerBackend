@@ -97,7 +97,7 @@ exports.sendAction = sendAction;
 
 exports.branchResetStates = function (script) {
     return new Promise((resolve, reject) => {
-        var url = (script.branch_address + branchRoutes.resetStates);
+        var url = (script.branch_address + branchRoutes.resetStates + "/" + script.name);
         var options = {
             method: 'get',
             url: url
@@ -130,13 +130,45 @@ exports.branchUpdateScript = function (script) {
 // ================= Screen Display routes ====================== //
 // ============================================================== //
 
+exports.branchReloadScreen = function (req, res) {
+    var scriptName = req.body.scriptName;
+    var screenName = req.body.screenName;
+    var msg = {
+        message_type: "reload",
+        scriptName: scriptName,
+        screenName: screenName
+    }
+    SocketController.socketEmit(msg);
+    res.send({
+        "Success": "Screen reloaded!"
+    });
+}
+
+exports.branchUpdateScreenConfig = function (req, res) {
+    var scriptName = req.body.scriptName;
+    var screenName = req.body.screenName;
+    var config = req.body.config;
+    var msg = {
+        message_type: "config",
+        scriptName: scriptName,
+        screenName: screenName,
+        config: config
+    }
+    SocketController.socketEmit(msg);
+    res.send({
+        "Success": "Screen reloaded!"
+    });
+}
+
 exports.branchSendTrigger = function (req, res) {
     var scriptName = req.body.scriptName;
     var trigger = req.body.trigger;
+    var screenName = trigger.screenName;
     var msg = {
         message_type: "trigger",
         scriptName: scriptName,
-        trigger: trigger
+        trigger: trigger,
+        screenName: screenName
     }
     SocketController.socketEmit(msg);
     res.send({
@@ -147,11 +179,13 @@ exports.branchSendTrigger = function (req, res) {
 
 exports.branchSendHint = function (req, res) {
     var scriptName = req.body.scriptName;
+    var screenName = req.body.screenName;
     var hintText = req.body.hintText;
     var msg = {
         message_type: "hint",
         scriptName: scriptName,
-        hintText: hintText
+        hintText: hintText,
+        screenName: screenName
     }
     SocketController.socketEmit(msg);
     var response = {
@@ -163,9 +197,11 @@ exports.branchSendHint = function (req, res) {
 
 exports.branchClearHint = function (req, res) {
     var scriptName = req.body.scriptName;
+    var screenName = req.body.screenName;
     var msg = {
         message_type: "hint",
         scriptName: scriptName,
+        screenName: screenName,
         hintText: "--clear--"
     }
     SocketController.socketEmit(msg);
@@ -174,10 +210,12 @@ exports.branchClearHint = function (req, res) {
 
 exports.branchSendAudio = function (req, res) {
     var scriptName = req.body.scriptName;
+    var screenName = req.body.screenName;
     var audioFile = req.body.audioFile;
     var msg = {
         message_type: "audio",
         scriptName: scriptName,
+        screenName: screenName,
         audioFile: audioFile
     }
     SocketController.socketEmit(msg);
@@ -189,10 +227,12 @@ exports.branchSendAudio = function (req, res) {
 
 exports.branchSendVideo = function (req, res) {
     var scriptName = req.body.scriptName;
+    var screenName = req.body.screenName;
     var videoFile = req.body.videoFile;
     var msg = {
         message_type: "video",
         scriptName: scriptName,
+        screenName: screenName,
         videoFile: videoFile
     }
     SocketController.socketEmit(msg);

@@ -35,7 +35,7 @@ router.get('/scriptf', ScriptController.getFreshScriptsFromDirectory) //Use for 
 
 router.put('/script', ScriptController.updateScript)
 
-router.delete('/script/:name', ScriptController.deleteScript)
+router.delete('/script/:scriptName', ScriptController.deleteScript)
 
 
 
@@ -74,6 +74,8 @@ router.post('/branch/script/update', BranchController.branchUpdateScript);
 router.post('/branch/trigger', BranchController.branchSendTrigger);
 router.post('/branch/trigger/audio', BranchController.branchSendAudio);
 router.post('/branch/trigger/video', BranchController.branchSendVideo);
+
+router.post('/branch/config', BranchController.branchUpdateScreenConfig);
 
 router.post('/branch/hint', BranchController.branchSendHint);
 router.post('/branch/hint/clear', BranchController.branchClearHint);

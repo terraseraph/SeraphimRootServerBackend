@@ -262,7 +262,7 @@ class Game {
 //====== HTTP functions ========================//
 //===========================================//
 
-exports.newGame = function(req, res) {
+exports.newGame = function (req, res) {
   var exScript = req.body.name;
   var timeLimit = req.body.timeLimit;
   localNewGame(exScript.name, timeLimit, game => {
@@ -295,7 +295,7 @@ function localNewGame(
   });
 }
 
-exports.readGame = function(req, res) {
+exports.readGame = function (req, res) {
   var name = req.params.name;
 
   //TODO: test
@@ -309,7 +309,7 @@ exports.readGame = function(req, res) {
 
 // @ts-ignore
 // @ts-ignore
-exports.readAll = function(req, res) {
+exports.readAll = function (req, res) {
   // res.send(games);
   JsonToArr(gamesJson).then(arr => {
     res.send(arr);
@@ -318,21 +318,21 @@ exports.readAll = function(req, res) {
 
 // @ts-ignore
 // @ts-ignore
-exports.updateGameState = function(req, res) {
+exports.updateGameState = function (req, res) {
   var name = req.body.name;
   var state = req.body.state;
   localUpdateState(name, state);
 };
 
 // @ts-ignore
-exports.updateGameTime = function(req, res) {
+exports.updateGameTime = function (req, res) {
   var name = req.body.name;
   var time = req.body.time;
   localUpdateTime(name, time);
   res.send(time);
 };
 
-exports.deleteGame = function(req, res) {
+exports.deleteGame = function (req, res) {
   var scriptName = req.params.name;
   // @ts-ignore
   var gRemoved;
@@ -347,7 +347,7 @@ exports.deleteGame = function(req, res) {
   });
 };
 
-exports.pauseGame = function(req, res) {
+exports.pauseGame = function (req, res) {
   var name = req.params.name;
   var result = {
     status: "paused",
@@ -359,7 +359,7 @@ exports.pauseGame = function(req, res) {
   }
 };
 
-exports.resumeGame = function(req, res) {
+exports.resumeGame = function (req, res) {
   var name = req.params.name;
   var result = {
     status: "resumed",
@@ -376,12 +376,12 @@ exports.resumeGame = function(req, res) {
 // ===================================================================== //
 
 // Outgoing force event to branch
-exports.forceEvent = function(req, res) {
+exports.forceEvent = function (req, res) {
   var name = req.body.name;
   var eventName = req.body.forceEvent;
   console.log(name, eventName);
   getScriptInstance(name).then(instanceName => {
-    gamesJson[`${instanceName}`].script.events.forEach(function(evt) {
+    gamesJson[`${instanceName}`].script.events.forEach(function (evt) {
       if (evt.name == eventName) {
         let address = gamesJson[`${instanceName}`].script.branch_address;
         let masterId = gamesJson[`${instanceName}`].script.masterId;
@@ -392,7 +392,7 @@ exports.forceEvent = function(req, res) {
   });
 };
 
-exports.forceAction = function(req, res) {
+exports.forceAction = function (req, res) {
   var name = req.body.name;
   var actionName = req.body.forceAction;
   getScriptInstance(name).then(instanceName => {
@@ -401,7 +401,7 @@ exports.forceAction = function(req, res) {
       "============ gameController.forceAction, sending action==================",
       gamesJson[`${instanceName}`].script
     );
-    gamesJson[`${instanceName}`].script.actions.forEach(function(act) {
+    gamesJson[`${instanceName}`].script.actions.forEach(function (act) {
       if (act.name == actionName) {
         act.status = "complete";
         let address = gamesJson[`${instanceName}`].script.branch_address;
@@ -422,7 +422,7 @@ exports.forceAction = function(req, res) {
  * @param {*} req
  * @param {*} res
  */
-exports.setEventCompleted = function(req, res) {
+exports.setEventCompleted = function (req, res) {
   var scriptName = req.body.event.branch_name;
   var eventName = req.body.event.name;
   var updatedStates = req.body.states;
@@ -460,7 +460,7 @@ function setStartAndEndEvents(scriptName, eventName) {
 
 function instanceEventCompletion(eventName, scriptName, updatedStates = null) {
   getScriptInstance(scriptName).then(instanceName => {
-    gamesJson[`${instanceName}`].script.events.forEach(function(evt) {
+    gamesJson[`${instanceName}`].script.events.forEach(function (evt) {
       if (evt.name == eventName) {
         const t = gamesJson[`${instanceName}`].getTimeStaticValues();
         evt.status = "complete";
@@ -489,12 +489,12 @@ function getScriptInstance(name) {
 //===========================================//
 
 /** For external modules */
-exports.loUpdateGameState = function(name, state) {
+exports.loUpdateGameState = function (name, state) {
   localUpdateState(name, state);
 };
 
 /** For external modules */
-exports.loUpdateGameTime = function(name, time) {
+exports.loUpdateGameTime = function (name, time) {
   localUpdateTime(name, time);
 };
 
@@ -527,7 +527,7 @@ function localUpdateState(name, state) {
 }
 
 // TODO: unused these 2????
-exports.localNewGame = function(script, timeLimit, canStart) {
+exports.localNewGame = function (script, timeLimit, canStart) {
   loNewGame(script, timeLimit, canStart);
 };
 
@@ -639,7 +639,8 @@ function sendTrigger(instanceName, trigger) {
   var msg = {
     message_type: "trigger",
     scriptName: instanceName,
-    trigger: trigger
+    trigger: trigger,
+    screenName: trigger.screenName
   };
   SocketController.socketEmit(msg);
 }

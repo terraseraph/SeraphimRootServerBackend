@@ -7,8 +7,7 @@
     "minutes": "60",
     "seconds": "0"
   },
-  "states": [
-    {
+  "states": [{
       "name": "start_game",
       "active": false
     },
@@ -21,8 +20,7 @@
       "active": false
     }
   ],
-  "events": [
-    {
+  "events": [{
       "id": "1",
       "name": "start_timeMachine_game",
       "device_id": "10",
@@ -35,12 +33,10 @@
         "chest_door_start"
       ],
       "message": "started the game",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "2",
@@ -74,12 +70,10 @@
       ],
       "can_toggle": "true",
       "message": "opened box",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "4",
@@ -95,12 +89,10 @@
       ],
       "can_toggle": "true",
       "message": "opened box",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "5",
@@ -116,12 +108,10 @@
       ],
       "can_toggle": "true",
       "message": "opened box",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "6",
@@ -137,12 +127,10 @@
       ],
       "can_toggle": "true",
       "message": "opened box",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "7",
@@ -169,12 +157,10 @@
       ],
       "can_toggle": "true",
       "message": "opened jack_in_the_box",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "8",
@@ -190,12 +176,10 @@
       ],
       "can_toggle": "true",
       "message": "opened vent",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "9",
@@ -211,12 +195,10 @@
       ],
       "can_toggle": "true",
       "message": "opened chest",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "10",
@@ -243,12 +225,10 @@
       ],
       "can_toggle": "true",
       "message": "Tetris",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "11",
@@ -264,12 +244,10 @@
       ],
       "can_toggle": "true",
       "message": "phone out",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "12",
@@ -287,12 +265,10 @@
       ],
       "can_toggle": "true",
       "message": "phone out",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "13",
@@ -308,12 +284,10 @@
       ],
       "can_toggle": "true",
       "message": "keypad test phone in",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "14",
@@ -329,12 +303,10 @@
       ],
       "can_toggle": "true",
       "message": "backup opened vent",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "15",
@@ -363,12 +335,10 @@
       ],
       "can_toggle": "true",
       "message": "opened jack_in_the_box",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "16",
@@ -386,16 +356,13 @@
       ],
       "can_toggle": "true",
       "message": "keypad test phone in",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     }
   ],
-  "actions": [
-    {
+  "actions": [{
       "id": "1",
       "name": "play_start_music",
       "device_id": "30",
@@ -410,12 +377,10 @@
       "repeatable": "true",
       "actions": [],
       "message": "played music",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "2",
@@ -432,12 +397,10 @@
       "repeatable": "true",
       "actions": [],
       "message": "played music",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "3",
@@ -457,12 +420,10 @@
       ],
       "actions": [],
       "message": "Jump scare",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "4",
@@ -479,12 +440,10 @@
       "dependencies": [],
       "actions": [],
       "message": "open_door",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "5",
@@ -501,12 +460,10 @@
       "dependencies": [],
       "actions": [],
       "message": "LED on",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "6",
@@ -523,12 +480,10 @@
       "dependencies": [],
       "actions": [],
       "message": "LED off",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "7",
@@ -545,12 +500,10 @@
       "dependencies": [],
       "actions": [],
       "message": "chest_door_on",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "8",
@@ -567,12 +520,10 @@
       "dependencies": [],
       "actions": [],
       "message": "Top drawer open",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "9",
@@ -589,12 +540,10 @@
       "dependencies": [],
       "actions": [],
       "message": "second_drawer_on",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "10",
@@ -611,12 +560,10 @@
       "dependencies": [],
       "actions": [],
       "message": "vent_latch_on",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "11",
@@ -633,12 +580,10 @@
       "dependencies": [],
       "actions": [],
       "message": "LED off",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "12",
@@ -658,12 +603,10 @@
       "dependencies": [],
       "actions": [],
       "message": "phone out r u wrath",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "13",
@@ -683,12 +626,10 @@
       "dependencies": [],
       "actions": [],
       "message": "phone out",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "14",
@@ -705,12 +646,10 @@
       "dependencies": [],
       "actions": [],
       "message": "chest_door_on",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "14",
@@ -727,12 +666,10 @@
       "dependencies": [],
       "actions": [],
       "message": "chest_door_off",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     },
     {
       "id": "14",
@@ -752,16 +689,13 @@
       "dependencies": [],
       "actions": [],
       "message": "phone continue",
-      "states": [
-        {
-          "name": "start_game",
-          "active": true
-        }
-      ]
+      "states": [{
+        "name": "start_game",
+        "active": true
+      }]
     }
   ],
-  "triggers": [
-    {
+  "triggers": [{
       "name": "start video",
       "trigger": "start_game",
       "audio": "sombnihfgeFile.mp3",
@@ -784,8 +718,7 @@
       "can_toggle": "true"
     }
   ],
-  "hints": [
-    {
+  "hints": [{
       "name": "Start hint",
       "hint": "Read the whole thing bro"
     },
@@ -796,6 +729,27 @@
     {
       "name": "end hint",
       "hint": "waughhhh"
+    }
+  ],
+  "screenConfigs": [{
+      "name": "Screen1",
+      "backgroundType": "Video",
+      "backgroundPath": "video/static_small.mp4",
+      "font": "'Times New Roman', Times, serif",
+      "font_colour": "white",
+      "audio": "",
+      "showTimer": true,
+      "showHints": true
+    },
+    {
+      "name": "screen2",
+      "backgroundType": "Video",
+      "backgroundPath": "video/christmas_background.mp4",
+      "font": "Impact, Charcoal, sans-serif",
+      "font_colour": "BlueViolet",
+      "audio": "",
+      "showTimer": false,
+      "showHints": false
     }
   ]
 }
