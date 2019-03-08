@@ -94,7 +94,7 @@ exports.db_select = db_select;
 function db_update(query) {
     return new Promise((resolve, reject) => {
 
-        let db = new sqlite3.Database('database/se.db');
+        // let db = new sqlite3.Database('database/se.db');
         //    UPDATE table
         //    SET column_1 = new_value_1,
         //        column_2 = new_value_2
@@ -125,7 +125,7 @@ exports.db_update = db_update;
 function db_delete(query) {
     return new Promise((resolve, reject) => {
 
-        let db = new sqlite3.Database('database/se.db');
+        // let db = new sqlite3.Database('database/se.db');
         // DELETE
         // FROM
         // table
