@@ -4,6 +4,7 @@ const app = require('../app')
 const ScriptController = require("../controllers/scriptController");
 const GameController = require("../controllers/gameController");
 const BranchController = require("../controllers/branchController");
+const DatabaseController = require("../controllers/databaseController");
 var log = require('../controllers/loggingController').log;
 /* GET home page. */
 
@@ -79,6 +80,26 @@ router.post('/branch/config', BranchController.branchUpdateScreenConfig);
 
 router.post('/branch/hint', BranchController.branchSendHint);
 router.post('/branch/hint/clear', BranchController.branchClearHint);
+
+//Branch CRUD
+router.post('/branch', BranchController.createBranch)
+router.get('/branch/:id', BranchController.getBranchById)
+router.get('/branch', BranchController.getAllBranches)
+router.put('/branch', BranchController.updateBranch)
+router.delete('/branch/:id', BranchController.deleteBranch)
+
+// Branch Node info
+router.get(`/branch/nodes/:branchId`)
+router.post("/branch/nodeUpdate", BranchController.nodeUpdateFromServer)
+
+
+//=============================================//
+//====== TEST DB =============================//
+//===========================================//
+
+router.get('/test/db', DatabaseController.testSelect);
+router.post('/test/db', DatabaseController.testInsert);
+
 
 
 

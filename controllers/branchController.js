@@ -2,6 +2,7 @@
 var SocketController = require("./socketController");
 var log = require("./loggingController").log;
 var ScriptController = require("./scriptController");
+var db = require("./databaseController");
 // var $ = require('jQuery');
 var request = require('request');
 var branchRoutes = {
@@ -15,6 +16,101 @@ var branchRoutes = {
 // ============================================================== //
 // ================= Branch Server Routes ====================== //
 // ============================================================== //
+exports.createBranch = function (req, res) {
+    var name = req.body.name
+    var rootserver_id = req.body.rootserver_id
+    var ip_address = req.body.ip_address
+    var q = `INSERT INTO BRANCHES (name, rootserver_id, ip_address) VALUES ("${name}", ${rootserver_id}, "${ip_address}")`
+    db.db_insert(q).then((query, id) => {
+        res.send({
+            "query": query,
+            "insertedAt": id
+        })
+    })
+}
+
+
+exports.getBranchById = function (req, res) {
+    db.db_select(`SELECT * FROM BRANCHES WHERE id = ${req.params.id}`).then((branch) => {
+        res.send(branch);
+    })
+}
+
+exports.getAllBranches = function (req, res) {
+    db.db_select(`SELECT * FROM BRANCHES`).then((response) => {
+        console.log(response)
+        res.send(response);
+    })
+}
+
+exports.updateBranch = function (req, res) {
+    var name = req.body.name
+    var rootserver_id = req.body.rootserver_id
+    var ip_address = req.body.ip_address
+    var id = req.body.id
+    var q = `UPDATE BRANCHES SET name = "${name}", rootserver_id = "${rootserver_id}", ip_address = "${ip_address}" WHERE id = ${id}`
+    db.db_update(q).then((result) => {
+        res.send(result)
+    })
+}
+
+
+exports.deleteBranch = function (req, res) {
+    var id = req.params.id
+    db.db_delete(`DELETE FROM BRANCHES WHERE id = ${id}`)
+}
+
+
+exports.getBranchNodes = function (req, res) {
+    var branchId = req.params.branchId
+    db.db_select(`SELECT * FROM NODEBRIDGES WHERE branch_id = ${branchId}`).then(result => {
+        res.send(result);
+    })
+}
+
+exports.nodeUpdateFromServer = function (req, res) {
+    var branchId = req.body.branchId;
+    var node = req.body.node;
+    db.db_select(`SELECT * FROM NODEBRIDGES WHERE name = "${node.id}"`).then(row => {
+        if (row.length != 0) {
+            db.db_insert(`INSERT INTO NODEBRIDGES (name, ip_address, branch_id) VALUES ("${node.id}", "${node.ipAddress}", "${branchId}")`).then(result => {
+                createNodeFromHeartbeatMessage(node.nodes, node.name)
+                res.send(result)
+                return;
+            })
+        } else {
+            db.db_update(`UPDATE NODEBRIDGES SET name = "${node.id}", ip_address = "${node.ipAddress}", branch_id = "${branchId}"`).then(result => {
+                createNodeFromHeartbeatMessage(node.nodes, node.name)
+                res.send(result)
+                return;
+            })
+        }
+    })
+}
+
+function createNodeFromHeartbeatMessage(nodes, bridgeId) {
+    for (let i = 0; i < nodes.length; i++) {
+        const node = nodes[i];
+
+        db.db_select(`SELECT * FROM NODES WHERE name = "${node.id}" AND bridge_id = "${bridgeId}"`).then(row => {
+            if (row.length != 0) {
+                db.db_insert(`INSERT INTO NODES (name, type, last_alive, bridge_id) VALUES ("${node.id}", "${node.ipAddress}", "${node.last_alive}", "${bridgeId}")`).then(result => {
+                    console.log(result);
+                })
+            } else {
+                db.db_update(`UPDATE NODES SET name = "${node.id}", type = "${node.type}", last_alive = "${node.last_alive}", bridge_id = "${bridgeId}"`).then(result => {
+                    console.log(result);
+                })
+            }
+        })
+    }
+}
+
+//========================================================================
+//========================= EVENT ACTIONS ================================
+//========================================================================
+//========================================================================
+
 exports.branchSendEvent = function (req, res) {
     var scriptName = req.body.scriptName;
     var eventName = req.body.eventName;
