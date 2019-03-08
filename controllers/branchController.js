@@ -68,11 +68,34 @@ exports.getBranchNodes = function (req, res) {
     })
 }
 
+exports.getLiveBranchNodeInfo = function (req, res) {
+
+    localGetBranchById(req.params.branchId, (branch) => {
+        var address = (`${branch[0].ip_address}/node`);
+        var options = {
+            method: 'get',
+            url: address
+        }
+        request(options, (err, response, body) => {
+            console.log("RESPONSE", response.body);
+
+            res.send(response.body)
+        })
+    })
+}
+
+function localGetBranchById(id, cb) {
+    db.db_select(`SELECT * FROM BRANCHES WHERE id = ${id}`).then((branch) => {
+        console.log("Branch : ", id, branch);
+        cb(branch);
+    })
+}
+
 exports.nodeUpdateFromServer = function (req, res) {
     var branchId = req.body.branchId;
     var node = req.body.node;
     db.db_select(`SELECT * FROM NODEBRIDGES WHERE name = "${node.id}"`).then(row => {
-        if (row.length != 0) {
+        if (row.length == 0 || row == undefined) {
             db.db_insert(`INSERT INTO NODEBRIDGES (name, ip_address, branch_id) VALUES ("${node.id}", "${node.ipAddress}", "${branchId}")`).then(result => {
                 createNodeFromHeartbeatMessage(node.nodes, node.name)
                 res.send(result)
@@ -89,6 +112,9 @@ exports.nodeUpdateFromServer = function (req, res) {
 }
 
 function createNodeFromHeartbeatMessage(nodes, bridgeId) {
+    if (nodes == undefined) {
+        return
+    }
     for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i];
 

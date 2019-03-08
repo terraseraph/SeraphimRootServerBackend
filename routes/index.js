@@ -89,7 +89,7 @@ router.put('/branch', BranchController.updateBranch)
 router.delete('/branch/:id', BranchController.deleteBranch)
 
 // Branch Node info
-router.get(`/branch/nodes/:branchId`)
+router.get(`/branch/nodes/:branchId`, BranchController.getLiveBranchNodeInfo)
 router.post("/branch/nodeUpdate", BranchController.nodeUpdateFromServer)
 
 
