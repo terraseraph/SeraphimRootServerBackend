@@ -163,8 +163,7 @@ function db_insertMessageLog(query) {
         });
         // db.close();
     })
-} <<
-<< << < HEAD
+}
 exports.db_insertMessageLog = db_insertMessageLog
 
 
@@ -236,7 +235,5 @@ CREATE TABLE IF NOT EXISTS "ROOTSERVER"(
 )
 
 
-`) ===
-    === =
-    exports.db_insertMessageLog = db_insertMessageLog >>>
-    >>> > 90 f2453e40342f2aea1c2cb15195ad579cfedb38
+`)
+exports.db_insertMessageLog = db_insertMessageLog

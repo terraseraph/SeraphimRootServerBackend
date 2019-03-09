@@ -195,13 +195,13 @@ class Game {
 
   prepareTimerEventListners() {
     var t = this;
-    // @ts-ignore
     this.timer.addEventListener(
+      // @ts-ignore
       "secondsUpdated",
       this.timerSecondsUpdatedListner
     );
-    // @ts-ignore
     this.timer.addEventListener(
+      // @ts-ignore
       "targetAchieved",
       this.timerTargetAchievedListner
     );
