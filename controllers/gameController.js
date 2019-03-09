@@ -379,7 +379,7 @@ exports.resumeGame = function (req, res) {
 exports.forceEvent = function (req, res) {
   var name = req.body.name;
   var eventName = req.body.forceEvent;
-  console.log(name, eventName);
+  log("forcing event", name, eventName);
   getScriptInstance(name).then(instanceName => {
     gamesJson[`${instanceName}`].script.events.forEach(function (evt) {
       if (evt.name == eventName) {
@@ -655,7 +655,6 @@ function JsonToArr(json) {
     var arr = [];
     for (var key in json) {
       if (json.hasOwnProperty(key)) {
-        // console.log(key + " -> " + json[key]);
         arr.push(json[key]);
       }
     }

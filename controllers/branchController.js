@@ -38,7 +38,7 @@ exports.getBranchById = function (req, res) {
 
 exports.getAllBranches = function (req, res) {
     db.db_select(`SELECT * FROM BRANCHES`).then((response) => {
-        console.log(response)
+        log(response)
         res.send(response);
     })
 }
@@ -77,16 +77,22 @@ exports.getLiveBranchNodeInfo = function (req, res) {
             url: address
         }
         request(options, (err, response, body) => {
-            console.log("RESPONSE", response.body);
-
-            res.send(response.body)
+            if (response == undefined) {
+                res.send({
+                    "status": "failed"
+                })
+            } else {
+                log("RESPONSE", response.body);
+                let branch = response.body;
+                res.send(branch)
+            }
         })
     })
 }
 
 function localGetBranchById(id, cb) {
     db.db_select(`SELECT * FROM BRANCHES WHERE id = ${id}`).then((branch) => {
-        console.log("Branch : ", id, branch);
+        log("Branch : ", id, branch);
         cb(branch);
     })
 }
@@ -97,13 +103,17 @@ exports.nodeUpdateFromServer = function (req, res) {
     db.db_select(`SELECT * FROM NODEBRIDGES WHERE name = "${node.id}"`).then(row => {
         if (row.length == 0 || row == undefined) {
             db.db_insert(`INSERT INTO NODEBRIDGES (name, ip_address, branch_id) VALUES ("${node.id}", "${node.ipAddress}", "${branchId}")`).then(result => {
-                createNodeFromHeartbeatMessage(node.nodes, node.name)
+                makeMeshNodeArray(node.meshNodes).then(arr => {
+                    createNodeFromHeartbeatMessage(arr, node.name)
+                })
                 res.send(result)
                 return;
             })
         } else {
             db.db_update(`UPDATE NODEBRIDGES SET name = "${node.id}", ip_address = "${node.ipAddress}", branch_id = "${branchId}"`).then(result => {
-                createNodeFromHeartbeatMessage(node.nodes, node.name)
+                makeMeshNodeArray(node.meshNodes).then(arr => {
+                    createNodeFromHeartbeatMessage(arr, node.name)
+                })
                 res.send(result)
                 return;
             })
@@ -111,23 +121,42 @@ exports.nodeUpdateFromServer = function (req, res) {
     })
 }
 
+function makeMeshNodeArray(meshNodes) {
+    return new Promise((resolve, reject) => {
+        var nodes = [];
+        for (var x in meshNodes) {
+            log("pushing", meshNodes[x]);
+            nodes.push(meshNodes[x]);
+        }
+        resolve(nodes);
+    });
+}
+
 function createNodeFromHeartbeatMessage(nodes, bridgeId) {
     if (nodes == undefined) {
         return
     }
     for (let i = 0; i < nodes.length; i++) {
-        const node = nodes[i];
-
-        db.db_select(`SELECT * FROM NODES WHERE name = "${node.id}" AND bridge_id = "${bridgeId}"`).then(row => {
-            if (row.length != 0) {
-                db.db_insert(`INSERT INTO NODES (name, type, last_alive, bridge_id) VALUES ("${node.id}", "${node.ipAddress}", "${node.last_alive}", "${bridgeId}")`).then(result => {
-                    console.log(result);
-                })
-            } else {
-                db.db_update(`UPDATE NODES SET name = "${node.id}", type = "${node.type}", last_alive = "${node.last_alive}", bridge_id = "${bridgeId}"`).then(result => {
-                    console.log(result);
-                })
-            }
+        let node = nodes[i];
+        log("UPSERTING: ", node)
+        db.db_insert(`
+        INSERT INTO NODES
+        (name, type, last_alive, bridge_id, hardware_id, memory)
+        VALUES ("${node.id}",
+        "${node.type}",
+        ${node.lastUpdated},
+        "${bridgeId}",
+        ${node.hardwareId},
+        ${node.memory})
+        ON CONFLICT(hardware_id) 
+        DO UPDATE
+        SET name = "${node.id}",
+        type = "${node.type}",
+        last_alive = ${node.lastUpdated},
+        bridge_id = "${bridgeId}",
+        hardware_id = ${node.hardwareId},
+        memory = ${node.memory}`).then(result => {
+            log(result);
         })
     }
 }
