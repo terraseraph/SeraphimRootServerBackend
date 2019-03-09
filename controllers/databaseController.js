@@ -1,5 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+var log = require("./loggingController").log;
 const db = new sqlite3.Database(path.join(__dirname, '../Database/data.db'));
 
 
@@ -45,15 +46,15 @@ exports.testSelect = testSelect
 function db_insert(query) {
 
     return new Promise((resolve, reject) => {
-        console.log(query);
+        log(query);
 
         db.run(query, [], function (err) {
             if (err) {
-                return console.log(err.message);
+                return log(err.message);
             }
-            resolve(query, this.lastID)
+            resolve(this.lastID)
             // get the last insert id
-            console.log(`A row has been inserted with rowid ${this.lastID}`); //add this.changes
+            log(`A row has been inserted with rowid ${this.lastID}`); //add this.changes
         });
 
         // close the database connection
@@ -75,7 +76,7 @@ function db_select(query) {
         let arr = []
         db.all(query, [], (err, rows) => {
             if (err) {
-                console.log(err);
+                log(err);
             }
             // db.close();
             resolve(rows)
@@ -93,8 +94,7 @@ exports.db_select = db_select;
  */
 function db_update(query) {
     return new Promise((resolve, reject) => {
-
-        // let db = new sqlite3.Database('database/se.db');
+        log(query)
         //    UPDATE table
         //    SET column_1 = new_value_1,
         //        column_2 = new_value_2
@@ -107,8 +107,8 @@ function db_update(query) {
             if (err) {
                 return console.error(err.message);
             }
-            resolve("updated" + query)
-            console.log(`Row(s) updated: ${this.changes}`);
+            resolve("updated" + this.changes)
+            log(`Row(s) updated: ${this.changes}`);
         });
 
         // close the database connection
@@ -124,8 +124,6 @@ exports.db_update = db_update;
 
 function db_delete(query) {
     return new Promise((resolve, reject) => {
-
-        // let db = new sqlite3.Database('database/se.db');
         // DELETE
         // FROM
         // table
@@ -137,13 +135,26 @@ function db_delete(query) {
             if (err) {
                 return console.error(err.message);
             }
-            resolve("deleted" + query)
-            console.log(`Row(s) updated: ${this.changes}`);
+            resolve("deleted" + this.changes)
+            // console.log(`Row(s) updated: ${this.changes}`);
         });
 
         // close the database connection
         // db.close();
     })
 }
-
 exports.db_delete = db_delete;
+
+function db_insertMessageLog(query) {
+    return new Promise((resolve, reject) => {
+
+        db.run(query, [], function (err) {
+            if (err) {
+                return
+            }
+            resolve(this.lastID)
+        });
+        // db.close();
+    })
+}
+exports.db_insertMessageLog = db_insertMessageLog

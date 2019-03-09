@@ -5,14 +5,16 @@ const ScriptController = require("../controllers/scriptController");
 const GameController = require("../controllers/gameController");
 const BranchController = require("../controllers/branchController");
 const DatabaseController = require("../controllers/databaseController");
-var log = require('../controllers/loggingController').log;
+var LoggingController = require('../controllers/loggingController');
+var log = LoggingController.log;
+
 /* GET home page. */
 
 router.get('/', function (req, res, next) {
   var result = {
     name: "Seraphim Root Server"
   }
-  log(result)
+  // log(result)
   res.send(result)
 });
 
@@ -92,6 +94,13 @@ router.delete('/branch/:id', BranchController.deleteBranch)
 router.get(`/branch/nodes/:branchId`, BranchController.getLiveBranchNodeInfo)
 router.post("/branch/nodeUpdate", BranchController.nodeUpdateFromServer)
 
+
+
+//=============================================//
+//====== Message Routes ======================//
+//===========================================//
+
+router.post("/log", LoggingController.logFromHttp);
 
 //=============================================//
 //====== TEST DB =============================//

@@ -108,7 +108,7 @@ function readScriptsInDirectory() {
     return new Promise((resolve, reject) => {
         fs.readdir(directoryPath, function (err, files) {
             if (err) {
-                return console.log('Unable to scan directory: ' + err);
+                return log('Unable to scan directory: ' + err);
             }
             files.forEach(function (file) {
                 var script = fs.readFileSync(directoryPath + `/${file}`, 'utf8')
