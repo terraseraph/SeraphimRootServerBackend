@@ -2,6 +2,7 @@
 var SocketController = require("./socketController");
 var log = require("./loggingController").log;
 var ScriptController = require("./scriptController");
+var db = require("./databaseController");
 // var $ = require('jQuery');
 var request = require('request');
 var branchRoutes = {
@@ -15,6 +16,156 @@ var branchRoutes = {
 // ============================================================== //
 // ================= Branch Server Routes ====================== //
 // ============================================================== //
+exports.createBranch = function (req, res) {
+    var name = req.body.name
+    var rootserver_id = req.body.rootserver_id
+    var ip_address = req.body.ip_address
+    var q = `INSERT INTO BRANCHES (name, rootserver_id, ip_address) VALUES ("${name}", ${rootserver_id}, "${ip_address}")`
+    db.db_insert(q).then((query, id) => {
+        res.send({
+            "query": query,
+            "insertedAt": id
+        })
+    })
+}
+
+
+exports.getBranchById = function (req, res) {
+    db.db_select(`SELECT * FROM BRANCHES WHERE id = ${req.params.id}`).then((branch) => {
+        res.send(branch);
+    })
+}
+
+exports.getAllBranches = function (req, res) {
+    db.db_select(`SELECT * FROM BRANCHES`).then((response) => {
+        log(response)
+        res.send(response);
+    })
+}
+
+exports.updateBranch = function (req, res) {
+    var name = req.body.name
+    var rootserver_id = req.body.rootserver_id
+    var ip_address = req.body.ip_address
+    var id = req.body.id
+    var q = `UPDATE BRANCHES SET name = "${name}", rootserver_id = "${rootserver_id}", ip_address = "${ip_address}" WHERE id = ${id}`
+    db.db_update(q).then((result) => {
+        res.send(result)
+    })
+}
+
+
+exports.deleteBranch = function (req, res) {
+    var id = req.params.id
+    db.db_delete(`DELETE FROM BRANCHES WHERE id = ${id}`)
+}
+
+
+exports.getBranchNodes = function (req, res) {
+    var branchId = req.params.branchId
+    db.db_select(`SELECT * FROM NODEBRIDGES WHERE branch_id = ${branchId}`).then(result => {
+        res.send(result);
+    })
+}
+
+exports.getLiveBranchNodeInfo = function (req, res) {
+
+    localGetBranchById(req.params.branchId, (branch) => {
+        var address = (`${branch[0].ip_address}/node`);
+        var options = {
+            method: 'get',
+            url: address
+        }
+        request(options, (err, response, body) => {
+            if (response == undefined) {
+                res.send({
+                    "status": "failed"
+                })
+            } else {
+                log("RESPONSE", response.body);
+                let branch = response.body;
+                res.send(branch)
+            }
+        })
+    })
+}
+
+function localGetBranchById(id, cb) {
+    db.db_select(`SELECT * FROM BRANCHES WHERE id = ${id}`).then((branch) => {
+        log("Branch : ", id, branch);
+        cb(branch);
+    })
+}
+
+exports.nodeUpdateFromServer = function (req, res) {
+    var branchId = req.body.branchId;
+    var node = req.body.node;
+    db.db_select(`SELECT * FROM NODEBRIDGES WHERE name = "${node.id}"`).then(row => {
+        if (row.length == 0 || row == undefined) {
+            db.db_insert(`INSERT INTO NODEBRIDGES (name, ip_address, branch_id) VALUES ("${node.id}", "${node.ipAddress}", "${branchId}")`).then(result => {
+                makeMeshNodeArray(node.meshNodes).then(arr => {
+                    createNodeFromHeartbeatMessage(arr, node.name)
+                })
+                res.send(result)
+                return;
+            })
+        } else {
+            db.db_update(`UPDATE NODEBRIDGES SET name = "${node.id}", ip_address = "${node.ipAddress}", branch_id = "${branchId}"`).then(result => {
+                makeMeshNodeArray(node.meshNodes).then(arr => {
+                    createNodeFromHeartbeatMessage(arr, node.name)
+                })
+                res.send(result)
+                return;
+            })
+        }
+    })
+}
+
+function makeMeshNodeArray(meshNodes) {
+    return new Promise((resolve, reject) => {
+        var nodes = [];
+        for (var x in meshNodes) {
+            log("pushing", meshNodes[x]);
+            nodes.push(meshNodes[x]);
+        }
+        resolve(nodes);
+    });
+}
+
+function createNodeFromHeartbeatMessage(nodes, bridgeId) {
+    if (nodes == undefined) {
+        return
+    }
+    for (let i = 0; i < nodes.length; i++) {
+        let node = nodes[i];
+        log("UPSERTING: ", node)
+        db.db_insert(`
+        INSERT INTO NODES
+        (name, type, last_alive, bridge_id, hardware_id, memory)
+        VALUES ("${node.id}",
+        "${node.type}",
+        ${node.lastUpdated},
+        "${bridgeId}",
+        ${node.hardwareId},
+        ${node.memory})
+        ON CONFLICT(hardware_id) 
+        DO UPDATE
+        SET name = "${node.id}",
+        type = "${node.type}",
+        last_alive = ${node.lastUpdated},
+        bridge_id = "${bridgeId}",
+        hardware_id = ${node.hardwareId},
+        memory = ${node.memory}`).then(result => {
+            log(result);
+        })
+    }
+}
+
+//========================================================================
+//========================= EVENT ACTIONS ================================
+//========================================================================
+//========================================================================
+
 exports.branchSendEvent = function (req, res) {
     var scriptName = req.body.scriptName;
     var eventName = req.body.eventName;
