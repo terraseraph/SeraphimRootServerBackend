@@ -31,15 +31,48 @@ exports.createBranch = function (req, res) {
 
 
 exports.getBranchById = function (req, res) {
-    db.db_select(`SELECT * FROM BRANCHES WHERE id = ${req.params.id}`).then((branch) => {
-        res.send(branch);
+    db.db_select(`SELECT * FROM BRANCHES WHERE id = '${req.params.id}'`).then(branch => {
+        getBranchConfig(branch.ip_address).then(config => {
+            branch["config"] = config
+            res.send(branch);
+        })
     })
 }
 
 exports.getAllBranches = function (req, res) {
     db.db_select(`SELECT * FROM BRANCHES`).then((response) => {
-        log(response)
-        res.send(response);
+        if (response.length == 0) {
+            return
+        };
+        for (let i = 0; i < response.length; i++) {
+            const branch = response[i];
+            getBranchConfig(branch.ip_address).then(config => {
+                response[i]["config"] = config
+                if (i == response.length - 1) {
+                    log(response)
+                    res.send(response);
+                }
+            })
+        }
+    })
+}
+
+function getBranchConfig(branchUrl) {
+    return new Promise((resolve, reject) => {
+
+        var options = {
+            method: 'get',
+            url: branchUrl + "/config"
+        }
+        request(options, (err, response, body) => {
+            if (response == undefined) {
+                resolve(false)
+            } else {
+                log("RESPONSE", response.body);
+                let branch = JSON.parse(response.body);
+                resolve(branch)
+            }
+        })
     })
 }
 

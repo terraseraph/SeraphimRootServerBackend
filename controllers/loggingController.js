@@ -98,7 +98,12 @@ exports.logFromHttp = function (req, res) {
 }
 
 function logToDb(msg, cb) {
-    db.db_insertMessageLog(`INSERT INTO MESSAGES (text, type, time, sender) VALUES ('${msg.text}','${msg.type}','${msg.time}', '${msg.from}')`).then(response => {
-        cb(response)
-    })
+    try {
+
+        db.db_insertMessageLog(`INSERT INTO MESSAGES (text, type, time, sender) VALUES ('${msg.text}','${msg.type}','${msg.time}', '${msg.from}')`).then(response => {
+            cb(response)
+        })
+    } catch (e) {
+
+    }
 }

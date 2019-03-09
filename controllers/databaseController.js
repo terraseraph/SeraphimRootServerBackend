@@ -3,8 +3,15 @@ const path = require('path');
 var log = require("./loggingController").log;
 const db = new sqlite3.Database(path.join(__dirname, '../Database/data.db'));
 
+// dbInit();
 
-
+function dbInit() {
+    db.run(CreateTableSchema.toString(), [], function (err) {
+        if (err) {
+            return log(err.message);
+        }
+    });
+}
 
 
 
@@ -158,3 +165,74 @@ function db_insertMessageLog(query) {
     })
 }
 exports.db_insertMessageLog = db_insertMessageLog
+
+
+
+
+
+var CreateTableSchema = (`
+CREATE TABLE IF NOT EXISTS "BRANCHES"(
+    "id"
+    INTEGER PRIMARY KEY AUTOINCREMENT,
+    "name"
+    TEXT,
+    "rootserver_id"
+    INTEGER,
+    "ip_address"
+    TEXT
+)
+
+CREATE TABLE IF NOT EXISTS "MESSAGES"(
+    "id"
+    INTEGER PRIMARY KEY AUTOINCREMENT,
+    "text"
+    TEXT,
+    "type"
+    TEXT,
+    "time"
+    INTEGER,
+    "sender"
+    TEXT
+)
+
+CREATE TABLE IF NOT EXISTS "NODEBRIDGES"(
+    "id"
+    INTEGER,
+    "name"
+    TEXT,
+    "ip_address"
+    TEXT,
+    "branch_id"
+    INTEGER,
+    PRIMARY KEY("id")
+)
+
+CREATE TABLE IF NOT EXISTS "NODES"(
+    "id"
+    INTEGER PRIMARY KEY AUTOINCREMENT,
+    "name"
+    TEXT,
+    "type"
+    TEXT,
+    "last_alive"
+    TEXT,
+    "bridge_id"
+    INTEGER,
+    "hardware_id"
+    INTEGER UNIQUE,
+    "memory"
+    INTEGER
+)
+
+CREATE TABLE IF NOT EXISTS "ROOTSERVER"(
+    "id"
+    INTEGER,
+    "name"
+    TEXT,
+    "config_path"
+    TEXT,
+    PRIMARY KEY("id")
+)
+
+
+`)
