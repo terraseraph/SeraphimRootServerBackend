@@ -95,6 +95,9 @@ router.delete('/branch/:id', BranchController.deleteBranch)
 router.get(`/branch/nodes/:branchId`, BranchController.getLiveBranchNodeInfo)
 router.post("/branch/nodeUpdate", BranchController.nodeUpdateFromServer)
 
+// Send a packet to a mesh
+router.post("/branch/nodes/direct", BranchController.sendNodeMeshPacket)
+
 //=============================================//
 //====== Trigger Routes ======================//
 //===========================================//

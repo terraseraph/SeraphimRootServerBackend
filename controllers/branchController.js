@@ -195,6 +195,29 @@ function createNodeFromHeartbeatMessage(nodes, bridgeId) {
     }
 }
 
+exports.sendNodeMeshPacket = function (req, res) {
+    var header = req.body.header;
+    var message = req.body.message;
+    var options = {
+        method: 'post',
+        body: message,
+        json: true,
+        url: `${header.branchAddress}/node/${header.nodeType}/${header.bridgeId}`
+    }
+    log(options)
+    console.log(message)
+    request(options, (err, result, body) => {
+        if (err) {
+            console.log(err)
+        }
+        var data = {
+            success: result,
+            body: body
+        }
+        res.send(data);
+    })
+}
+
 //========================================================================
 //========================= EVENT ACTIONS ================================
 //========================================================================
