@@ -7,6 +7,7 @@ var SocketController = require("./socketController");
 var log = require("./loggingController").log;
 var ScriptController = require("./scriptController");
 const BranchController = require("./branchController");
+const HttpManager = require("../Managers/httpManager");
 // @ts-ignore
 var timerArr = [];
 var games = [];
@@ -643,6 +644,18 @@ function sendTrigger(instanceName, trigger) {
     screenName: trigger.screenName
   };
   SocketController.socketEmit(msg);
+  if (trigger.httpRequestType != "NONE" || trigger.httpRequestType != "") {
+    var reqOptions = {
+      body: {
+        type: trigger.httpRequestType,
+        url: trigger.httpRequestUrl,
+        body: trigger.httpRequestBody
+      }
+    }
+    HttpManager.sendHttpRequest(reqOptions, (response) => {
+      log(response);
+    })
+  }
 }
 
 /**

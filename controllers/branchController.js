@@ -3,6 +3,7 @@ var SocketController = require("./socketController");
 var log = require("./loggingController").log;
 var ScriptController = require("./scriptController");
 var db = require("./databaseController");
+const HttpManager = require("../Managers/httpManager");
 // var $ = require('jQuery');
 var request = require('request');
 var branchRoutes = {
@@ -358,6 +359,18 @@ exports.branchSendTrigger = function (req, res) {
     res.send({
         "Success": "Triggerd!"
     });
+    if (trigger.httpRequestType != "NONE" && trigger.httpRequestType != "" && trigger.httpRequestType != undefined) {
+        var reqOptions = {
+            body: {
+                type: trigger.httpRequestType,
+                url: trigger.httpRequestUrl,
+                body: trigger.httpRequestBody
+            }
+        }
+        HttpManager.sendHttpRequest(reqOptions, (response) => {
+            log(response);
+        })
+    }
 }
 
 

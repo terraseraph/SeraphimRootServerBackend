@@ -5,6 +5,7 @@ const ScriptController = require("../controllers/scriptController");
 const GameController = require("../controllers/gameController");
 const BranchController = require("../controllers/branchController");
 const DatabaseController = require("../controllers/databaseController");
+const HttpManager = require("../Managers/httpManager")
 var LoggingController = require('../controllers/loggingController');
 var log = LoggingController.log;
 
@@ -94,7 +95,10 @@ router.delete('/branch/:id', BranchController.deleteBranch)
 router.get(`/branch/nodes/:branchId`, BranchController.getLiveBranchNodeInfo)
 router.post("/branch/nodeUpdate", BranchController.nodeUpdateFromServer)
 
-
+//=============================================//
+//====== Trigger Routes ======================//
+//===========================================//
+router.post(`/trigger/request`, HttpManager.sendHttpRequest)
 
 //=============================================//
 //====== Message Routes ======================//

@@ -6,8 +6,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # Database
-*.db
-
+.db
+Database/
 # Runtime data
 pids
 *.pid
