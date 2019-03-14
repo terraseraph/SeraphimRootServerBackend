@@ -60,7 +60,6 @@ exports.getAllBranches = function (req, res) {
 
 function getBranchConfig(branchUrl) {
     return new Promise((resolve, reject) => {
-
         var options = {
             method: 'get',
             url: branchUrl + "/config"
@@ -76,6 +75,125 @@ function getBranchConfig(branchUrl) {
         })
     })
 }
+
+function getBranchMedia(branchUrl) {
+    return new Promise((resolve, reject) => {
+
+        var options = {
+            method: 'get',
+            url: branchUrl + "/media"
+        }
+        request(options, (err, response, body) => {
+            if (response == undefined) {
+                resolve(false)
+            } else {
+                log("RESPONSE", response.body);
+                let branch = JSON.parse(response.body);
+                resolve(branch)
+            }
+        })
+    })
+}
+
+function getBranchVideo(branchUrl) {
+    return new Promise((resolve, reject) => {
+
+        var options = {
+            method: 'get',
+            url: branchUrl + "/video"
+        }
+        request(options, (err, response, body) => {
+            if (response == undefined) {
+                resolve(false)
+            } else {
+                log("RESPONSE", response.body);
+                let branch = JSON.parse(response.body);
+                resolve(branch)
+            }
+        })
+    })
+}
+
+
+function getBRanchAudio(branchUrl) {
+    return new Promise((resolve, reject) => {
+
+        var options = {
+            method: 'get',
+            url: branchUrl + "/audio"
+        }
+        request(options, (err, response, body) => {
+            if (response == undefined) {
+                resolve(false)
+            } else {
+                log("RESPONSE", response.body);
+                let branch = JSON.parse(response.body);
+                resolve(branch)
+            }
+        })
+    })
+}
+
+exports.deleteMedia = function (req, res) {
+    var type = req.body.type
+    var name = req.body.name
+    var ip = req.body.branchIp
+
+    var options = {
+        method: 'delete',
+        url: ip + `/media/${type}/${name}`
+    }
+    request(options, (err, response, body) => {
+        if (response == undefined) {
+            res.send(false)
+        } else {
+            log("RESPONSE", response.body);
+            // let branch = JSON.parse(response.body);
+            res.send({
+                success: true
+            })
+        }
+    })
+}
+
+exports.uploadBranchVideo = function (req, res) {
+
+    var options = {
+        method: 'post',
+        files: req.body.files,
+        url: req.body.branchIp + `/video`
+    }
+    request(options, (err, response, body) => {
+        if (response == undefined) {
+            res.send(false)
+        } else {
+            log("RESPONSE", response.body);
+            // let branch = JSON.parse(response.body);
+            res.send({
+                success: true
+            })
+        }
+    })
+}
+exports.uploadBranchAudio = function (req, res) {
+    var options = {
+        method: 'post',
+        files: req.body.files,
+        url: req.body.branchIp + `/audio`
+    }
+    request(options, (err, response, body) => {
+        if (response == undefined) {
+            res.send(false)
+        } else {
+            log("RESPONSE", response.body);
+            // let branch = JSON.parse(response.body);
+            res.send({
+                success: true
+            })
+        }
+    })
+}
+
 
 exports.updateBranch = function (req, res) {
     var name = req.body.name

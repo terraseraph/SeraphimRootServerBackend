@@ -95,6 +95,11 @@ router.delete('/branch/:id', BranchController.deleteBranch)
 router.get(`/branch/nodes/:branchId`, BranchController.getLiveBranchNodeInfo)
 router.post("/branch/nodeUpdate", BranchController.nodeUpdateFromServer)
 
+//Branch media routes
+router.post(`/branch/media/delete`, BranchController.deleteMedia);
+router.post("/branch/video", BranchController.uploadBranchVideo);
+router.post("/branch/audio", BranchController.uploadBranchAudio);
+
 // Send a packet to a mesh
 router.post("/branch/nodes/direct", BranchController.sendNodeMeshPacket)
 
