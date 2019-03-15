@@ -3,6 +3,8 @@ var SocketController = require("./socketController");
 var log = require("./loggingController").log;
 var ScriptController = require("./scriptController");
 var db = require("./databaseController");
+const fs = require("fs");
+var path = require('path');
 const HttpManager = require("../Managers/httpManager");
 // var $ = require('jQuery');
 var request = require('request');
@@ -157,41 +159,58 @@ exports.deleteMedia = function (req, res) {
 }
 
 exports.uploadBranchVideo = function (req, res) {
-
-    var options = {
-        method: 'post',
-        files: req.body.files,
-        url: req.body.branchIp + `/video`
-    }
-    request(options, (err, response, body) => {
-        if (response == undefined) {
-            res.send(false)
-        } else {
-            log("RESPONSE", response.body);
-            // let branch = JSON.parse(response.body);
-            res.send({
-                success: true
-            })
+    let videoFile = req.files.file;
+    videoFile.mv(path.resolve(__dirname, `../public/files/video/${videoFile.name}`), function (err) {
+        if (err) {
+            return res.status(500).send(err);
         }
-    })
+
+        var options = {
+            method: 'post',
+            formData: {
+                file: fs.createReadStream(path.resolve(__dirname, `../public/files/video/${videoFile.name}`))
+            },
+            url: req.body.branchIp + `/video`,
+            'Content-Type': 'multipart/form-data; charset=UTF-8'
+        }
+        request(options, (err, response, body) => {
+            if (response == undefined) {
+                res.send(false)
+            } else {
+                log("RESPONSE", body);
+                res.send({
+                    success: true
+                })
+            }
+        })
+    });
 }
 exports.uploadBranchAudio = function (req, res) {
-    var options = {
-        method: 'post',
-        files: req.body.files,
-        url: req.body.branchIp + `/audio`
-    }
-    request(options, (err, response, body) => {
-        if (response == undefined) {
-            res.send(false)
-        } else {
-            log("RESPONSE", response.body);
-            // let branch = JSON.parse(response.body);
-            res.send({
-                success: true
-            })
+    let audioFile = req.files.file;
+    audioFile.mv(path.resolve(__dirname, `../public/files/audio/${audioFile.name}`), function (err) {
+        if (err) {
+            return res.status(500).send(err);
         }
-    })
+
+        var options = {
+            method: 'post',
+            formData: {
+                file: fs.createReadStream(path.resolve(__dirname, `../public/files/audio/${audioFile.name}`))
+            },
+            url: req.body.branchIp + `/audio`,
+            'Content-Type': 'multipart/form-data; charset=UTF-8'
+        }
+        request(options, (err, response, body) => {
+            if (response == undefined) {
+                res.send(false)
+            } else {
+                log("RESPONSE", body);
+                res.send({
+                    success: true
+                })
+            }
+        })
+    });
 }
 
 
