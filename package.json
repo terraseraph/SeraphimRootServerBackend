@@ -1,7 +1,18 @@
 {
   "name": "seraphimrootserver",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/terraseraph/SeraphimRootServerBackend.git"
+  },
+  "engines": {
+    "node": ">=10.15.0",
+    "npm": ">=6.5.0"
+  },
+  "license": "MIT",
+  "author": "Terra Seraphim",
+  "description": "Root server for the seraphim automation framework",
   "scripts": {
     "start": "nodemon ./bin/www --config nodemon.json"
   },
