@@ -93,13 +93,13 @@ var MessageType = {
 
 exports.logFromHttp = function (req, res) {
     logToDb(req.body.message, (response) => {
-        res.send(response)
+        res.send("logged")
     })
 }
 
 function logToDb(msg, cb) {
     try {
-
+        cb("logged")
         // db.db_insertMessageLog(`INSERT INTO MESSAGES (text, type, time, sender) VALUES ('${msg.text}','${msg.type}','${msg.time}', '${msg.from}')`).then(response => {
         //     cb(response)
         // })
