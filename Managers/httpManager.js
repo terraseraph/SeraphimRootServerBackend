@@ -21,6 +21,7 @@ exports.sendHttpRequest = function (packet, callback) {
 
     request(options, (err, response, body) => {
         if (response == undefined) {
+            console.log(err, body)
             callback({
                 "status": "failed"
             })
