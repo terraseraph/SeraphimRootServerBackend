@@ -4,6 +4,7 @@ var log = require("./loggingController").log;
 var ScriptController = require("./scriptController");
 var db = require("./databaseController");
 const fs = require("fs");
+var ip = require('ip');
 var path = require('path');
 const HttpManager = require("../Managers/httpManager");
 // var $ = require('jQuery');
@@ -77,6 +78,8 @@ function getBranchConfig(branchUrl) {
         })
     })
 }
+
+
 
 function getBranchMedia(branchUrl) {
     return new Promise((resolve, reject) => {
@@ -223,12 +226,34 @@ exports.updateBranch = function (req, res) {
     db.db_update(q).then((result) => {
         res.send(result)
     })
+    branchUpdateRootApi(ip_address, req.socket.localAddress)
 }
 
 
 exports.deleteBranch = function (req, res) {
     var id = req.params.id
     db.db_delete(`DELETE FROM BRANCHES WHERE id = ${id}`)
+}
+
+
+function branchUpdateRootApi(branchIp, rootIp) {
+    var options = {
+        method: 'put',
+        body: {
+            api: `http://${rootIp}:4300`
+        },
+        json: true,
+        url: branchIp + "/config/api"
+    }
+    request(options, (err, response, body) => {
+        if (response == undefined) {
+            // res.send(false)
+        } else {
+            log("RESPONSE", body);
+            // let branch = JSON.parse(response.body);
+            // res.send(response.body)
+        }
+    })
 }
 
 

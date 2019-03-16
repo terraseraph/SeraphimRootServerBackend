@@ -31,7 +31,6 @@ app.use(
     })
 );
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
 app.engine(
     "handlebars",
     exphbs({
@@ -43,6 +42,7 @@ app.set("view engine", "handlebars");
 app.set("io", io);
 
 /** Directory linking */
+app.use(express.static(path.join(__dirname, "views")));
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/packages", express.static(path.join(__dirname, "node_modules"))); //TODO: make individ paths for each (jquery..etc)
 
