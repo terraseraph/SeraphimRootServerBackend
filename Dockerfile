@@ -1,4 +1,4 @@
-FROM node:10.15.3-alpine
+FROM node:10.15-alpine
 # https://hub.docker.com/_/node/
 
 # install dependencies
@@ -15,6 +15,4 @@ COPY . /home/server
 # set application PORT and expose docker PORT, 80 is what Elastic Beanstalk expects
 ENV PORT 4300
 EXPOSE 4300
-
-# CMD [ "npm", "run", "start" ]
 CMD ["node", "app.js"]
