@@ -216,6 +216,47 @@ exports.uploadBranchAudio = function (req, res) {
     });
 }
 
+exports.uploadBranchScript = function(req, res){
+    console.log(req.body.script)
+    var msg = {
+        script : req.body.script
+    }
+        var options = {
+        method: 'post',
+        body: msg,
+        json:true,
+        url: req.body.branchIp + `/scripts`
+    }
+    request(options, (err, response, body) => {
+        if (response == undefined) {
+            res.send(false)
+        } else {
+            log("RESPONSE", response.body);
+            res.send({
+                success: true
+            })
+        }
+    })
+}
+
+exports.deleteBranchScript = function(req, res){
+    var sName = path.parse(req.body.scriptName);
+        var options = {
+        method: 'delete',
+        url: req.body.branchIp + `/scripts/${sName.name}`
+    }
+    request(options, (err, response, body) => {
+        if (response == undefined) {
+            res.send(false)
+        } else {
+            log("RESPONSE", response.body);
+            res.send({
+                success: true
+            })
+        }
+    })
+}
+
 
 exports.updateBranch = function (req, res) {
     var name = req.body.name

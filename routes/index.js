@@ -73,6 +73,8 @@ router.post("/branch/event", BranchController.branchSendEvent);
 router.post("/branch/action", BranchController.branchSendAction);
 
 router.post("/branch/script/update", BranchController.branchUpdateScript);
+router.post("/branch/script/upload", BranchController.uploadBranchScript);
+router.post("/branch/script/delete", BranchController.deleteBranchScript);
 
 router.post("/branch/trigger", BranchController.branchSendTrigger);
 router.post("/branch/trigger/audio", BranchController.branchSendAudio);
