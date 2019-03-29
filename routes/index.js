@@ -115,6 +115,14 @@ router.post(`/trigger/request`, HttpManager.sendHttpRequest);
 
 router.post("/log", LoggingController.logFromHttp);
 
+
+//=============================================//
+//====== Shell Commands ======================//
+//===========================================//
+router.post("/branch/shell/restart", BranchController.shellRestartBranchServer);
+router.post("/branch/shell/reload", BranchController.shellReloadBranchDesktop);
+router.post("/branch/shell/command", BranchController.shellCustomCommand);
+
 //=============================================//
 //====== TEST DB =============================//
 //===========================================//

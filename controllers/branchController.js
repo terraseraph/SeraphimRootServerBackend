@@ -663,3 +663,33 @@ exports.branchSendVideo = function (req, res) {
         success: true
     })
 }
+
+
+// =============================================================================== //
+// ========================= Shell commands ===================================== //
+// ============================================================================= //
+exports.shellRestartBranchServer = function(req, res){
+    var branchUrl = req.body.branchUrl;
+    request.get(`${branchUrl}/shell/restart`, (result)=>{
+        res.send(result)
+    })
+}
+
+exports.shellReloadBranchDesktop = function(req, res){
+    var branchUrl = req.body.branchUrl;
+    request.get(`${branchUrl}/shell/reload`, (result)=>{
+        res.send(result)
+    })
+}
+
+exports.shellCustomCommand = function(req, res){
+    var branchUrl = req.body.branchUrl;
+            var options = {
+            method: 'post',
+            body: req.body.command,
+            url: branchUrl+"/shell/command"
+        }
+        request(options, (err, result, body) => {
+            res.send(result);
+        })
+}
