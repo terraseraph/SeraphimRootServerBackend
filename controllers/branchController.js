@@ -678,14 +678,6 @@ exports.shellRestartBranchServer = function(req, res){
             console.log(options)
             res.send(response)
         })
-            var options = {
-            method: 'get',
-            url: branchUrl
-        }
-        request(options, (err, response, body) => {
-
-            res.send(response)
-        })
     // request.get(`${branchUrl}/shell/restart`, (result)=>{
     //     res.send(result)
     // })
