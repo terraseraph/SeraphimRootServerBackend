@@ -121,6 +121,7 @@ router.post("/log", LoggingController.logFromHttp);
 //===========================================//
 router.post("/branch/shell/restart", BranchController.shellRestartBranchServer);
 router.post("/branch/shell/reload", BranchController.shellReloadBranchDesktop);
+router.post("/branch/shell/gitupdate", BranchController.shellCustomCommand);
 router.post("/branch/shell/command", BranchController.shellCustomCommand);
 
 //=============================================//
