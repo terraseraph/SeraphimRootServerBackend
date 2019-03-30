@@ -2,11 +2,14 @@
 var SocketController = require("./socketController");
 var log = require("./loggingController").log;
 var ScriptController = require("./scriptController");
+var RootServerController = require("./rootServerController")
+var GameController = require("./gameController")
 var db = require("./databaseController");
 const fs = require("fs");
 var ip = require('ip');
 var path = require('path');
 const HttpManager = require("../Managers/httpManager");
+var Branch = require("../models/branchModel").Branch;
 // var $ = require('jQuery');
 var request = require('request');
 var branchRoutes = {
@@ -14,6 +17,48 @@ var branchRoutes = {
     action: `/server/action`,
     updateScript: `/scripts/update`,
     resetStates: `/scripts/selected/reset`
+}
+
+var branchList = [];
+loadBranchesFromDb().then(list => {
+    branchList = list
+}); //TODO: put in init file
+
+function loadBranchesFromDb() {
+    return new Promise((resolve, reject) => {
+        var bList = []
+        db.db_select(`SELECT * FROM BRANCHES`).then((response) => {
+            if (response.length == 0) {
+                return
+            };
+            for (let i = 0; i < response.length; i++) {
+                const branch = response[i]; //old
+                let b = new Branch(branch.name)
+                b.initValues(branch.id, branch.ip_address, branch.rootserver_id)
+                b.getBranchConfig().then(config => {
+                    // response[i]["config"] = config //old
+                    b.setConfig(config)
+                    bList.push(b);
+                    if (i == response.length - 1) {
+                        log(response)
+                        // res.send(response);
+                        resolve(bList);
+                    }
+                })
+            }
+        })
+    })
+}
+
+function findBranchById(id) {
+    return new Promise((resolve, reject) => {
+        for (let b of branchList) {
+            if (b.id == id) {
+                resolve(b)
+            }
+        }
+    })
+
 }
 
 
@@ -24,60 +69,82 @@ exports.createBranch = function (req, res) {
     var name = req.body.name
     var rootserver_id = req.body.rootserver_id
     var ip_address = req.body.ip_address
-    var q = `INSERT INTO BRANCHES (name, rootserver_id, ip_address) VALUES ("${name}", ${rootserver_id}, "${ip_address}")`
-    db.db_insert(q).then((query, id) => {
-        res.send({
-            "query": query,
-            "insertedAt": id
-        })
+    var branch = new Branch(name)
+    branch.setIp_address(ip_address);
+    branch.setRootserverId(rootserver_id);
+    branch.create().then(response => {
+        res.send(response)
+        branchList.push(response)
     })
+    // var q = `INSERT INTO BRANCHES (name, rootserver_id, ip_address) VALUES ("${name}", ${rootserver_id}, "${ip_address}")`
+    // db.db_insert(q).then((query, id) => {
+    //     res.send({
+    //         "query": query,
+    //         "insertedAt": id
+    //     })
+    // })
 }
 
 
 exports.getBranchById = function (req, res) {
-    db.db_select(`SELECT * FROM BRANCHES WHERE id = '${req.params.id}'`).then(branch => {
-        getBranchConfig(branch.ip_address).then(config => {
-            branch["config"] = config
-            res.send(branch);
-        })
-    })
+    var id = req.params.id
+    for (let b of branchList) {
+        if (branchList[b].id == id) {
+            res.send(branchList[b])
+        }
+    }
+    // db.db_select(`SELECT * FROM BRANCHES WHERE id = '${req.params.id}'`).then(branch => {
+    //     getBranchConfig(branch.ip_address).then(config => {
+    //         branch["config"] = config
+    //         res.send(branch);
+    //     })
+    // })
 }
 
 exports.getAllBranches = function (req, res) {
-    db.db_select(`SELECT * FROM BRANCHES`).then((response) => {
-        if (response.length == 0) {
-            return
-        };
-        for (let i = 0; i < response.length; i++) {
-            const branch = response[i];
-            getBranchConfig(branch.ip_address).then(config => {
-                response[i]["config"] = config
-                if (i == response.length - 1) {
-                    log(response)
-                    res.send(response);
-                }
-            })
-        }
+    // var bList = []
+    // db.db_select(`SELECT * FROM BRANCHES`).then((response) => {
+    //     if (response.length == 0) {
+    //         return
+    //     };
+    //     for (let i = 0; i < response.length; i++) {
+    //         const branch = response[i]; //old
+    //         var b = new Branch(branch.name)
+    //         b.initValues(branch.id, branch.ip_address, branch.rootserver_id)
+    //         getBranchConfig(branch.ip_address).then(config => {
+    //             // response[i]["config"] = config //old
+    //             b.setConfig(config)
+    //             bList.push(b);
+    //             if (i == response.length - 1) {
+    //                 log(response)
+    //                 // res.send(response);
+    //                 res.send(bList);
+    //             }
+    //         })
+    //     }
+    // })
+    loadBranchesFromDb().then(list => {
+        res.send(list);
     })
 }
 
-function getBranchConfig(branchUrl) {
-    return new Promise((resolve, reject) => {
-        var options = {
-            method: 'get',
-            url: branchUrl + "/config"
-        }
-        request(options, (err, response, body) => {
-            if (response == undefined) {
-                resolve(false)
-            } else {
-                log("RESPONSE", response.body);
-                let branch = JSON.parse(response.body);
-                resolve(branch)
-            }
-        })
-    })
-}
+// function getBranchConfig(branchUrl) {
+//     return new Promise((resolve, reject) => {
+//         var options = {
+//             method: 'get',
+//             url: branchUrl + "/config"
+//         }
+//         request(options, (err, response, body) => {
+//             if (response == undefined) {
+//                 resolve(false)
+//             } else {
+//                 log("RESPONSE", response.body);
+//                 let branch = JSON.parse(response.body);
+//                 resolve(branch)
+//             }
+//         })
+//     })
+// }
 
 
 
@@ -142,118 +209,48 @@ function getBRanchAudio(branchUrl) {
 exports.deleteMedia = function (req, res) {
     var type = req.body.type
     var name = req.body.name
-    var ip = req.body.branchIp
-
-    var options = {
-        method: 'delete',
-        url: ip + `/media/${type}/${name}`
-    }
-    request(options, (err, response, body) => {
-        if (response == undefined) {
-            res.send(false)
-        } else {
-            log("RESPONSE", response.body);
-            // let branch = JSON.parse(response.body);
-            res.send({
-                success: true
-            })
-        }
+    var id = req.body.id
+    findBranchById(id).then(branch => {
+        branch.deleteMedia(type, name).then(response => {
+            res.send(response)
+        })
     })
 }
 
 exports.uploadBranchVideo = function (req, res) {
+    let id = req.body.id
     let videoFile = req.files.file;
-    videoFile.mv(path.resolve(__dirname, `../public/files/video/${videoFile.name}`), function (err) {
-        if (err) {
-            return res.status(500).send(err);
-        }
-
-        var options = {
-            method: 'post',
-            formData: {
-                file: fs.createReadStream(path.resolve(__dirname, `../public/files/video/${videoFile.name}`))
-            },
-            url: req.body.branchIp + `/video`,
-            'Content-Type': 'multipart/form-data; charset=UTF-8'
-        }
-        request(options, (err, response, body) => {
-            if (response == undefined) {
-                res.send(false)
-            } else {
-                log("RESPONSE", body);
-                res.send({
-                    success: true
-                })
-            }
+    findBranchById(id).then(branch => {
+        branch.uploadMedia(videoFile, branch.mediaType.VIDEO).then(result => {
+            res.send(result)
         })
-    });
+    })
 }
 exports.uploadBranchAudio = function (req, res) {
     let audioFile = req.files.file;
-    audioFile.mv(path.resolve(__dirname, `../public/files/audio/${audioFile.name}`), function (err) {
-        if (err) {
-            return res.status(500).send(err);
-        }
-
-        var options = {
-            method: 'post',
-            formData: {
-                file: fs.createReadStream(path.resolve(__dirname, `../public/files/audio/${audioFile.name}`))
-            },
-            url: req.body.branchIp + `/audio`,
-            'Content-Type': 'multipart/form-data; charset=UTF-8'
-        }
-        request(options, (err, response, body) => {
-            if (response == undefined) {
-                res.send(false)
-            } else {
-                log("RESPONSE", body);
-                res.send({
-                    success: true
-                })
-            }
+    let id = req.body.id
+    findBranchById(id).then(branch => {
+        branch.uploadMedia(audioFile, branch.mediaType.AUDIO).then(result => {
+            res.send(result)
         })
-    });
-}
-
-exports.uploadBranchScript = function(req, res){
-    console.log(req.body.script)
-    var msg = {
-        script : req.body.script
-    }
-        var options = {
-        method: 'post',
-        body: msg,
-        json:true,
-        url: req.body.branchIp + `/scripts`
-    }
-    request(options, (err, response, body) => {
-        if (response == undefined) {
-            res.send(false)
-        } else {
-            log("RESPONSE", response.body);
-            res.send({
-                success: true
-            })
-        }
     })
 }
 
-exports.deleteBranchScript = function(req, res){
-    var sName = path.parse(req.body.scriptName);
-        var options = {
-        method: 'delete',
-        url: req.body.branchIp + `/scripts/${sName.name}`
-    }
-    request(options, (err, response, body) => {
-        if (response == undefined) {
-            res.send(false)
-        } else {
-            log("RESPONSE", response.body);
-            res.send({
-                success: true
-            })
-        }
+exports.uploadBranchScript = function (req, res) {
+    console.log(req.body.script)
+    findBranchById(req.body.id).then(branch => {
+        branch.uploadScript(req.body.script).then(response => {
+            res.send(response)
+        })
+    })
+}
+
+exports.deleteBranchScript = function (req, res) {
+    var sName = path.parse(req.body.scriptName).name;
+    findBranchById(req.body.id).then(branch => {
+        branch.deleteScript(sName).then(response => {
+            res.send(response)
+        })
     })
 }
 
@@ -262,12 +259,22 @@ exports.updateBranch = function (req, res) {
     var name = req.body.name
     var rootserver_id = req.body.rootserver_id
     var ip_address = req.body.ip_address
+    var root_ip = req.body.config.server_url
     var id = req.body.id
-    var q = `UPDATE BRANCHES SET name = "${name}", rootserver_id = "${rootserver_id}", ip_address = "${ip_address}" WHERE id = ${id}`
-    db.db_update(q).then((result) => {
-        res.send(result)
+    findBranchById(id).then(branch => {
+        branch.setIp_address(ip_address)
+        branch.setName(name)
+        branch.updateRootApi(root_ip).then(response => {
+            branch.update().then(qResult => {
+                res.send({
+                    http: response,
+                    query: qResult
+                })
+            })
+        });
     })
-    branchUpdateRootApi(ip_address, req.socket.localAddress)
+    // branchUpdateRootApi(ip_address, req.socket.localAddress)
+
 }
 
 
@@ -277,25 +284,25 @@ exports.deleteBranch = function (req, res) {
 }
 
 
-function branchUpdateRootApi(branchIp, rootIp) {
-    var options = {
-        method: 'put',
-        body: {
-            api: `http://${rootIp}:4300`
-        },
-        json: true,
-        url: branchIp + "/config/api"
-    }
-    request(options, (err, response, body) => {
-        if (response == undefined) {
-            // res.send(false)
-        } else {
-            log("RESPONSE", body);
-            // let branch = JSON.parse(response.body);
-            // res.send(response.body)
-        }
-    })
-}
+// function branchUpdateRootApi(branchIp, rootIp) {
+//     var options = {
+//         method: 'put',
+//         body: {
+//             api: rootIp
+//         },
+//         json: true,
+//         url: branchIp + "/config/api"
+//     }
+//     request(options, (err, response, body) => {
+//         if (response == undefined) {
+//             // res.send(false)
+//         } else {
+//             log("RESPONSE", body);
+//             // let branch = JSON.parse(response.body);
+//             // res.send(response.body)
+//         }
+//     })
+// }
 
 
 exports.getBranchNodes = function (req, res) {
@@ -611,6 +618,9 @@ exports.branchSendHint = function (req, res) {
         screenName: screenName
     }
     SocketController.socketEmit(msg);
+    GameController.getScriptInstance(scriptName).then(instance => {
+        GameController.gamesJson[instance].displayedHint = hintText
+    })
     var response = {
         message: msg,
         success: true
@@ -627,6 +637,9 @@ exports.branchClearHint = function (req, res) {
         screenName: screenName,
         hintText: "--clear--"
     }
+    GameController.getScriptInstance(scriptName).then(instance => {
+        GameController.gamesJson[instance].displayedHint = ""
+    })
     SocketController.socketEmit(msg);
 }
 
@@ -668,57 +681,57 @@ exports.branchSendVideo = function (req, res) {
 // =============================================================================== //
 // ========================= Shell commands ===================================== //
 // ============================================================================= //
-exports.shellRestartBranchServer = function(req, res){
-    var branchUrl = req.body.branchIp+'/shell/restart';
-            var options = {
-            method: 'get',
-            url: branchUrl
-        }
-        request(options, (err, response, body) => {
-            console.log(options)
-            res.send(response)
-        })
+exports.shellRestartBranchServer = function (req, res) {
+    var branchUrl = req.body.branchIp + '/shell/restart';
+    var options = {
+        method: 'get',
+        url: branchUrl
+    }
+    request(options, (err, response, body) => {
+        console.log(options)
+        res.send(response)
+    })
     // request.get(`${branchUrl}/shell/restart`, (result)=>{
     //     res.send(result)
     // })
 }
 
-exports.shellReloadBranchDesktop = function(req, res){
-    var branchUrl = req.body.branchIp+'/shell/reload';
-            var options = {
-            method: 'get',
-            url: branchUrl
-        }
-        request(options, (err, response, body) => {
+exports.shellReloadBranchDesktop = function (req, res) {
+    var branchUrl = req.body.branchIp + '/shell/reload';
+    var options = {
+        method: 'get',
+        url: branchUrl
+    }
+    request(options, (err, response, body) => {
 
-        })
-        res.send(options)
+    })
+    res.send(options)
 }
 
-exports.shellGitUpdate = function(req, res){
-    var branchUrl = req.body.branchIp+'/shell/gitupdate';
-            var options = {
-            method: 'get',
-            url: branchUrl
-        }
-        request(options, (err, response, body) => {
+exports.shellGitUpdate = function (req, res) {
+    var branchUrl = req.body.branchIp + '/shell/gitupdate';
+    var options = {
+        method: 'get',
+        url: branchUrl
+    }
+    request(options, (err, response, body) => {
 
-        })
-        res.send(options)
+    })
+    res.send(options)
 }
 
-exports.shellCustomCommand = function(req, res){
+exports.shellCustomCommand = function (req, res) {
     var branchUrl = req.body.branchIp;
     var msg = {
-        command : req.body.command
+        command: req.body.command
     }
-            var options = {
-            method: 'post',
-            body: msg,
-            url: branchUrl+"/shell/command",
-            json:true
-        }
-        request(options, (err, result, body) => {
-        })
-        res.send(msg);
+    var options = {
+        method: 'post',
+        body: msg,
+        url: branchUrl + "/shell/command",
+        json: true
+    }
+    request(options, (err, result, body) => {
+    })
+    res.send(msg);
 }

@@ -1,7 +1,7 @@
 {
   "name": "Christmas",
   "id": "0",
-  "branch_address": "http://192.168.0.52:4400",
+  "branch_address": "http://192.168.0.180:4400",
   "masterId": "10",
   "time": {
     "hours": "0",

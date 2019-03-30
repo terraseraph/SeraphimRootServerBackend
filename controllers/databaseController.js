@@ -224,15 +224,13 @@ CREATE TABLE IF NOT EXISTS "NODES"(
     INTEGER
 )
 
-CREATE TABLE IF NOT EXISTS "ROOTSERVER"(
-    "id"
-    INTEGER,
-    "name"
-    TEXT,
-    "config_path"
-    TEXT,
-    PRIMARY KEY("id")
-)
+CREATE TABLE "ROOTSERVER" (
+	"id"	INTEGER,
+	"name"	TEXT,
+	"ip_address"	TEXT,
+	"config_path"	TEXT,
+	PRIMARY KEY("id")
+);
 
 
 `)
