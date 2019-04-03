@@ -326,12 +326,40 @@ exports.getLiveBranchNodeInfo = function (req, res) {
                     "status": "failed"
                 })
             } else {
-                log("RESPONSE", response.body);
-                let branch = response.body;
-                res.send(branch)
+                log(body)
+
+                // makeNodeArrayWithMesh(JSON.parse(body)).then(nodes => {
+                //     log("RESPONSE", nodes);
+                //     let branch = response.body;
+                //     res.send(nodes)
+                // })
+                res.send(body)
             }
         })
     })
+}
+
+function makeNodeArrayWithMesh(nodes) {
+    return new Promise((resolve, reject) => {
+        console.log("============= ", nodes)
+        var result = {
+            nodes: nodes
+        }
+        var arr = []
+        for (let i in nodes.meshNodes) {
+            let n = nodes.meshNodes[i]
+            arr.push(n)
+        }
+        result.nodes.cocks = arr;
+        resolve(result.nodes);
+    });
+}
+
+function mapObj(obj) {
+    var result = Object.keys(obj).map(function (key) {
+        return [key, obj[key]];
+    });
+    return result;
 }
 
 function localGetBranchById(id, cb) {
