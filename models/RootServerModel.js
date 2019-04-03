@@ -17,8 +17,9 @@ class RootServer {
 
 
     // Once loaded from db, insert values here
-    initValues(id, address, config = null) {
+    initValues(id, name, address, config = null) {
         this.setId(id)
+        this.setName(name)
         this.setIp_address(address)
         this.setConfig(config)
     }

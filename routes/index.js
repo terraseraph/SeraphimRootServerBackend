@@ -10,6 +10,7 @@ const BranchController = require("../controllers/branchController");
 const DatabaseController = require("../controllers/databaseController");
 const HttpManager = require("../Managers/httpManager");
 var LoggingController = require("../controllers/loggingController");
+var RootServerController = require("../controllers/rootServerController");
 var log = LoggingController.log;
 
 /* GET home page. */
@@ -25,6 +26,13 @@ router.get("/gamescreen/:script/:screenName", function (req, res, next) {
     layout: false
   });
 });
+
+
+//=============================================//
+//====== Config ==============================//
+//===========================================//
+router.get("/config", RootServerController.getRootConfig)
+router.put('/config', RootServerController.updateRootConfig)
 
 //=============================================//
 //====== Event action paths ==================//
