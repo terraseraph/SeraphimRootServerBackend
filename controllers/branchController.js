@@ -22,7 +22,9 @@ var branchRoutes = {
 var branchList = [];
 loadBranchesFromDb().then(list => {
     branchList = list
+
 }); //TODO: put in init file
+getBranchStatusUpdates();
 
 function loadBranchesFromDb() {
     return new Promise((resolve, reject) => {
@@ -36,6 +38,9 @@ function loadBranchesFromDb() {
                 let b = new Branch(branch.name)
                 b.initValues(branch.id, branch.ip_address, branch.rootserver_id)
                 b.getBranchConfig().then(config => {
+                    if (config == false) {
+                        b.setConfig(null);
+                    }
                     // response[i]["config"] = config //old
                     b.setConfig(config)
                     bList.push(b);
@@ -48,6 +53,17 @@ function loadBranchesFromDb() {
             }
         })
     })
+}
+
+function getBranchStatusUpdates() {
+    // for(var i = 0 ; i < branchList.length ; i++){
+    //     branchList[i] = branchList[i].getBranchConfig();
+    // }
+    setTimeout(function () {
+        loadBranchesFromDb().then(list => {
+            branchList = list;
+        });
+    }, 10000)
 }
 
 function findBranchById(id) {
@@ -102,50 +118,11 @@ exports.getBranchById = function (req, res) {
 }
 
 exports.getAllBranches = function (req, res) {
-    // var bList = []
-    // db.db_select(`SELECT * FROM BRANCHES`).then((response) => {
-    //     if (response.length == 0) {
-    //         return
-    //     };
-    //     for (let i = 0; i < response.length; i++) {
-    //         const branch = response[i]; //old
-    //         var b = new Branch(branch.name)
-    //         b.initValues(branch.id, branch.ip_address, branch.rootserver_id)
-    //         getBranchConfig(branch.ip_address).then(config => {
-    //             // response[i]["config"] = config //old
-    //             b.setConfig(config)
-    //             bList.push(b);
-    //             if (i == response.length - 1) {
-    //                 log(response)
-    //                 // res.send(response);
-    //                 res.send(bList);
-    //             }
-    //         })
-    //     }
+    // loadBranchesFromDb().then(list => {
+    //     res.send(list);
     // })
-    loadBranchesFromDb().then(list => {
-        res.send(list);
-    })
+    res.send(branchList);
 }
-
-// function getBranchConfig(branchUrl) {
-//     return new Promise((resolve, reject) => {
-//         var options = {
-//             method: 'get',
-//             url: branchUrl + "/config"
-//         }
-//         request(options, (err, response, body) => {
-//             if (response == undefined) {
-//                 resolve(false)
-//             } else {
-//                 log("RESPONSE", response.body);
-//                 let branch = JSON.parse(response.body);
-//                 resolve(branch)
-//             }
-//         })
-//     })
-// }
-
 
 
 function getBranchMedia(branchUrl) {

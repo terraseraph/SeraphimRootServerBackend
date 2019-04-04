@@ -65,10 +65,11 @@ class Branch {
         return new Promise((resolve, reject) => {
             var options = {
                 method: 'get',
-                url: this.ip_address + "/config"
+                url: this.ip_address + "/config",
+                timeout: 100
             }
             request(options, (err, response, body) => {
-                if (response == undefined) {
+                if (response == undefined || err) {
                     resolve(false)
                 } else {
                     log("RESPONSE", response.body);
