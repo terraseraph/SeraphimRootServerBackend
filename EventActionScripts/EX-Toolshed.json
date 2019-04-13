@@ -1,0 +1,174 @@
+{
+  "time": {
+    "hours": "0",
+    "minutes": "60",
+    "seconds": "0"
+  },
+  "name": "EX-Toolshed",
+  "states": [
+    {
+      "name": "start_instance",
+      "active": true
+    },
+    {
+      "name": "end_instance",
+      "active": true
+    },
+    {
+      "name": "timer_complete",
+      "active": false
+    }
+  ],
+  "events": [
+    {
+      "states": [
+        {
+          "name": "start_instance",
+          "active": true
+        }
+      ],
+      "id": "",
+      "name": "start_instance",
+      "device_id": "11",
+      "event": "toggle",
+      "eventType": "button",
+      "data": "1",
+      "description": "",
+      "dependencies": [],
+      "actions": [
+        "Close door"
+      ],
+      "message": ""
+    },
+    {
+      "states": [
+        {
+          "name": "end_instance",
+          "active": true
+        }
+      ],
+      "id": "",
+      "name": "end_instance",
+      "device_id": "13",
+      "event": "code",
+      "eventType": "keypad",
+      "data": "123456",
+      "description": "",
+      "dependencies": [],
+      "actions": [
+        "Open door"
+      ],
+      "message": ""
+    }
+  ],
+  "actions": [
+    {
+      "id": "",
+      "name": "Close door",
+      "device_id": "12",
+      "action": "start",
+      "actionType": "relay",
+      "data": "27",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Open door",
+      "device_id": "12",
+      "action": "stop",
+      "actionType": "relay",
+      "data": "27",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    }
+  ],
+  "hints": [
+    {
+      "name": "use the force",
+      "hint": "yo you should use the forks"
+    }
+  ],
+  "triggers": [
+    {
+      "name": "start",
+      "trigger": "start_instance",
+      "audio": "http://192.168.0.50:4400/audio/intro.mp3",
+      "video": "",
+      "hint": "",
+      "can_toggle": "",
+      "screenName": "main",
+      "httpRequestType": "NONE",
+      "httpRequestUrl": "",
+      "httpRequestBody": "",
+      "audio_type": "start",
+      "pause_timer": true,
+      "video_type": "custom"
+    },
+    {
+      "name": "fail audio",
+      "trigger": "timer_complete",
+      "audio": "http://192.168.0.50:4400/audio/fail.mp3",
+      "video": "",
+      "hint": "Better luck next life....",
+      "can_toggle": "",
+      "screenName": "main",
+      "httpRequestType": "NONE",
+      "httpRequestUrl": "",
+      "httpRequestBody": "",
+      "audio_type": "end"
+    },
+    {
+      "name": "win audio",
+      "trigger": "end_instance",
+      "audio": "http://192.168.0.50:4400/audio/win_audio.mp3",
+      "video": "",
+      "hint": "",
+      "can_toggle": "",
+      "screenName": "main",
+      "httpRequestType": "NONE",
+      "httpRequestUrl": "",
+      "httpRequestBody": "",
+      "audio_type": "end"
+    },
+    {
+      "name": "Background audio",
+      "trigger": "start_instance",
+      "audio": "http://192.168.0.50:4400/audio/background.mp3",
+      "video": "",
+      "hint": "",
+      "can_toggle": "",
+      "screenName": "main",
+      "httpRequestType": "NONE",
+      "httpRequestUrl": "",
+      "httpRequestBody": "",
+      "audio_type": "background",
+      "loop_audio": true
+    }
+  ],
+  "screenConfigs": [
+    {
+      "name": "main",
+      "backgroundType": "Video",
+      "backgroundPath": "http://192.168.0.50:4400/video/static_small.mp4",
+      "audio": "",
+      "font": "'Times New Roman', Times, serif",
+      "font_colour": "white",
+      "showTimer": true,
+      "showHints": true,
+      "defaultHintAudioPath": "http://192.168.0.50:4400/audio/congrats.mp3"
+    }
+  ],
+  "branch_address": "http://192.168.0.50:4400",
+  "masterId": "20"
+}

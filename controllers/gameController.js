@@ -654,7 +654,7 @@ function sendTrigger(instanceName, trigger) {
       gamesJson[`${instance}`].displayedHint = trigger.hint
     })
   }
-  if (trigger.httpRequestType != "NONE" || trigger.httpRequestType != "") {
+  if (trigger.httpRequestType != "NONE" && trigger.httpRequestType != "") {
     var reqOptions = {
       body: {
         type: trigger.httpRequestType,

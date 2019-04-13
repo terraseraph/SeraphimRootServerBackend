@@ -62,6 +62,7 @@ function getBranchStatusUpdates() {
     setTimeout(function () {
         loadBranchesFromDb().then(list => {
             branchList = list;
+            getBranchStatusUpdates();
         });
     }, 10000)
 }
