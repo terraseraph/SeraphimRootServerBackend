@@ -180,6 +180,14 @@ class Game {
     }
   }
 
+  updateState(stateName, active) {
+    for (var s of this.script.states) {
+      if (s.name == stateName) {
+        s.active = active;
+      }
+    }
+  }
+
   updateTime(customTime) {
     this.prepareTimerRemoval().then(() => {
       this.timer = new Timer();
@@ -521,12 +529,20 @@ function InitializeInstances() {
   });
 }
 
-function localUpdateState(name, state) {
-  for (var key in gamesJson) {
-    if (gamesJson.hasOwnProperty(`${key}`)) {
-      if (gamesJson[`${key}`].name == name) {
-        gamesJson[`${key}`].states.push(state);
-      }
+function localUpdateState(instance_name, state) {
+  for (var instance in gamesJson) {
+    if (gamesJson.hasOwnProperty(`${instance}`)) {
+      // if (gamesJson[`${instance}`].name == instance_name) {
+      //   findTriggersByState(instance, state.name).then(
+      //     triggers => {
+      //       SocketController.socketEmit(`instance name : ${instance_name} ||  ${instance}|| ${state.name}`)
+      //       for (let i = 0; i < triggers.length; i++) {
+      //         const trigger = triggers[i];
+      //         sendTrigger(instance, trigger);
+      //       }
+      //     }
+      //   );
+      // }
     }
   }
 }
@@ -577,6 +593,7 @@ function localEndGame(scriptName) {
   // @ts-ignore
   return new Promise((resolve, reject) => {
     if (gamesJson.hasOwnProperty(`${scriptName}`)) {
+      localUpdateState(scriptName, { name: "end_instance", active: true });
       gamesJson[`${scriptName}`].endGame();
       resolve(`{"ended": ${scriptName}}`);
     } else {
@@ -599,9 +616,11 @@ function localDeleteGame(scriptName) {
 }
 
 function findTriggersByState(instanceName, stateName) {
+  SocketController.socketEmit(`Finding trigger for : ${instanceName} | ${stateName}`)
   let triggersArr = new Array();
   return new Promise((resolve, reject) => {
     let selectedScript = gamesJson[`${instanceName}`].script;
+    SocketController.socketEmit(`ScriptFinding it for : ${gamesJson[`${instanceName}`].name}`)
     for (let i = 0; i < selectedScript.triggers.length; i++) {
       const trigger = selectedScript.triggers[i];
       if (trigger.trigger == stateName) {

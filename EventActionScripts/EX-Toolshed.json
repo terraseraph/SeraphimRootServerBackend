@@ -52,7 +52,7 @@
       "device_id": "13",
       "event": "code",
       "eventType": "keypad",
-      "data": "123456",
+      "data": "4872",
       "description": "",
       "dependencies": [],
       "actions": [
@@ -162,8 +162,8 @@
       "backgroundType": "Video",
       "backgroundPath": "http://192.168.0.50:4400/video/static_small.mp4",
       "audio": "",
-      "font": "'Times New Roman', Times, serif",
-      "font_colour": "white",
+      "font": "'YouMurderer BB'",
+      "font_colour": "DarkRed",
       "showTimer": true,
       "showHints": true,
       "defaultHintAudioPath": "http://192.168.0.50:4400/audio/congrats.mp3"
