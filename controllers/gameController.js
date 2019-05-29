@@ -5,6 +5,7 @@
 var Timer = require("easytimer");
 var SocketController = require("./socketController");
 var log = require("./loggingController").log;
+var logStatus = require("./loggingController").logStatus;
 var ScriptController = require("./scriptController");
 const BranchController = require("./branchController");
 const HttpManager = require("../Managers/httpManager");
@@ -409,7 +410,7 @@ exports.forceAction = function (req, res) {
   var actionName = req.body.forceAction;
   getScriptInstance(name).then(instanceName => {
     var masterId = gamesJson[`${instanceName}`].script.masterId;
-    log(
+    logStatus(
       "============ gameController.forceAction, sending action==================",
       gamesJson[`${instanceName}`].script
     );
@@ -439,7 +440,7 @@ exports.setEventCompleted = function (req, res) {
   var eventName = req.body.event.name;
   var updatedStates = req.body.states;
   log("=========Completed Event===========");
-  log(updatedStates);
+  logStatus(updatedStates);
   instanceEventCompletion(eventName, scriptName, updatedStates);
   setStartAndEndEvents(scriptName, eventName);
   res.send({

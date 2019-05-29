@@ -1,0 +1,469 @@
+{
+  "time": {
+    "hours": "0",
+    "minutes": "60",
+    "seconds": "0"
+  },
+  "name": "Atonement",
+  "states": [
+    {
+      "name": "start_instance",
+      "active": true
+    },
+    {
+      "name": "end_instance",
+      "active": true
+    },
+    {
+      "name": "timer_complete",
+      "active": false
+    },
+    {
+      "name": "sidequest",
+      "active": true
+    }
+  ],
+  "events": [
+    {
+      "states": [
+        {
+          "name": "start_instance",
+          "active": true
+        }
+      ],
+      "id": "",
+      "name": "start_instance",
+      "device_id": "20",
+      "event": "code",
+      "eventType": "keypad",
+      "data": "2#",
+      "description": "",
+      "dependencies": [],
+      "actions": [
+        "Close Vent",
+        "Close Chest",
+        "Close Closet exit",
+        "Close Top Drawer",
+        "Close Second Drawer"
+      ],
+      "message": ""
+    },
+    {
+      "states": [
+        {
+          "name": "end_instance",
+          "active": true
+        }
+      ],
+      "id": "",
+      "name": "end_instance",
+      "device_id": "20",
+      "event": "code",
+      "eventType": "keypad",
+      "data": "4#",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": ""
+    },
+    {
+      "states": [],
+      "id": "",
+      "name": "Scan rfid",
+      "device_id": "16",
+      "event": "code",
+      "eventType": "rfid",
+      "data": "31 11 05 83",
+      "description": "",
+      "dependencies": [],
+      "actions": [
+        "Open Vent"
+      ],
+      "message": ""
+    },
+    {
+      "states": [],
+      "id": "",
+      "name": "Jack in the box",
+      "device_id": "17",
+      "event": "toggle",
+      "eventType": "magnetSwitch",
+      "data": "[0,1,0,0,0,0,0,0,0,0]",
+      "description": "",
+      "dependencies": [],
+      "actions": [
+        "Open Top Drawer"
+      ],
+      "message": ""
+    },
+    {
+      "states": [
+        {
+          "name": "sidequest",
+          "active": true
+        }
+      ],
+      "id": "",
+      "name": "Phone call",
+      "device_id": "20",
+      "event": "code",
+      "eventType": "keypad",
+      "data": "1234567890",
+      "description": "",
+      "dependencies": [],
+      "actions": [
+        "Play phone track"
+      ],
+      "message": ""
+    },
+    {
+      "states": [],
+      "id": "",
+      "name": "Phone open chest",
+      "device_id": "20",
+      "event": "code",
+      "eventType": "keypad",
+      "data": "1#",
+      "description": "",
+      "dependencies": [
+        "sidequest"
+      ],
+      "actions": [
+        "Open chest"
+      ],
+      "message": ""
+    },
+    {
+      "states": [],
+      "id": "",
+      "name": "Phone open 3rd door TEST",
+      "device_id": "20",
+      "event": "code",
+      "eventType": "keypad",
+      "data": "1234#",
+      "description": "",
+      "dependencies": [],
+      "actions": [
+        "Open Closet Exit"
+      ],
+      "message": ""
+    },
+    {
+      "states": [
+        {
+          "name": "end_instance",
+          "active": true
+        }
+      ],
+      "id": "",
+      "name": "phone open all",
+      "device_id": "20",
+      "event": "code",
+      "eventType": "keypad",
+      "data": "3#",
+      "description": "",
+      "dependencies": [],
+      "actions": [
+        "Open Vent",
+        "Open chest",
+        "Open Closet Exit",
+        "Open Top Drawer",
+        "Open Second Drawer",
+        "Play phone track"
+      ],
+      "message": ""
+    },
+    {
+      "states": [],
+      "id": "",
+      "name": "Tetris puzzle",
+      "device_id": "15",
+      "event": "toggle",
+      "eventType": "magnetSwitch",
+      "data": "[1,1,1,1,1,1,1,1,1,1]",
+      "description": "",
+      "dependencies": [],
+      "actions": [
+        "Open Second Drawer"
+      ],
+      "message": ""
+    }
+  ],
+  "actions": [
+    {
+      "id": "",
+      "name": "Close Vent",
+      "device_id": "12",
+      "action": "start",
+      "actionType": "relay",
+      "data": "5",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Open Vent",
+      "device_id": "12",
+      "action": "stop",
+      "actionType": "relay",
+      "data": "5",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Close Chest",
+      "device_id": "12",
+      "action": "start",
+      "actionType": "relay",
+      "data": "4",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Open chest",
+      "device_id": "12",
+      "action": "stop",
+      "actionType": "relay",
+      "data": "4",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Close Closet exit",
+      "device_id": "12",
+      "action": "start",
+      "actionType": "relay",
+      "data": "13",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Open Closet Exit",
+      "device_id": "12",
+      "action": "stop",
+      "actionType": "relay",
+      "data": "13",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Close Top Drawer",
+      "device_id": "12",
+      "action": "start",
+      "actionType": "relay",
+      "data": "15",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Open Top Drawer",
+      "device_id": "12",
+      "action": "stop",
+      "actionType": "relay",
+      "data": "15",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Close Second Drawer",
+      "device_id": "12",
+      "action": "start",
+      "actionType": "relay",
+      "data": "2",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Open Second Drawer",
+      "device_id": "12",
+      "action": "stop",
+      "actionType": "relay",
+      "data": "2",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Play phone track",
+      "device_id": "20",
+      "action": "play",
+      "actionType": "mp3",
+      "data": "{folder:1, file:92}",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    }
+  ],
+  "hints": [],
+  "triggers": [
+    {
+      "AudioTypes": {
+        "BACKGROUND": "background",
+        "START": "start",
+        "END": "end",
+        "HINT": "hint",
+        "CUSTOM": "custom"
+      },
+      "name": "intro video",
+      "trigger": "start_instance",
+      "audio": "http://192.168.0.174:4400/audio/background.mp3",
+      "loop_audio": true,
+      "video": "http://192.168.0.174:4400/video/intro_small.mp4",
+      "loop_video": false,
+      "pause_timer": true,
+      "hint": "",
+      "can_toggle": "",
+      "screenName": "main",
+      "httpRequestType": "NONE",
+      "httpRequestUrl": "",
+      "httpRequestBody": "",
+      "video_type": "custom",
+      "audio_type": "background"
+    },
+    {
+      "AudioTypes": {
+        "BACKGROUND": "background",
+        "START": "start",
+        "END": "end",
+        "HINT": "hint",
+        "CUSTOM": "custom"
+      },
+      "name": "sidequest_trigger",
+      "trigger": "sidequest",
+      "audio": "",
+      "loop_audio": false,
+      "video": "http://192.168.0.174:4400/video/continue.mp4",
+      "loop_video": false,
+      "pause_timer": true,
+      "hint": "",
+      "can_toggle": "",
+      "screenName": "main",
+      "httpRequestType": "NONE",
+      "httpRequestUrl": "",
+      "httpRequestBody": "",
+      "video_type": "custom"
+    },
+    {
+      "AudioTypes": {
+        "BACKGROUND": "background",
+        "START": "start",
+        "END": "end",
+        "HINT": "hint",
+        "CUSTOM": "custom"
+      },
+      "name": "win_game",
+      "trigger": "end_instance",
+      "audio": "",
+      "loop_audio": false,
+      "video": "",
+      "loop_video": false,
+      "pause_timer": false,
+      "hint": "You are free",
+      "can_toggle": "",
+      "screenName": "main",
+      "httpRequestType": "NONE",
+      "httpRequestUrl": "",
+      "httpRequestBody": ""
+    },
+    {
+      "AudioTypes": {
+        "BACKGROUND": "background",
+        "START": "start",
+        "END": "end",
+        "HINT": "hint",
+        "CUSTOM": "custom"
+      },
+      "name": "lose game",
+      "trigger": "timer_complete",
+      "audio": "",
+      "loop_audio": false,
+      "video": "",
+      "loop_video": false,
+      "pause_timer": false,
+      "hint": "You ran out of time.....",
+      "can_toggle": "",
+      "screenName": "main",
+      "httpRequestType": "NONE",
+      "httpRequestUrl": "",
+      "httpRequestBody": "",
+      "audio_type": "background"
+    }
+  ],
+  "screenConfigs": [
+    {
+      "name": "main",
+      "backgroundType": "Video",
+      "backgroundPath": "http://192.168.0.174:4400/video/static_small.mp4",
+      "audio": "",
+      "font": "'YouMurderer BB'",
+      "font_colour": "Maroon",
+      "showTimer": true,
+      "showHints": true,
+      "defaultHintAudioPath": "http://192.168.0.174:4400/audio/congrats.mp3"
+    }
+  ],
+  "branch_address": "http://192.168.0.174:4400",
+  "masterId": "10"
+}

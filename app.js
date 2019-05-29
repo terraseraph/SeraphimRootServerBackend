@@ -70,6 +70,15 @@ io.on("connection", function (socket) {
     //     cb('subscribed')
     // });
 
+    socket.on('logSubscribe', function (logFront) {
+        log('sending logs', logFront);
+        socket.join("logs");
+        var join_data = {
+            message: " JOINED logs"
+        }
+        io.sockets.in("logs").emit('message', { message: join_data });
+    });
+
     // socket.on('unsubscribe', function (branch, cb) {
     //     log('leaving room', branch.id);
     //     socket.leave(branch.id);

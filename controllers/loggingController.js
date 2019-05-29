@@ -1,9 +1,18 @@
 //@ts-check
+
+const SocketController = require("./socketController");
+logUpdate();
+function logUpdate() {
+    setTimeout(function () {
+        logToDb("TestLog")
+        logUpdate();
+    }, 10000)
+}
 function log(...args) {
     try {
 
         args.unshift(log.caller.name.toString())
-    } catch (e) {}
+    } catch (e) { }
     console.log(args)
     var msg = {
         text: JSON.stringify(args),
@@ -11,7 +20,7 @@ function log(...args) {
         time: new Date().getTime(),
         from: "root"
     }
-    logToDb(msg, (e) => {})
+    logToDb(msg, (e) => { })
 
 }
 
@@ -23,7 +32,7 @@ function logInfo(...args) {
         time: new Date().getTime(),
         from: "root"
     }
-    logToDb(msg, (e) => {})
+    logToDb(msg, (e) => { })
 }
 
 function logWarning(...args) {
@@ -34,7 +43,7 @@ function logWarning(...args) {
         time: new Date().getTime(),
         from: "root"
     }
-    logToDb(msg, (e) => {})
+    logToDb(msg, (e) => { })
 }
 
 
@@ -46,7 +55,7 @@ function logError(...args) {
         time: new Date().getTime(),
         from: "root"
     }
-    logToDb(msg, (e) => {})
+    logToDb(msg, (e) => { })
 }
 
 
@@ -58,7 +67,7 @@ function logCritical(...args) {
         time: new Date().getTime(),
         from: "root"
     }
-    logToDb(msg, (e) => {})
+    logToDb(msg, (e) => { })
 }
 
 function logStatus(...args) {
@@ -69,7 +78,7 @@ function logStatus(...args) {
         time: new Date().getTime(),
         from: "root"
     }
-    logToDb(msg, (e) => {})
+    logToDb(msg, (e) => { })
 }
 
 
@@ -92,14 +101,18 @@ var MessageType = {
 }
 
 exports.logFromHttp = function (req, res) {
-    logToDb(req.body.message, (response) => {
-        res.send("logged")
-    })
+    logStatus(req.body.message);
+    res.send("logged")
+    // logToDb(req.body.message, (response) => {
+    // })
 }
 
 function logToDb(msg, cb) {
     try {
-        cb("logged")
+        cb("logged");
+        SocketController.socketSendLog(msg);
+        if (msg.type == MessageType.STATUS) {
+        }
         // db.db_insertMessageLog(`INSERT INTO MESSAGES (text, type, time, sender) VALUES ('${msg.text}','${msg.type}','${msg.time}', '${msg.from}')`).then(response => {
         //     cb(response)
         // })
