@@ -21,6 +21,10 @@
     {
       "name": "sidequest",
       "active": true
+    },
+    {
+      "name": "phone_dialed",
+      "active": true
     }
   ],
   "events": [
@@ -29,14 +33,18 @@
         {
           "name": "start_instance",
           "active": true
+        },
+        {
+          "name": "sidequest",
+          "active": false
         }
       ],
       "id": "",
       "name": "start_instance",
-      "device_id": "20",
-      "event": "code",
-      "eventType": "keypad",
-      "data": "2#",
+      "device_id": "50",
+      "event": "toggle",
+      "eventType": "button",
+      "data": "1",
       "description": "",
       "dependencies": [],
       "actions": [
@@ -44,7 +52,8 @@
         "Close Chest",
         "Close Closet exit",
         "Close Top Drawer",
-        "Close Second Drawer"
+        "Close Second Drawer",
+        "Close main door"
       ],
       "message": ""
     },
@@ -57,13 +66,15 @@
       ],
       "id": "",
       "name": "end_instance",
-      "device_id": "20",
-      "event": "code",
-      "eventType": "keypad",
-      "data": "4#",
+      "device_id": "24",
+      "event": "toggle",
+      "eventType": "magnetSwitch",
+      "data": "[1,0,0,0,0,0,0,0,0,0]",
       "description": "",
       "dependencies": [],
-      "actions": [],
+      "actions": [
+        "Open Closet Exit"
+      ],
       "message": ""
     },
     {
@@ -92,14 +103,14 @@
       "description": "",
       "dependencies": [],
       "actions": [
-        "Open Top Drawer"
+        "Open Second Drawer"
       ],
       "message": ""
     },
     {
       "states": [
         {
-          "name": "sidequest",
+          "name": "phone_dialed",
           "active": true
         }
       ],
@@ -117,7 +128,12 @@
       "message": ""
     },
     {
-      "states": [],
+      "states": [
+        {
+          "name": "sidequest",
+          "active": true
+        }
+      ],
       "id": "",
       "name": "Phone open chest",
       "device_id": "20",
@@ -126,7 +142,7 @@
       "data": "1#",
       "description": "",
       "dependencies": [
-        "sidequest"
+        "phone_dialed"
       ],
       "actions": [
         "Open chest"
@@ -135,26 +151,6 @@
     },
     {
       "states": [],
-      "id": "",
-      "name": "Phone open 3rd door TEST",
-      "device_id": "20",
-      "event": "code",
-      "eventType": "keypad",
-      "data": "1234#",
-      "description": "",
-      "dependencies": [],
-      "actions": [
-        "Open Closet Exit"
-      ],
-      "message": ""
-    },
-    {
-      "states": [
-        {
-          "name": "end_instance",
-          "active": true
-        }
-      ],
       "id": "",
       "name": "phone open all",
       "device_id": "20",
@@ -169,7 +165,7 @@
         "Open Closet Exit",
         "Open Top Drawer",
         "Open Second Drawer",
-        "Play phone track"
+        "Open main door"
       ],
       "message": ""
     },
@@ -180,11 +176,11 @@
       "device_id": "15",
       "event": "toggle",
       "eventType": "magnetSwitch",
-      "data": "[1,1,1,1,1,1,1,1,1,1]",
+      "data": "[1,1,1,0,0,1,1,1,1,1]",
       "description": "",
       "dependencies": [],
       "actions": [
-        "Open Second Drawer"
+        "Open Top Drawer"
       ],
       "message": ""
     }
@@ -346,7 +342,37 @@
       "device_id": "20",
       "action": "play",
       "actionType": "mp3",
-      "data": "{folder:1, file:92}",
+      "data": "[001,092]",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Close main door",
+      "device_id": "12",
+      "action": "start",
+      "actionType": "relay",
+      "data": "12",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Open main door",
+      "device_id": "12",
+      "action": "stop",
+      "actionType": "relay",
+      "data": "12",
       "description": "",
       "dependencies": [],
       "actions": [],
@@ -356,7 +382,12 @@
       "repeatable": true
     }
   ],
-  "hints": [],
+  "hints": [
+    {
+      "name": "best hint",
+      "hint": "u r bung hole"
+    }
+  ],
   "triggers": [
     {
       "AudioTypes": {
@@ -415,7 +446,7 @@
       },
       "name": "win_game",
       "trigger": "end_instance",
-      "audio": "",
+      "audio": "http://192.168.0.174:4400/audio/win_audio.mp3",
       "loop_audio": false,
       "video": "",
       "loop_video": false,
@@ -425,7 +456,9 @@
       "screenName": "main",
       "httpRequestType": "NONE",
       "httpRequestUrl": "",
-      "httpRequestBody": ""
+      "httpRequestBody": "",
+      "audio_type": "end",
+      "video_type": "background"
     },
     {
       "AudioTypes": {

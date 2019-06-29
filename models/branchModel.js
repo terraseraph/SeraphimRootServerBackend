@@ -1,5 +1,5 @@
 //@ts-check
-var log = require("../controllers/loggingController").log;
+var log = require("../controllers/loggingController").logInfo;
 var db = require("../controllers/databaseController");
 var path = require('path');
 const fs = require("fs");

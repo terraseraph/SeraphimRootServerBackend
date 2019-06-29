@@ -3,7 +3,7 @@
 const app = require("../app");
 // var socket = app.io;
 const GameController = require("./gameController")
-var log = require("./loggingController").log;
+var log = require("./loggingController").logStatus;
 exports.parseMessage = function (msg) {
     log(msg)
     if (msg.updateTime == "true") {
@@ -47,6 +47,18 @@ exports.socketSendAction = function (action) {
 exports.socketEmit = function (msg) {
     // @ts-ignore
     io.emit(`message`, msg)
+}
+
+exports.customSocketEmit = function (req, res) {
+    var topic = req.params.topic;
+    var msg = req.body.message;
+    customSocketMessage(topic, msg);
+    res.send("socketSent");
+}
+
+function customSocketMessage(topic, msg) {
+    // @ts-ignore
+    io.emit(topic, msg);
 }
 
 function updateTime(msg) {

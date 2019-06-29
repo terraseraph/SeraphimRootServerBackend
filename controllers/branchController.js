@@ -2,6 +2,7 @@
 var SocketController = require("./socketController");
 var log = require("./loggingController").log;
 var logStatus = require("./loggingController").logStatus;
+var logInfo = require("./loggingController").logInfo;
 var ScriptController = require("./scriptController");
 var RootServerController = require("./rootServerController")
 var GameController = require("./gameController")
@@ -352,7 +353,7 @@ exports.nodeUpdateFromServer = function (req, res) {
     var branchId = req.body.branchId;
     var node = req.body.node;
     var pkt = { branch: branchId, node: node };
-    logStatus(pkt);
+    logInfo(pkt);
     db.db_select(`SELECT * FROM NODEBRIDGES WHERE name = "${node.id}"`).then(row => {
         if (row.length == 0 || row == undefined) {
             db.db_insert(`INSERT INTO NODEBRIDGES (name, ip_address, branch_id) VALUES ("${node.id}", "${node.ipAddress}", "${branchId}")`).then(result => {
@@ -423,7 +424,7 @@ exports.sendNodeMeshPacket = function (req, res) {
         json: true,
         url: `${header.branchAddress}/node/${header.nodeType}/${header.bridgeId}`
     }
-    log(options)
+    logStatus(options)
     console.log(message)
     request(options, (err, result, body) => {
         if (err) {

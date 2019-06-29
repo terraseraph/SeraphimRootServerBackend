@@ -7,7 +7,7 @@ var RootServer = require("../models/RootServerModel").RootServer
 var rootServerList = [];
 loadRootServersFromDb().then(list => {
     rootServerList = list
-    console.log(rootServerList)
+    log(rootServerList)
 }); //TODO: put in init file
 
 function loadRootServersFromDb() {

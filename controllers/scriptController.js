@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const jsonfile = require("jsonfile");
 var log = require('./loggingController').log;
+var logStatus = require('./loggingController').logStatus;
 var gameController = require('./gameController');
 var SocketController = require("./socketController");
 const directoryPath = path.join(__dirname, '../EventActionScripts');
@@ -67,7 +68,7 @@ exports.forceEvent = function (req, res) {
     var name = req.body.name
     var eventName = req.body.forceEvent
     var time = req.body.completedTime
-    console.log(name, eventName)
+    // console.log(name, eventName)
     getScript(name).then((s) => {
         getEvent(s.events, eventName).then((evt) => {
             evt.status = "complete";
@@ -76,7 +77,7 @@ exports.forceEvent = function (req, res) {
                 event: evt,
                 script_name: name
             }
-            log(msg)
+            logStatus(msg)
             res.send(msg)
             SocketController.socketSendEvent(msg)
         })
@@ -93,7 +94,7 @@ exports.forceAction = function (req, res) {
                 action: act,
                 script_name: name
             }
-            log(msg)
+            logStatus(msg)
             res.send(msg)
             SocketController.socketSendAction(msg)
 

@@ -440,7 +440,7 @@ exports.setEventCompleted = function (req, res) {
   var eventName = req.body.event.name;
   var updatedStates = req.body.states;
   log("=========Completed Event===========");
-  logStatus(updatedStates);
+  logStatus(req.body);
   instanceEventCompletion(eventName, scriptName, updatedStates);
   setStartAndEndEvents(scriptName, eventName);
   res.send({

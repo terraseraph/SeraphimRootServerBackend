@@ -13,10 +13,10 @@ function log(...args) {
 
         args.unshift(log.caller.name.toString())
     } catch (e) { }
-    console.log(args)
+    // console.log(args)
     var msg = {
         text: JSON.stringify(args),
-        type: "info",
+        type: "log",
         time: new Date().getTime(),
         from: "root"
     }
@@ -25,7 +25,7 @@ function log(...args) {
 }
 
 function logInfo(...args) {
-    console.log(args)
+    // console.log(args)
     var msg = {
         text: JSON.stringify(args),
         type: MessageType.INFO,
@@ -71,7 +71,7 @@ function logCritical(...args) {
 }
 
 function logStatus(...args) {
-    console.log(args)
+    // console.log(args)
     var msg = {
         text: JSON.stringify(args),
         type: MessageType.STATUS,
@@ -101,7 +101,7 @@ var MessageType = {
 }
 
 exports.logFromHttp = function (req, res) {
-    logStatus(req.body.message);
+    logStatus(req.body);
     res.send("logged")
     // logToDb(req.body.message, (response) => {
     // })

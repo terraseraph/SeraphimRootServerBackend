@@ -6,6 +6,7 @@ const controlInterface = path.join(__dirname, '../views/console.handlebars');
 const screenInterface = path.join(__dirname, '../views/display.handlebars');
 const ScriptController = require("../controllers/scriptController");
 const GameController = require("../controllers/gameController");
+const SocketController = require("../controllers/socketController");
 const BranchController = require("../controllers/branchController");
 const DatabaseController = require("../controllers/databaseController");
 const HttpManager = require("../Managers/httpManager");
@@ -131,6 +132,13 @@ router.post("/branch/shell/restart", BranchController.shellRestartBranchServer);
 router.post("/branch/shell/reload", BranchController.shellReloadBranchDesktop);
 router.post("/branch/shell/gitupdate", BranchController.shellCustomCommand);
 router.post("/branch/shell/command", BranchController.shellCustomCommand);
+
+
+//=============================================//
+//===== Socket Commands ======================//
+//===========================================//
+router.post("/socket/:topic", SocketController.customSocketEmit);
+
 
 //=============================================//
 //====== TEST DB =============================//
