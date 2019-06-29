@@ -50,8 +50,8 @@ exports.socketEmit = function (msg) {
 }
 
 exports.customSocketEmit = function (req, res) {
-    var topic = req.params.topic;
-    var msg = req.body.message;
+    var topic = "message";
+    var msg = req.body;
     customSocketMessage(topic, msg);
     res.send("socketSent");
 }

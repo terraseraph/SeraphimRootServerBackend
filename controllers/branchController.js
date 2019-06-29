@@ -360,7 +360,7 @@ exports.nodeUpdateFromServer = function (req, res) {
                 makeMeshNodeArray(node.meshNodes).then(arr => {
                     createNodeFromHeartbeatMessage(arr, node.name)
                 })
-                res.send(result)
+                res.send("Inserted")
                 return;
             })
         } else {
@@ -368,7 +368,7 @@ exports.nodeUpdateFromServer = function (req, res) {
                 makeMeshNodeArray(node.meshNodes).then(arr => {
                     createNodeFromHeartbeatMessage(arr, node.name)
                 })
-                res.send(result)
+                res.send("updated")
                 return;
             })
         }

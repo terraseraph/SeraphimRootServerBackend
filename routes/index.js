@@ -137,7 +137,7 @@ router.post("/branch/shell/command", BranchController.shellCustomCommand);
 //=============================================//
 //===== Socket Commands ======================//
 //===========================================//
-router.post("/socket/:topic", SocketController.customSocketEmit);
+router.post("/socket/message", SocketController.customSocketEmit);
 
 
 //=============================================//

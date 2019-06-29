@@ -25,6 +25,10 @@
     {
       "name": "phone_dialed",
       "active": true
+    },
+    {
+      "name": "HELP",
+      "active": false
     }
   ],
   "events": [
@@ -182,6 +186,42 @@
       "actions": [
         "Open Top Drawer"
       ],
+      "message": ""
+    },
+    {
+      "states": [
+        {
+          "name": "HELP",
+          "active": true
+        }
+      ],
+      "id": "",
+      "name": "HelpButton",
+      "device_id": "50",
+      "event": "toggle",
+      "eventType": "button",
+      "data": "0",
+      "description": "Help buton pressed",
+      "dependencies": [],
+      "actions": [],
+      "message": ""
+    },
+    {
+      "states": [
+        {
+          "name": "HELP",
+          "active": false
+        }
+      ],
+      "id": "",
+      "name": "dismissHelp",
+      "device_id": "",
+      "event": "toggle",
+      "eventType": "button",
+      "data": "",
+      "description": "turn off an led or something....",
+      "dependencies": [],
+      "actions": [],
       "message": ""
     }
   ],
@@ -482,6 +522,28 @@
       "httpRequestUrl": "",
       "httpRequestBody": "",
       "audio_type": "background"
+    },
+    {
+      "AudioTypes": {
+        "BACKGROUND": "background",
+        "START": "start",
+        "END": "end",
+        "HINT": "hint",
+        "CUSTOM": "custom"
+      },
+      "name": "Help button pressed",
+      "trigger": "HELP",
+      "audio": "",
+      "loop_audio": false,
+      "video": "",
+      "loop_video": false,
+      "pause_timer": false,
+      "hint": "",
+      "can_toggle": "",
+      "screenName": "other",
+      "httpRequestType": "POST",
+      "httpRequestUrl": "http://192.168.0.180:4300/socket/message",
+      "httpRequestBody": "{ \"scriptName\": \"Atonement\",  \"message\":\"<h1>some hint plz</h1>\", \"toaster\":\"true\", \"eventName\" :\"dismissHelp\"}"
     }
   ],
   "screenConfigs": [
@@ -495,6 +557,17 @@
       "showTimer": true,
       "showHints": true,
       "defaultHintAudioPath": "http://192.168.0.174:4400/audio/congrats.mp3"
+    },
+    {
+      "name": "other",
+      "backgroundType": "",
+      "backgroundPath": "",
+      "audio": "",
+      "font": "'Times New Roman', Times, serif",
+      "font_colour": "white",
+      "showTimer": true,
+      "showHints": true,
+      "defaultHintAudioPath": ""
     }
   ],
   "branch_address": "http://192.168.0.174:4400",
