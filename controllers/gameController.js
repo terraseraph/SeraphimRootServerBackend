@@ -616,7 +616,7 @@ function localDeleteGame(scriptName) {
   });
 }
 
-function findTriggersByState(instanceName, stateName) {
+function findTriggersByState(instanceName, stateName, alreadyActive) {
   SocketController.socketEmit(`Finding trigger for : ${instanceName} | ${stateName}`)
   let triggersArr = new Array();
   return new Promise((resolve, reject) => {
@@ -625,7 +625,14 @@ function findTriggersByState(instanceName, stateName) {
     for (let i = 0; i < selectedScript.triggers.length; i++) {
       const trigger = selectedScript.triggers[i];
       if (trigger.trigger == stateName) {
-        triggersArr.push(trigger);
+        if (alreadyActive) {
+          if (trigger.can_toggle == true) {
+            triggersArr.push(trigger);
+          }
+        }
+        else {
+          triggersArr.push(trigger);
+        }
       }
       if (i == selectedScript.triggers.length - 1) {
         resolve(triggersArr);
@@ -641,13 +648,17 @@ function findTriggersByState(instanceName, stateName) {
  * @param {*} eventStates
  */
 function setScriptStates(instanceName, eventStates) {
+  var isAlreadyActive = false;
   var gStates = gamesJson[`${instanceName}`].states;
   for (var i = 0; i < eventStates.length; i++) {
     for (var j = 0; j < gStates.length; j++) {
       if (gStates[j].name == eventStates[i].name) {
+        if (gStates[j].active) {
+          isAlreadyActive = true; // should copy value not ref, but js is weird.
+        }
         gStates[j].active = eventStates[i].active;
         if (eventStates[i].active == true) {
-          findTriggersByState(instanceName, eventStates[i].name).then(
+          findTriggersByState(instanceName, eventStates[i].name, isAlreadyActive).then(
             triggers => {
               for (let i = 0; i < triggers.length; i++) {
                 const trigger = triggers[i];

@@ -41,6 +41,10 @@
         {
           "name": "sidequest",
           "active": false
+        },
+        {
+          "name": "HELP",
+          "active": false
         }
       ],
       "id": "",
@@ -445,7 +449,7 @@
       "loop_video": false,
       "pause_timer": true,
       "hint": "",
-      "can_toggle": "",
+      "can_toggle": true,
       "screenName": "main",
       "httpRequestType": "NONE",
       "httpRequestUrl": "",
@@ -543,7 +547,7 @@
       "screenName": "other",
       "httpRequestType": "POST",
       "httpRequestUrl": "http://192.168.0.180:4300/socket/message",
-      "httpRequestBody": "{ \"scriptName\": \"Atonement\",  \"message\":\"<h1>some hint plz</h1>\", \"toaster\":\"true\", \"eventName\" :\"dismissHelp\"}"
+      "httpRequestBody": "{ \"scriptName\": \"Atonement\",  \"message\":\"some hint plz\", \"toaster\":\"true\", \"eventName\" :\"dismissHelp\", \"type\": \"warning\"}"
     }
   ],
   "screenConfigs": [
