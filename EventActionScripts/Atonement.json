@@ -164,7 +164,7 @@
       "device_id": "20",
       "event": "code",
       "eventType": "keypad",
-      "data": "3#",
+      "data": "411696#",
       "description": "",
       "dependencies": [],
       "actions": [
@@ -184,7 +184,7 @@
       "device_id": "15",
       "event": "toggle",
       "eventType": "magnetSwitch",
-      "data": "[1,1,1,0,0,1,1,1,1,1]",
+      "data": "[1,1,1,1,1,1,1,1,1,1]",
       "description": "",
       "dependencies": [],
       "actions": [
@@ -207,7 +207,9 @@
       "data": "0",
       "description": "Help buton pressed",
       "dependencies": [],
-      "actions": [],
+      "actions": [
+        "Help LED on"
+      ],
       "message": ""
     },
     {
@@ -225,7 +227,29 @@
       "data": "",
       "description": "turn off an led or something....",
       "dependencies": [],
-      "actions": [],
+      "actions": [
+        "Help LED off"
+      ],
+      "message": ""
+    },
+    {
+      "states": [],
+      "id": "",
+      "name": "phone lock all",
+      "device_id": "20",
+      "event": "code",
+      "eventType": "keypad",
+      "data": "4132#",
+      "description": "lock all locks",
+      "dependencies": [],
+      "actions": [
+        "Close Vent",
+        "Close Chest",
+        "Close Closet exit",
+        "Close Second Drawer",
+        "Close main door",
+        "Close Top Drawer"
+      ],
       "message": ""
     }
   ],
@@ -424,12 +448,46 @@
       "states": [],
       "wait": 0,
       "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Help LED on",
+      "device_id": "50",
+      "action": "start",
+      "actionType": "customPin",
+      "data": "27",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Help LED off",
+      "device_id": "50",
+      "action": "stop",
+      "actionType": "customPin",
+      "data": "27",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
     }
   ],
   "hints": [
     {
       "name": "best hint",
       "hint": "u r bung hole"
+    },
+    {
+      "name": "u r gaye",
+      "hint": "poop"
     }
   ],
   "triggers": [
