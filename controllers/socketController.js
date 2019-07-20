@@ -35,7 +35,8 @@ exports.socketSendLog = function (log) {
 exports.socketSendEvent = function (event) {
     // log("Socket: ", event)
     // @ts-ignore
-    io.emit(`message`, event)
+    io.emit(`message`, event);
+    console.log(event);
 }
 
 exports.socketSendAction = function (action) {

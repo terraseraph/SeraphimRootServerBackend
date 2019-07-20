@@ -14,7 +14,8 @@
   "author": "Terra Seraphim",
   "description": "Root server for the seraphim automation framework",
   "scripts": {
-    "start": "nodemon ./bin/www --config nodemon.json",
+    "start": "node ./bin/www",
+	"start-dev" : "nodemon ./bin/www --config nodemon.json",
     "build": "docker build --rm -f Dockerfile -t terraseraph/seraphimrootserverbackend:latest . && docker push terraseraph/seraphimrootserverbackend:latest"
   },
   "dependencies": {

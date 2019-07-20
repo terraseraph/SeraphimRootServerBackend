@@ -13,6 +13,7 @@ const HttpManager = require("../Managers/httpManager");
 var timerArr = [];
 var games = [];
 var gamesJson = {};
+var gameUpdater;
 exports.gamesJson = gamesJson
 InitializeInstances();
 
@@ -208,11 +209,12 @@ class Game {
 
   prepareTimerEventListners() {
     var t = this;
-    this.timer.addEventListener(
-      // @ts-ignore
-      "secondsUpdated",
-      this.timerSecondsUpdatedListner
-    );
+    this.gameUpdater = setInterval(this.timerSecondsUpdatedListner, 1000);
+    // this.timer.addEventListener(
+    //   // @ts-ignore
+    //   "secondsUpdated",
+    //   this.timerSecondsUpdatedListner
+    // );
     this.timer.addEventListener(
       // @ts-ignore
       "targetAchieved",
@@ -256,11 +258,12 @@ class Game {
     return new Promise((resolve, reject) => {
       // @ts-ignore
       var t = this;
-      this.timer.removeEventListener(
-        // @ts-ignore
-        "secondsUpdated",
-        this.timerSecondsUpdatedListner
-      );
+      // this.timer.removeEventListener(
+      //   // @ts-ignore
+      //   "secondsUpdated",
+      //   this.timerSecondsUpdatedListner
+      // );
+      clearInterval(this.gameUpdater);
       this.timer.removeEventListener(
         // @ts-ignore
         "targetAchieved",

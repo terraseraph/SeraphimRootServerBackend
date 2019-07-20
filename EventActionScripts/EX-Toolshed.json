@@ -17,6 +17,10 @@
     {
       "name": "timer_complete",
       "active": false
+    },
+    {
+      "name": "Help",
+      "active": false
     }
   ],
   "events": [
@@ -25,18 +29,23 @@
         {
           "name": "start_instance",
           "active": true
+        },
+        {
+          "name": "Help",
+          "active": false
         }
       ],
       "id": "",
       "name": "start_instance",
       "device_id": "11",
       "event": "toggle",
-      "eventType": "button",
-      "data": "1",
+      "eventType": "magnetSwitch",
+      "data": "[0,0,0,0,0,0,0,0,0,0]",
       "description": "",
       "dependencies": [],
       "actions": [
-        "Close door"
+        "Close door",
+        "Help LED off"
       ],
       "message": ""
     },
@@ -57,6 +66,46 @@
       "dependencies": [],
       "actions": [
         "Open door"
+      ],
+      "message": ""
+    },
+    {
+      "states": [
+        {
+          "name": "Help",
+          "active": true
+        }
+      ],
+      "id": "",
+      "name": "Help Button",
+      "device_id": "11",
+      "event": "toggle",
+      "eventType": "button",
+      "data": "[1,1,0,0,0,0,0,0,0,0]",
+      "description": "",
+      "dependencies": [],
+      "actions": [
+        "Help LED on"
+      ],
+      "message": ""
+    },
+    {
+      "states": [
+        {
+          "name": "Help",
+          "active": false
+        }
+      ],
+      "id": "",
+      "name": "Dismiss help",
+      "device_id": "",
+      "event": "toggle",
+      "eventType": "button",
+      "data": "",
+      "description": "dismiss help led",
+      "dependencies": [],
+      "actions": [
+        "Help LED off"
       ],
       "message": ""
     }
@@ -83,6 +132,36 @@
       "device_id": "12",
       "action": "stop",
       "actionType": "relay",
+      "data": "27",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Help LED on",
+      "device_id": "11",
+      "action": "start",
+      "actionType": "customPin",
+      "data": "27",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Help LED off",
+      "device_id": "11",
+      "action": "stop",
+      "actionType": "customPin",
       "data": "27",
       "description": "",
       "dependencies": [],
@@ -154,6 +233,28 @@
       "httpRequestBody": "",
       "audio_type": "background",
       "loop_audio": true
+    },
+    {
+      "AudioTypes": {
+        "BACKGROUND": "background",
+        "START": "start",
+        "END": "end",
+        "HINT": "hint",
+        "CUSTOM": "custom"
+      },
+      "name": "Help Trigger",
+      "trigger": "Help",
+      "audio": "",
+      "loop_audio": false,
+      "video": "",
+      "loop_video": false,
+      "pause_timer": false,
+      "hint": "",
+      "can_toggle": "",
+      "screenName": "main",
+      "httpRequestType": "POST",
+      "httpRequestUrl": "http://192.168.0.180:4300/socket/message",
+      "httpRequestBody": "{ \"scriptName\": \"EX-Toolshed\",  \"message\":\"some hint plz\", \"toaster\":\"true\", \"eventName\" :\"Dismiss help\", \"type\": \"error\"}"
     }
   ],
   "screenConfigs": [

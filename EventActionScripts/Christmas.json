@@ -20,16 +20,20 @@
     {
       "name": "timer_complete",
       "active": false
+    },
+    {
+      "name": "Help",
+      "active": false
     }
   ],
   "events": [
     {
       "id": "1",
       "name": "start_instance",
-      "device_id": "101",
+      "device_id": "12",
       "event": "toggle",
-      "eventType": "button",
-      "data": "1",
+      "eventType": "magnetSwitch",
+      "data": "[0,1,0,1,0,0,0,0,0,0]",
       "description": "start instnace",
       "dependencies": [],
       "actions": [],
@@ -58,6 +62,46 @@
       "dependencies": [],
       "actions": [
         "Fireplace toggle open"
+      ],
+      "message": ""
+    },
+    {
+      "states": [
+        {
+          "name": "Help",
+          "active": true
+        }
+      ],
+      "id": "",
+      "name": "Help button press",
+      "device_id": "12",
+      "event": "toggle",
+      "eventType": "magnetSwitch",
+      "data": "[1,1,0,0,0,0,0,0,0,0]",
+      "description": "",
+      "dependencies": [],
+      "actions": [
+        "Help LED on"
+      ],
+      "message": ""
+    },
+    {
+      "states": [
+        {
+          "name": "Help",
+          "active": false
+        }
+      ],
+      "id": "",
+      "name": "dismiss help LED",
+      "device_id": "",
+      "event": "toggle",
+      "eventType": "button",
+      "data": "",
+      "description": "",
+      "dependencies": [],
+      "actions": [
+        "Help LED off"
       ],
       "message": ""
     }
@@ -100,6 +144,36 @@
       "action": "toggleOffOn",
       "actionType": "relay",
       "data": "15",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Help LED on",
+      "device_id": "12",
+      "action": "start",
+      "actionType": "customPin",
+      "data": "27",
+      "description": "",
+      "dependencies": [],
+      "actions": [],
+      "message": "",
+      "states": [],
+      "wait": 0,
+      "repeatable": true
+    },
+    {
+      "id": "",
+      "name": "Help LED off",
+      "device_id": "12",
+      "action": "stop",
+      "actionType": "customPin",
+      "data": "27",
       "description": "",
       "dependencies": [],
       "actions": [],
@@ -153,6 +227,28 @@
       "pause_timer": true,
       "audio_type": "background",
       "loop_audio": true
+    },
+    {
+      "AudioTypes": {
+        "BACKGROUND": "background",
+        "START": "start",
+        "END": "end",
+        "HINT": "hint",
+        "CUSTOM": "custom"
+      },
+      "name": "Help trigger",
+      "trigger": "Help",
+      "audio": "",
+      "loop_audio": false,
+      "video": "",
+      "loop_video": false,
+      "pause_timer": false,
+      "hint": "",
+      "can_toggle": "",
+      "screenName": "main",
+      "httpRequestType": "POST",
+      "httpRequestUrl": "http://192.168.0.180:4300/socket/message",
+      "httpRequestBody": "{ \"scriptName\": \"Christmas\",  \"message\":\"some hint plz\", \"toaster\":\"true\", \"eventName\" :\"dismiss help LED\", \"type\": \"error\"}"
     }
   ],
   "hints": [
@@ -179,7 +275,7 @@
       "audio": "",
       "showTimer": true,
       "showHints": true,
-      "defaultHintAudioPath": "http://192.168.0.51:4400/audio/hint_audio.mp3"
+      "defaultHintAudioPath": "http://192.168.0.51:4400/audio/NewHintAudio.mp3"
     }
   ],
   "ended": false

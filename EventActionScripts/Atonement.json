@@ -29,6 +29,10 @@
     {
       "name": "HELP",
       "active": false
+    },
+    {
+      "name": "Puzzle Boom",
+      "active": true
     }
   ],
   "events": [
@@ -61,7 +65,8 @@
         "Close Closet exit",
         "Close Top Drawer",
         "Close Second Drawer",
-        "Close main door"
+        "Close main door",
+        "Help LED off"
       ],
       "message": ""
     },
@@ -86,7 +91,12 @@
       "message": ""
     },
     {
-      "states": [],
+      "states": [
+        {
+          "name": "Puzzle Boom",
+          "active": true
+        }
+      ],
       "id": "",
       "name": "Scan rfid",
       "device_id": "16",
@@ -101,7 +111,12 @@
       "message": ""
     },
     {
-      "states": [],
+      "states": [
+        {
+          "name": "Puzzle Boom",
+          "active": true
+        }
+      ],
       "id": "",
       "name": "Jack in the box",
       "device_id": "17",
@@ -158,7 +173,12 @@
       "message": ""
     },
     {
-      "states": [],
+      "states": [
+        {
+          "name": "Puzzle Boom",
+          "active": true
+        }
+      ],
       "id": "",
       "name": "phone open all",
       "device_id": "20",
@@ -233,7 +253,12 @@
       "message": ""
     },
     {
-      "states": [],
+      "states": [
+        {
+          "name": "Puzzle Boom",
+          "active": true
+        }
+      ],
       "id": "",
       "name": "phone lock all",
       "device_id": "20",
@@ -410,7 +435,7 @@
       "device_id": "20",
       "action": "play",
       "actionType": "mp3",
-      "data": "[001,092]",
+      "data": "[001,091]",
       "description": "",
       "dependencies": [],
       "actions": [],
@@ -501,7 +526,7 @@
       },
       "name": "intro video",
       "trigger": "start_instance",
-      "audio": "http://192.168.0.174:4400/audio/background.mp3",
+      "audio": "http://192.168.0.174:4400/audio/atonement_background.mp3",
       "loop_audio": true,
       "video": "http://192.168.0.174:4400/video/intro_small.mp4",
       "loop_video": false,
@@ -525,18 +550,19 @@
       },
       "name": "sidequest_trigger",
       "trigger": "sidequest",
-      "audio": "",
-      "loop_audio": false,
+      "audio": "http://192.168.0.174:4400/audio/room_3_sterio.mp3",
+      "loop_audio": true,
       "video": "http://192.168.0.174:4400/video/continue.mp4",
       "loop_video": false,
       "pause_timer": true,
       "hint": "",
-      "can_toggle": "",
+      "can_toggle": true,
       "screenName": "main",
       "httpRequestType": "NONE",
       "httpRequestUrl": "",
       "httpRequestBody": "",
-      "video_type": "custom"
+      "video_type": "custom",
+      "audio_type": "background"
     },
     {
       "AudioTypes": {
@@ -605,7 +631,30 @@
       "screenName": "other",
       "httpRequestType": "POST",
       "httpRequestUrl": "http://192.168.0.180:4300/socket/message",
-      "httpRequestBody": "{ \"scriptName\": \"Atonement\",  \"message\":\"some hint plz\", \"toaster\":\"true\", \"eventName\" :\"dismissHelp\", \"type\": \"warning\"}"
+      "httpRequestBody": "{ \"scriptName\": \"Atonement\",  \"message\":\"some hint plz\", \"toaster\":\"true\", \"eventName\" :\"dismissHelp\", \"type\": \"error\"}"
+    },
+    {
+      "AudioTypes": {
+        "BACKGROUND": "background",
+        "START": "start",
+        "END": "end",
+        "HINT": "hint",
+        "CUSTOM": "custom"
+      },
+      "name": "Boom Sound",
+      "trigger": "Puzzle Boom",
+      "audio": "http://192.168.0.174:4400/audio/congrats.mp3",
+      "loop_audio": false,
+      "video": "",
+      "loop_video": false,
+      "pause_timer": false,
+      "hint": "",
+      "can_toggle": true,
+      "screenName": "main",
+      "httpRequestType": "NONE",
+      "httpRequestUrl": "",
+      "httpRequestBody": "",
+      "audio_type": "custom"
     }
   ],
   "screenConfigs": [
