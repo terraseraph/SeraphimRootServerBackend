@@ -317,7 +317,19 @@ exports.readGame = function (req, res) {
   //TODO: test
   for (var key in gamesJson) {
     if (gamesJson.hasOwnProperty(name)) {
-      res.send(gamesJson[`${name}`]);
+      const scr = gamesJson[`${name}`];
+      let result = {
+        completedEvents: scr.completedEvents,
+        countdown: scr.countdown,
+        displayedHint: scr.displayedHint,
+        eneded: scr.ended,
+        name: scr.name,
+        script: scr.script,
+        states: scr.states,
+        time: scr.time,
+        timeLimit: scr.timeLimit
+      }
+      res.send(result);
       return;
     }
   }
