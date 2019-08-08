@@ -94,6 +94,10 @@ exports.createBranch = function (req, res) {
     branch.create().then(response => {
         res.send(response)
         branchList.push(response)
+        console.log(response);
+        loadBranchesFromDb().then(b => {
+            branchList = b;
+        }); // TODO: fix - just refresh the list on the fly
     })
     // var q = `INSERT INTO BRANCHES (name, rootserver_id, ip_address) VALUES ("${name}", ${rootserver_id}, "${ip_address}")`
     // db.db_insert(q).then((query, id) => {
@@ -260,7 +264,12 @@ exports.updateBranch = function (req, res) {
 
 exports.deleteBranch = function (req, res) {
     var id = req.params.id
-    db.db_delete(`DELETE FROM BRANCHES WHERE id = ${id}`)
+    db.db_delete(`DELETE FROM BRANCHES WHERE id = ${id}`).then(reponse => {
+        res.send("Deleted");
+    })
+    loadBranchesFromDb().then(b => {
+        branchList = b;
+    }); // TODO: fix - just refresh the list on the fly
 }
 
 
@@ -349,6 +358,13 @@ function localGetBranchById(id, cb) {
     })
 }
 
+function localGetBranchByName(name, cb) {
+    db.db_select(`SELECT * FROM BRANCHES WHERE name = ${name}`).then((branch) => {
+        log("Branch : ", name, branch);
+        cb(branch);
+    })
+}
+
 exports.nodeUpdateFromServer = function (req, res) {
     var branchId = req.body.branchId;
     var node = req.body.node;
@@ -379,7 +395,7 @@ function makeMeshNodeArray(meshNodes) {
     return new Promise((resolve, reject) => {
         var nodes = [];
         for (var x in meshNodes) {
-            log("pushing", meshNodes[x]);
+            // log("pushing", meshNodes[x]);
             nodes.push(meshNodes[x]);
         }
         resolve(nodes);
@@ -410,7 +426,7 @@ function createNodeFromHeartbeatMessage(nodes, bridgeId) {
         bridge_id = "${bridgeId}",
         hardware_id = ${node.hardwareId},
         memory = ${node.memory}`).then(result => {
-            log(result);
+            // log(result);
         })
     }
 }

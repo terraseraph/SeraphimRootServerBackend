@@ -1,16 +1,67 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 var log = require("./loggingController").log;
-const db = new sqlite3.Database(path.join(__dirname, '../Database/data.db'));
+var config = require("../config/serverConfig.json");
 
-// dbInit();
+const dbPath = path.join(__dirname, '../Database/data.db');
+// const db = new sqlite3.Database(dbPath); 
+var db;
+
+dbInit();
 
 function dbInit() {
-    db.run(CreateTableSchema.toString(), [], function (err) {
+    db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+        if (err) {
+            console.error(err.message);
+        }
+        else {
+            initSchema();
+            initInsert();
+        }
+    });
+}
+
+function initSchema() {
+    db.run(table_BRANCHES.toString(), [], function (err) {
         if (err) {
             return log(err.message);
         }
     });
+    db.run(table_MESSAGES.toString(), [], function (err) {
+        if (err) {
+            return log(err.message);
+        }
+    });
+    db.run(table_NODEBRIDGES.toString(), [], function (err) {
+        if (err) {
+            return log(err.message);
+        }
+    });
+    db.run(table_NODES.toString(), [], function (err) {
+        if (err) {
+            return log(err.message);
+        }
+    });
+    db.run(table_ROOTSERVER.toString(), [], function (err) {
+        if (err) {
+            return log(err.message);
+        }
+    });
+}
+
+
+function initInsert() {
+    var address = `http://${config.ip_address}:${config.port}`;
+    var name = config.name;
+    var query = `INSERT INTO ROOTSERVER (name, ip_address) VALUES ("${name}", "${address}")`
+    console.log(query);
+    db_insert(query).then((msg, index) => {
+        log({
+            "query": msg,
+            "insertedAt": index
+        })
+        console.log(msg);
+    })
 }
 
 
@@ -53,7 +104,7 @@ exports.testSelect = testSelect
 function db_insert(query) {
 
     return new Promise((resolve, reject) => {
-        log(query);
+        // log(query);
 
         db.run(query, [], function (err) {
             if (err) {
@@ -61,7 +112,7 @@ function db_insert(query) {
             }
             resolve(this.lastID)
             // get the last insert id
-            log(`A row has been inserted with rowid ${this.lastID}`); //add this.changes
+            // log(`A row has been inserted with rowid ${this.lastID}`); //add this.changes
         });
 
         // close the database connection
@@ -166,7 +217,62 @@ function db_insertMessageLog(query) {
 }
 exports.db_insertMessageLog = db_insertMessageLog
 
-
+const table_BRANCHES = (`CREATE TABLE IF NOT EXISTS "BRANCHES"(
+    "id"
+    INTEGER PRIMARY KEY AUTOINCREMENT,
+    "name"
+    TEXT,
+    "rootserver_id"
+    INTEGER,
+    "ip_address"
+    TEXT
+);`);
+const table_MESSAGES = (`CREATE TABLE IF NOT EXISTS "MESSAGES"(
+    "id"
+    INTEGER PRIMARY KEY AUTOINCREMENT,
+    "text"
+    TEXT,
+    "type"
+    TEXT,
+    "time"
+    INTEGER,
+    "sender"
+    TEXT
+);`);
+const table_NODEBRIDGES = (`CREATE TABLE IF NOT EXISTS "NODEBRIDGES"(
+    "id"
+    INTEGER,
+    "name"
+    TEXT,
+    "ip_address"
+    TEXT,
+    "branch_id"
+    INTEGER,
+    PRIMARY KEY("id")
+);`);
+const table_NODES = (`CREATE TABLE IF NOT EXISTS "NODES"(
+    "id"
+    INTEGER PRIMARY KEY AUTOINCREMENT,
+    "name"
+    TEXT,
+    "type"
+    TEXT,
+    "last_alive"
+    TEXT,
+    "bridge_id"
+    INTEGER,
+    "hardware_id"
+    INTEGER UNIQUE,
+    "memory"
+    INTEGER
+);`);
+const table_ROOTSERVER = (`CREATE TABLE "ROOTSERVER" (
+	"id"	INTEGER,
+	"name"	TEXT UNIQUE,
+	"ip_address"	TEXT,
+	"config_path"	TEXT,
+	PRIMARY KEY("id")
+);`);
 
 
 
@@ -180,8 +286,8 @@ CREATE TABLE IF NOT EXISTS "BRANCHES"(
     INTEGER,
     "ip_address"
     TEXT
-)
-;
+);
+
 CREATE TABLE IF NOT EXISTS "MESSAGES"(
     "id"
     INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -226,7 +332,7 @@ CREATE TABLE IF NOT EXISTS "NODES"(
 
 CREATE TABLE "ROOTSERVER" (
 	"id"	INTEGER,
-	"name"	TEXT,
+	"name"	TEXT UNIQUE,
 	"ip_address"	TEXT,
 	"config_path"	TEXT,
 	PRIMARY KEY("id")

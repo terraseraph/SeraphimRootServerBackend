@@ -208,13 +208,13 @@ class Game {
   }
 
   prepareTimerEventListners() {
-    var t = this;
-    this.gameUpdater = setInterval(this.timerSecondsUpdatedListner, 1000);
+    // this.gameUpdater = setInterval(this.timerSecondsUpdatedListner, 1000);
     // this.timer.addEventListener(
     //   // @ts-ignore
     //   "secondsUpdated",
     //   this.timerSecondsUpdatedListner
     // );
+    this.timerSecondsUpdatedListner();
     this.timer.addEventListener(
       // @ts-ignore
       "targetAchieved",
@@ -223,11 +223,14 @@ class Game {
   }
 
   timerSecondsUpdatedListner() {
-    var t = this;
-    if (t.ended) {
-      return;
+    let t = this;
+    if (!this.ended) {
+      // return;
+      // this.gameUpdater = setTimeout(this.timerSecondsUpdatedListner, 1000);
+      setTimeout(this.timerSecondsUpdatedListner, 1000);
+
     }
-    t.prepareStructure();
+    this.prepareStructure();
     // @ts-ignore
     t.time.hours = t.timer.getTimeValues().hours;
     // @ts-ignore
@@ -235,9 +238,10 @@ class Game {
     // @ts-ignore
     t.time.seconds = t.timer.getTimeValues().seconds;
     SocketController.socketSendEvent({
-      instance_update: t
+      instance_update: this
     });
-    t.checkTimeTriggers(t.time);
+    this.checkTimeTriggers(this.time);
+
   }
 
   timerTargetAchievedListner() {
@@ -257,13 +261,14 @@ class Game {
     // @ts-ignore
     return new Promise((resolve, reject) => {
       // @ts-ignore
-      var t = this;
       // this.timer.removeEventListener(
       //   // @ts-ignore
       //   "secondsUpdated",
       //   this.timerSecondsUpdatedListner
       // );
-      clearInterval(this.gameUpdater);
+
+      // clearInterval(this.gameUpdater);
+      // clearTimeout(this.gameUpdater);
       this.timer.removeEventListener(
         // @ts-ignore
         "targetAchieved",
@@ -423,6 +428,7 @@ exports.forceEvent = function (req, res) {
 exports.forceAction = function (req, res) {
   var name = req.body.name;
   var actionName = req.body.forceAction;
+  res.send({ success: true });
   getScriptInstance(name).then(instanceName => {
     var masterId = gamesJson[`${instanceName}`].script.masterId;
     logStatus(
@@ -457,14 +463,14 @@ exports.setEventCompleted = function (req, res) {
   log("=========Completed Event===========");
   logStatus(req.body);
   instanceEventCompletion(eventName, scriptName, updatedStates);
-  setStartAndEndEvents(scriptName, eventName);
+  // setStartAndEndCommands(scriptName, eventName);
   res.send({
     event: "completed"
   });
 };
 
-function setStartAndEndEvents(scriptName, eventName) {
-  switch (eventName) {
+function setStartAndEndCommands(scriptName, event_state_name) {
+  switch (event_state_name) {
     case "start_instance":
       ScriptController.localGetFreshScript(scriptName).then(script => {
         var timeLimit = {
@@ -473,7 +479,7 @@ function setStartAndEndEvents(scriptName, eventName) {
           seconds: parseInt(script.time.seconds, 10)
         };
         localNewGame(scriptName, timeLimit, () => {
-          instanceEventCompletion(eventName, script.name); //TODO: make this better
+          // instanceEventCompletion(event_state_name, script.name); //TODO: make this better
           log("Created new game from device event");
         });
       });
@@ -673,6 +679,7 @@ function setScriptStates(instanceName, eventStates) {
         }
         gStates[j].active = eventStates[i].active;
         if (eventStates[i].active == true) {
+          setStartAndEndCommands(instanceName, eventStates[i].name);
           findTriggersByState(instanceName, eventStates[i].name, isAlreadyActive).then(
             triggers => {
               for (let i = 0; i < triggers.length; i++) {

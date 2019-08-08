@@ -29,7 +29,7 @@ exports.parseMessage = function (msg) {
 exports.socketSendLog = function (log) {
     //@ts-ignore
     // io.to('logs').emit(log);
-    io.sockets.in("logs").emit('log', { message: log });
+    // io.sockets.in("logs").emit('log', { message: log });
 }
 
 exports.socketSendEvent = function (event) {

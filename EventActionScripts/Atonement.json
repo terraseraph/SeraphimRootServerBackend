@@ -24,7 +24,7 @@
     },
     {
       "name": "phone_dialed",
-      "active": true
+      "active": false
     },
     {
       "name": "HELP",
@@ -52,6 +52,10 @@
         },
         {
           "name": "HELP",
+          "active": false
+        },
+        {
+          "name": "phone_dialed",
           "active": false
         }
       ],
@@ -146,7 +150,7 @@
       "device_id": "20",
       "event": "code",
       "eventType": "keypad",
-      "data": "1234567890",
+      "data": "0437897284",
       "description": "",
       "dependencies": [],
       "actions": [
@@ -299,6 +303,26 @@
       "event": "code",
       "eventType": "keypad",
       "data": "1#",
+      "description": "",
+      "dependencies": [
+        "phone_dialed"
+      ],
+      "actions": [],
+      "message": ""
+    },
+    {
+      "states": [
+        {
+          "name": "end_instance",
+          "active": true
+        }
+      ],
+      "id": "",
+      "name": "end normal",
+      "device_id": "19",
+      "event": "toggle",
+      "eventType": "magnetSwitch",
+      "data": "[0,1,0,0,0,0,0,0,0,0]",
       "description": "",
       "dependencies": [
         "phone_dialed"
