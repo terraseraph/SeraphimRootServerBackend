@@ -90,7 +90,7 @@
       "device_id": "24",
       "event": "toggle",
       "eventType": "magnetSwitch",
-      "data": "[1,0,0,0,0,0,0,0,0,0]",
+      "data": "[1,1,0,0,0,0,0,0,0,0]",
       "description": "",
       "dependencies": [],
       "actions": [
@@ -702,6 +702,29 @@
       "loop_video": false,
       "pause_timer": false,
       "hint": "",
+      "can_toggle": true,
+      "screenName": "main",
+      "httpRequestType": "NONE",
+      "httpRequestUrl": "",
+      "httpRequestBody": "",
+      "audio_type": "custom"
+    },
+    {
+      "AudioTypes": {
+        "BACKGROUND": "background",
+        "START": "start",
+        "END": "end",
+        "HINT": "hint",
+        "CUSTOM": "custom"
+      },
+      "name": "Game over",
+      "trigger": "timer_complete",
+      "audio": "http://192.168.0.174:4400/audio/fail.mp3",
+      "loop_audio": false,
+      "video": "",
+      "loop_video": false,
+      "pause_timer": false,
+      "hint": "Time is up....",
       "can_toggle": true,
       "screenName": "main",
       "httpRequestType": "NONE",
