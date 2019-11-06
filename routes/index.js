@@ -10,6 +10,8 @@ const SocketController = require("../controllers/socketController");
 const BranchController = require("../controllers/branchController");
 const DatabaseController = require("../controllers/databaseController");
 const HttpManager = require("../Managers/httpManager");
+const MediaController = require("../controllers/MediaController");
+const ModelController = require("../controllers/ModelController")
 var LoggingController = require("../controllers/loggingController");
 var RootServerController = require("../controllers/rootServerController");
 var log = LoggingController.log;
@@ -117,6 +119,18 @@ router.post("/branch/nodes/direct", BranchController.sendNodeMeshPacket);
 //====== Trigger Routes ======================//
 //===========================================//
 router.post(`/trigger/request`, HttpManager.sendHttpRequest);
+
+
+//=============================================//
+//====== Media Routes ======================//
+//===========================================//
+router.get('/media/audio/:fileName', MediaController.mediaController.getAudioHTTP)
+
+
+//=============================================//
+//====== Model Routes ======================//
+//===========================================//
+router.get('/models/device', ModelController.modelManager.httpGetDeviceModel)
 
 //=============================================//
 //====== Message Routes ======================//

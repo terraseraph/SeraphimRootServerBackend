@@ -254,7 +254,7 @@
       "screenName": "main",
       "httpRequestType": "POST",
       "httpRequestUrl": "http://192.168.0.180:4300/socket/message",
-      "httpRequestBody": "{ \"scriptName\": \"EX-Toolshed\",  \"message\":\"some hint plz\", \"toaster\":\"true\", \"eventName\" :\"Dismiss help\", \"type\": \"error\"}"
+      "httpRequestBody": "{ \"scriptName\": \"EX-Toolshed\",  \"message\":\"some hint plz\", \"toaster\":\"true\", \"eventName\" :\"Dismiss help\", \"type\": \"error\", \"sound\": \"http://localhost:4300/media/audio/alarm-beeps.mp3\"}"
     }
   ],
   "screenConfigs": [
@@ -267,7 +267,7 @@
       "font_colour": "DarkRed",
       "showTimer": true,
       "showHints": true,
-      "defaultHintAudioPath": "http://192.168.0.50:4400/audio/congrats.mp3"
+      "defaultHintAudioPath": "http://192.168.0.50:4400/audio/HINT SOUND.mp3"
     }
   ],
   "branch_address": "http://192.168.0.50:4400",

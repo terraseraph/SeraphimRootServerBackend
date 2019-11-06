@@ -248,7 +248,7 @@
       "screenName": "main",
       "httpRequestType": "POST",
       "httpRequestUrl": "http://192.168.0.180:4300/socket/message",
-      "httpRequestBody": "{ \"scriptName\": \"Christmas\",  \"message\":\"some hint plz\", \"toaster\":\"true\", \"eventName\" :\"dismiss help LED\", \"type\": \"error\"}"
+      "httpRequestBody": "{ \"scriptName\": \"Christmas\",  \"message\":\"some hint plz\", \"toaster\":\"true\", \"eventName\" :\"dismiss help LED\", \"type\": \"error\", \"sound\": \"http://localhost:4300/media/audio/alarm-beeps.mp3\"}"
     }
   ],
   "hints": [
@@ -275,7 +275,7 @@
       "audio": "",
       "showTimer": true,
       "showHints": true,
-      "defaultHintAudioPath": "http://192.168.0.51:4400/audio/NewHintAudio.mp3"
+      "defaultHintAudioPath": "http://192.168.0.51:4400/audio/HINT SOUND.mp3"
     }
   ],
   "ended": false

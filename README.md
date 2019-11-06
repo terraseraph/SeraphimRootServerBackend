@@ -15,6 +15,18 @@ Node server behind the root server, controls the data and socket connections.
 - This repo does not come wiht a UI, please find the one under SeraphimRootServerFrontEnd
 - MASSIVE WIP!
 
+### To build with nw-gyp
+
+- Navigate to `node_modules/<package>/bindings` || if sqlite3 `node_modules/sqlite3`
+- run `nw-gyp configure --target=0.33.4` (or whatever version installed)
+- This will create a vcxproj file in the `build/` directory (or a MAKEFILE on other platforms)
+- run `nw-gyp build --target=0.33.4`
+
+- Issues: - `https://github.com/nwjs/nw.js/issues/6552#issuecomment-402382908`
+- `npm install --global --production windows-build-tools --vs2017`
+- `C:\Users\AppData\Roaming\npm\node_modules\nw-gyp\gyp\pylib\gyp\MSVSVersion.py`
+- change default toolset of first 2 2015 versions to v141
+
 ## Other things
 
 If you want/need to get this up and running, just shoot me an email terraseraph@gmail.com

@@ -37,6 +37,10 @@
     {
       "name": "Phone continue selected",
       "active": true
+    },
+    {
+      "name": "Chest Opened",
+      "active": true
     }
   ],
   "events": [
@@ -57,14 +61,18 @@
         {
           "name": "phone_dialed",
           "active": false
+        },
+        {
+          "name": "Chest Opened",
+          "active": false
         }
       ],
       "id": "",
       "name": "start_instance",
       "device_id": "50",
       "event": "toggle",
-      "eventType": "button",
-      "data": "1",
+      "eventType": "magnetSwitch",
+      "data": "[1,1,0,0,0,0,0,0,0,0]",
       "description": "",
       "dependencies": [],
       "actions": [
@@ -143,6 +151,10 @@
         {
           "name": "phone_dialed",
           "active": true
+        },
+        {
+          "name": "Puzzle Boom",
+          "active": true
         }
       ],
       "id": "",
@@ -159,7 +171,16 @@
       "message": ""
     },
     {
-      "states": [],
+      "states": [
+        {
+          "name": "Chest Opened",
+          "active": true
+        },
+        {
+          "name": "Puzzle Boom",
+          "active": true
+        }
+      ],
       "id": "",
       "name": "Phone open chest",
       "device_id": "20",
@@ -232,8 +253,8 @@
       "name": "HelpButton",
       "device_id": "50",
       "event": "toggle",
-      "eventType": "button",
-      "data": "0",
+      "eventType": "magnetSwitch",
+      "data": "[0,1,0,1,0,0,0,0,0,0]",
       "description": "Help buton pressed",
       "dependencies": [],
       "actions": [
@@ -294,6 +315,10 @@
         },
         {
           "name": "sidequest",
+          "active": true
+        },
+        {
+          "name": "Puzzle Boom",
           "active": true
         }
       ],
@@ -603,8 +628,8 @@
       },
       "name": "sidequest_trigger",
       "trigger": "sidequest",
-      "audio": "http://192.168.0.174:4400/audio/room_3_sterio.mp3",
-      "loop_audio": true,
+      "audio": "",
+      "loop_audio": false,
       "video": "http://192.168.0.174:4400/video/continue.mp4",
       "loop_video": false,
       "pause_timer": true,
@@ -684,7 +709,7 @@
       "screenName": "other",
       "httpRequestType": "POST",
       "httpRequestUrl": "http://192.168.0.180:4300/socket/message",
-      "httpRequestBody": "{ \"scriptName\": \"Atonement\",  \"message\":\"some hint plz\", \"toaster\":\"true\", \"eventName\" :\"dismissHelp\", \"type\": \"danger\"}"
+      "httpRequestBody": "{ \"scriptName\": \"Atonement\",  \"message\":\"some hint plz\", \"toaster\":\"true\", \"eventName\" :\"dismissHelp\", \"type\": \"danger\", \"sound\": \"http://localhost:4300/media/audio/alarm-beeps.mp3\"}"
     },
     {
       "AudioTypes": {
@@ -731,6 +756,29 @@
       "httpRequestUrl": "",
       "httpRequestBody": "",
       "audio_type": "custom"
+    },
+    {
+      "AudioTypes": {
+        "BACKGROUND": "background",
+        "START": "start",
+        "END": "end",
+        "HINT": "hint",
+        "CUSTOM": "custom"
+      },
+      "name": "Sidequest Audio",
+      "trigger": "Chest Opened",
+      "audio": "http://192.168.0.174:4400/audio/room_3_sterio.mp3",
+      "loop_audio": true,
+      "video": "",
+      "loop_video": false,
+      "pause_timer": false,
+      "hint": "",
+      "can_toggle": "",
+      "screenName": "main",
+      "httpRequestType": "NONE",
+      "httpRequestUrl": "",
+      "httpRequestBody": "",
+      "audio_type": "background"
     }
   ],
   "screenConfigs": [
@@ -743,16 +791,27 @@
       "font_colour": "Maroon",
       "showTimer": true,
       "showHints": true,
-      "defaultHintAudioPath": "http://192.168.0.174:4400/audio/congrats.mp3"
+      "defaultHintAudioPath": "http://192.168.0.174:4400/audio/HINT SOUND.mp3"
     },
     {
       "name": "other",
       "backgroundType": "",
       "backgroundPath": "",
       "audio": "",
-      "font": "'Times New Roman', Times, serif",
-      "font_colour": "white",
+      "font": "Tahoma, Geneva, sans-serif",
+      "font_colour": "Red",
       "showTimer": true,
+      "showHints": true,
+      "defaultHintAudioPath": ""
+    },
+    {
+      "name": "somescreen",
+      "backgroundType": "",
+      "backgroundPath": "",
+      "audio": "",
+      "font": "Tahoma, Geneva, sans-serif",
+      "font_colour": "Indego",
+      "showTimer": false,
       "showHints": true,
       "defaultHintAudioPath": ""
     }
